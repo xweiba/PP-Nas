@@ -18,6 +18,7 @@ import lombok.extern.log4j.Log4j2;
 @NoArgsConstructor
 @Data
 public class PartUploadResult {
-    
+
+    private String id;
 
 }

@@ -5,9 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.KeyValue;
 
-import java.util.List;
+import java.util.Properties;
 
 /**
  * 资源查询参数
@@ -29,7 +28,7 @@ public class ResourceQueryParams {
     private String keyWord;
 
     /* 排序字段 */
-    private List<KeyValue> sortFields;
+    private Properties sortFields;
 
     private Integer pageNo;
 
