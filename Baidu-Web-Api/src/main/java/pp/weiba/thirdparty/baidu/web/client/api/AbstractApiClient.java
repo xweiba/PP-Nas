@@ -1,6 +1,7 @@
-package pp.weiba.thirdparty.baidu.web.client;
+package pp.weiba.thirdparty.baidu.web.client.api;
 
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.thirdparty.baidu.web.client.IHttpClient;
 
 /**
  * Api 客户端抽象类

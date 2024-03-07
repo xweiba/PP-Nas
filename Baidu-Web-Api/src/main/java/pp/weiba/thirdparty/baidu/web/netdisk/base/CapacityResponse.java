@@ -16,7 +16,7 @@ import pp.weiba.thirdparty.baidu.web.netdisk.ApiResponse;
 @Accessors(chain = true)
 @Getter
 @Setter
-public class Capacity extends ApiResponse {
+public class CapacityResponse extends ApiResponse {
 
     // 已使用
     private Long used;

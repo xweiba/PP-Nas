@@ -16,4 +16,17 @@ public class UrlConstants {
 
     // 查询网盘用量
     public static final String GET_QUOTA = API_PREFIX + "/quota?clienttype=0&app_id=250528&web=1&dp-logid={}";
+
+    // 创建文件夹
+    public static final String POST_CREATE_DIR = API_PREFIX + "/create?a=commit&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&bdstoken={bdstoken}";
+
+    // Header REFERER
+    public static final String HEADER_REFERER = API_DOMAIN + "/disk/main";
+
+    // 获取页面模板变量
+    public static final String GET_TEMPLATE_VARIABLE = API_PREFIX + "/gettemplatevariable?clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&fields=[{fields}]";
+
+    // 获取用户登录状态
+    public static final String GET_LOGIN_STATUS = API_PREFIX + "/loginStatus?clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}";
+
 }

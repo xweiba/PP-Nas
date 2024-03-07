@@ -52,25 +52,54 @@ public class HttpRequest {
     // 构建参数, 不参与请求
     private Map<String, Object> buildParams;
 
-    public static HttpRequest urlFormatBuilder(CharSequence urlTemplate, Object... urlParams) {
+    public static HttpRequest urlFormatBuilder(CharSequence urlTemplate) {
+        return urlFormatBuilder(Method.GET, urlTemplate, null);
+    }
+
+    public static HttpRequest urlFormatBuilder(CharSequence urlTemplate, Map<?, ?> urlParams) {
         return urlFormatBuilder(Method.GET, urlTemplate, urlParams);
     }
 
-    public static HttpRequest urlFormatBuilder(Method method, CharSequence urlTemplate, Object... urlParams) {
+    public static HttpRequest urlFormatBuilder(Method method, CharSequence urlTemplate) {
+        return urlFormatBuilder(method, urlTemplate, null);
+    }
+
+    public static HttpRequest urlFormatBuilder(Method method, CharSequence urlTemplate, Map<?, ?> urlParams) {
+        String url = StrUtil.format(urlTemplate, urlParams);
         HttpRequest httpRequest = new HttpRequest();
-        httpRequest.setUrl(StrUtil.format(urlTemplate, urlParams));
+        httpRequest.setUrl(url);
+        httpRequest.setMethod(method);
         return httpRequest;
     }
 
     public HttpRequest addParam(String key, Object value) {
-        if (this.params == null) this.params = new HashMap<>();
-        this.params.put(key, value);
+        this.params = addMapValue(this.params, key, value);
         return this;
     }
 
     public HttpRequest addheader(String key, String value) {
-        this.headerMap.put(key, value);
+        this.headerMap = addMapValue(this.headerMap, key, value);
         return this;
     }
 
+    public HttpRequest addBuildParams(String key, String value) {
+        this.buildParams = addMapValue(this.buildParams, key, value);
+        return this;
+    }
+
+    public <T> Map<String, T> addMapValue(Map<String, T> map, String key, T value) {
+        if (map == null) map = new HashMap<>();
+        map.put(key, value);
+        return map;
+    }
+
+    public HttpRequest params(Map<String, Object> hashMap) {
+        this.params = hashMap;
+        return this;
+    }
+
+    public HttpRequest handler(Map<String, String> headerMap) {
+        this.headerMap = headerMap;
+        return this;
+    }
 }
