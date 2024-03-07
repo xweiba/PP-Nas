@@ -2,6 +2,8 @@ package pp.weiba.framework.resource;
 
 import lombok.Getter;
 
+import java.util.Objects;
+
 /**
  * 资源状态
  *
@@ -26,7 +28,7 @@ public enum ResourceState {
     public static ResourceState get(Integer type) {
         if (type != null) {
             for (ResourceState entity : ResourceState.values()) {
-                if (entity.getType() == type) {
+                if (Objects.equals(entity.getType(), type)) {
                     return entity;
                 }
             }

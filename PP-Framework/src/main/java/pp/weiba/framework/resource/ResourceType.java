@@ -2,6 +2,8 @@ package pp.weiba.framework.resource;
 
 import lombok.Getter;
 
+import java.util.Objects;
+
 /**
  * 资源类型, 文件或文件夹
  *
@@ -24,7 +26,7 @@ public enum ResourceType {
     public static ResourceType get(Integer type) {
         if (type != null) {
             for (ResourceType entity : ResourceType.values()) {
-                if (entity.getType() == type) {
+                if (Objects.equals(entity.getType(), type)) {
                     return entity;
                 }
             }

@@ -2,6 +2,8 @@ package pp.weiba.framework;
 
 import lombok.Getter;
 
+import java.util.Objects;
+
 /**
  * 签名类型
  *
@@ -22,7 +24,7 @@ public enum DigestType {
     public static DigestType get(Integer type) {
         if (type != null) {
             for (DigestType entity : DigestType.values()) {
-                if (entity.getType() == type) {
+                if (Objects.equals(entity.getType(), type)) {
                     return entity;
                 }
             }
