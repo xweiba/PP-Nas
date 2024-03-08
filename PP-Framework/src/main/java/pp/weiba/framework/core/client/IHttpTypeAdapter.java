@@ -1,4 +1,4 @@
-package pp.weiba.framework.client;
+package pp.weiba.framework.core.client;
 
 /**
  * Http Client 请求信息与响应信息转换适配接口

@@ -2,8 +2,8 @@ package pp.weiba.thirdparty.baidu.web.resource.processors;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.client.HttpResponse;
-import pp.weiba.framework.convert.IDataProcessor;
+import pp.weiba.framework.core.client.HttpResponse;
+import pp.weiba.framework.core.convert.IDataProcessor;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.ErrorStatus;
 
 /**

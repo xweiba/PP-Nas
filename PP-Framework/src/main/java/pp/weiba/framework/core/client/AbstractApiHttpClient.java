@@ -1,7 +1,7 @@
-package pp.weiba.framework.client;
+package pp.weiba.framework.core.client;
 
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.convert.TypeReference;
+import pp.weiba.framework.core.convert.TypeReference;
 
 import java.util.HashMap;
 import java.util.Map;

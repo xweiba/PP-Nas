@@ -1,8 +1,8 @@
 package pp.weiba.thirdparty.baidu.web.resource.processors;
 
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.client.HttpRequest;
-import pp.weiba.framework.convert.IDataProcessor;
+import pp.weiba.framework.core.client.HttpRequest;
+import pp.weiba.framework.core.convert.IDataProcessor;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.AuthenticationManager;
 

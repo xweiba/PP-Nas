@@ -1,4 +1,4 @@
-package pp.weiba.framework.convert;
+package pp.weiba.framework.core.convert;
 
 import com.alibaba.fastjson.util.ParameterizedTypeImpl;
 import com.alibaba.fastjson.util.TypeUtils;

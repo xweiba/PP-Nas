@@ -1,4 +1,4 @@
-package pp.weiba.framework.convert;
+package pp.weiba.framework.core.convert;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;

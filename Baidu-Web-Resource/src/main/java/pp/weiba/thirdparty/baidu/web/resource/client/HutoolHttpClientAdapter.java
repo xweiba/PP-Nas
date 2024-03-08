@@ -14,9 +14,9 @@ import cn.hutool.http.Method;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 import org.junit.platform.commons.util.StringUtils;
-import pp.weiba.framework.client.AbstractHttpClient;
-import pp.weiba.framework.client.IHttpTypeAdapter;
-import pp.weiba.framework.convert.StrJsonTypeReferenceProcessor;
+import pp.weiba.framework.core.client.AbstractHttpClient;
+import pp.weiba.framework.core.client.IHttpTypeAdapter;
+import pp.weiba.framework.core.convert.StrJsonTypeReferenceProcessor;
 
 import java.net.HttpCookie;
 import java.net.Proxy;
@@ -80,7 +80,7 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
     static private class HttpTypeAdapter implements IHttpTypeAdapter<HttpRequest, HttpResponse> {
 
         @Override
-        public HttpRequest adapter(pp.weiba.framework.client.HttpRequest request) {
+        public HttpRequest adapter(pp.weiba.framework.core.client.HttpRequest request) {
             log.debug("execute request: {}", request);
             HttpRequest httpRequest = new HttpRequest(getUrlBuilder(request.getUrl(), !request.isDisableUrlEncoding()));
             if (StringUtils.isNotBlank(request.getRequestBody())) {
@@ -119,8 +119,8 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
         }
 
         @Override
-        public pp.weiba.framework.client.HttpResponse adapter(HttpResponse response) {
-            pp.weiba.framework.client.HttpResponse responseAdapter = new pp.weiba.framework.client.HttpResponse()
+        public pp.weiba.framework.core.client.HttpResponse adapter(HttpResponse response) {
+            pp.weiba.framework.core.client.HttpResponse responseAdapter = new pp.weiba.framework.core.client.HttpResponse()
                     .setStatusCode(response.getStatus())
                     .setBody(response.body())
                     .setContentType(response.header("Content-Type"));

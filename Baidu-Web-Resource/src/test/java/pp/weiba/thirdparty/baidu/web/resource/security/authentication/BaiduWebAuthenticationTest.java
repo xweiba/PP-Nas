@@ -1,7 +1,7 @@
 package pp.weiba.thirdparty.baidu.web.resource.security.authentication;
 
 import org.junit.jupiter.api.Test;
-import pp.weiba.framework.client.IHttpClient;
+import pp.weiba.framework.core.client.IHttpClient;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.base.BaseApiClient;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;

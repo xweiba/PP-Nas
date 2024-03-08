@@ -1,4 +1,4 @@
-package pp.weiba.framework.convert;
+package pp.weiba.framework.core.convert;
 
 /**
  * 类型转换处理器

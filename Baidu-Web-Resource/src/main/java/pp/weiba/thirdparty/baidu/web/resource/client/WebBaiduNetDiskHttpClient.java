@@ -1,8 +1,8 @@
 package pp.weiba.thirdparty.baidu.web.resource.client;
 
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.client.AbstractHttpClientWrap;
-import pp.weiba.framework.client.IHttpClient;
+import pp.weiba.framework.core.client.AbstractHttpClientWrap;
+import pp.weiba.framework.core.client.IHttpClient;
 import pp.weiba.thirdparty.baidu.web.resource.processors.AddDefaultHeaderProcessor;
 import pp.weiba.thirdparty.baidu.web.resource.processors.AddHeaderCookieProcessor;
 import pp.weiba.thirdparty.baidu.web.resource.processors.ErrorStatusProcessor;

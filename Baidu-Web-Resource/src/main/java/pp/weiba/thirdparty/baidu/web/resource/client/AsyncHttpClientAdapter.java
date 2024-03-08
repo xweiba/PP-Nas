@@ -9,12 +9,12 @@ import io.netty.handler.codec.http.cookie.DefaultCookie;
 import lombok.extern.log4j.Log4j2;
 import org.asynchttpclient.*;
 import org.asynchttpclient.proxy.ProxyServer;
-import pp.weiba.framework.client.AbstractHttpClient;
-import pp.weiba.framework.client.HttpRequest;
-import pp.weiba.framework.client.HttpResponse;
-import pp.weiba.framework.client.IHttpTypeAdapter;
-import pp.weiba.framework.convert.ITypeReferenceProcessor;
-import pp.weiba.framework.convert.StrJsonTypeReferenceProcessor;
+import pp.weiba.framework.core.client.AbstractHttpClient;
+import pp.weiba.framework.core.client.HttpRequest;
+import pp.weiba.framework.core.client.HttpResponse;
+import pp.weiba.framework.core.client.IHttpTypeAdapter;
+import pp.weiba.framework.core.convert.ITypeReferenceProcessor;
+import pp.weiba.framework.core.convert.StrJsonTypeReferenceProcessor;
 
 import java.util.List;
 import java.util.Map;

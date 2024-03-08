@@ -1,4 +1,4 @@
-package pp.weiba.framework.client;
+package pp.weiba.framework.core.client;
 
 import lombok.Getter;
 
