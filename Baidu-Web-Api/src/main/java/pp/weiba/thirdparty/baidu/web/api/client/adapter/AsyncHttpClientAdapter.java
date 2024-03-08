@@ -133,4 +133,10 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
             return responseAdapter;
         }
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        asyncHttpClient.close();
+    }
 }
