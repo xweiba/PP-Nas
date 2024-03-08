@@ -2,9 +2,9 @@ package pp.weiba.thirdparty.baidu.web.api.netdisk.file;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.baidu.web.api.client.AbstractApiHttpClient;
-import pp.weiba.thirdparty.baidu.web.api.client.IHttpClient;
-import pp.weiba.thirdparty.baidu.web.api.client.TypeReference;
+import pp.weiba.framework.client.AbstractApiHttpClient;
+import pp.weiba.framework.client.IHttpClient;
+import pp.weiba.framework.convert.TypeReference;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.UrlConstants;
 
 import java.util.HashMap;
