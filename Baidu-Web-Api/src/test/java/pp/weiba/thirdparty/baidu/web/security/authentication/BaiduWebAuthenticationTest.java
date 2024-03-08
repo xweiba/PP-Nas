@@ -1,12 +1,14 @@
 package pp.weiba.thirdparty.baidu.web.security.authentication;
 
 import org.junit.jupiter.api.Test;
-import pp.weiba.thirdparty.baidu.web.client.IHttpClient;
-import pp.weiba.thirdparty.baidu.web.client.adapter.AsyncHttpClientAdapter;
-import pp.weiba.thirdparty.baidu.web.netdisk.WebBaiduNetDiskHttpClient;
-import pp.weiba.thirdparty.baidu.web.netdisk.base.BaseApiClient;
-import pp.weiba.thirdparty.baidu.web.security.authentication.credentials.ICredential;
-import pp.weiba.thirdparty.baidu.web.security.authentication.credentials.ManualSetCredentials;
+import pp.weiba.thirdparty.baidu.web.api.client.IHttpClient;
+import pp.weiba.thirdparty.baidu.web.api.client.adapter.AsyncHttpClientAdapter;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.WebBaiduNetDiskHttpClient;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.base.BaseApiClient;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.BaiduWebAuthentication;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.credentials.ICredential;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.credentials.ManualSetCredentials;
 
 class BaiduWebAuthenticationTest extends DefaultTest {
 
