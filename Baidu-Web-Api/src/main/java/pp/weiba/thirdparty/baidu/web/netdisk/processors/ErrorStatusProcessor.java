@@ -29,6 +29,8 @@ public class ErrorStatusProcessor implements IDataProcessor<HttpResponse> {
     }
 
     private int getStatusCode(String body) {
-        return 0;
+        String errno = body.substring(body.indexOf("errno") + 7);
+        errno = errno.substring(0, errno.indexOf(","));
+        return Integer.valueOf(errno);
     }
 }

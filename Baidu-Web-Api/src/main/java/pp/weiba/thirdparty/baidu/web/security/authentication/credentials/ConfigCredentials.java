@@ -1,8 +1,8 @@
-package pp.weiba.thirdparty.baidu.web.security.authentication;
+package pp.weiba.thirdparty.baidu.web.security.authentication.credentials;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.baidu.web.security.Authentication;
+import pp.weiba.thirdparty.baidu.web.security.authentication.Authentication;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -15,7 +15,7 @@ import java.util.Properties;
  * @date 2024/3/6 14:59
  */
 @Log4j2
-public class ConfigCredentials extends AbstractBaiduAuthentication {
+public class ConfigCredentials implements IConfigCredentials {
 
     private final String configPath;
 
@@ -27,7 +27,20 @@ public class ConfigCredentials extends AbstractBaiduAuthentication {
     }
 
     // 获取jar目录下的config.properties中的baidu.authentication.bduss和baidu.authentication.stoken
-    public Authentication getAuthentication() {
+    public Authentication getCredential() {
+
+        Properties props = getProperties();
+
+        // 从配置文件中获取值
+        String bduss = props.getProperty("baidu.authentication.bduss");
+        String stoken = props.getProperty("baidu.authentication.stoken");
+
+        // 构建并返回 Authentication 对象
+        return new Authentication(bduss, stoken);
+    }
+
+    @Override
+    public Properties getProperties() {
         // 创建 Properties 对象
         Properties props = new Properties();
         try {
@@ -41,13 +54,6 @@ public class ConfigCredentials extends AbstractBaiduAuthentication {
         } catch (Exception e) {
             return null;
         }
-
-        // 从配置文件中获取值
-        String bduss = props.getProperty("baidu.authentication.bduss");
-        String stoken = props.getProperty("baidu.authentication.stoken");
-
-        // 构建并返回 Authentication 对象
-        return new Authentication(bduss, stoken);
+        return props;
     }
-
 }

@@ -1,7 +1,7 @@
-package pp.weiba.thirdparty.baidu.web.security.authentication;
+package pp.weiba.thirdparty.baidu.web.security.authentication.credentials;
 
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.baidu.web.security.Authentication;
+import pp.weiba.thirdparty.baidu.web.security.authentication.Authentication;
 
 /**
  * 短信验证
@@ -10,11 +10,10 @@ import pp.weiba.thirdparty.baidu.web.security.Authentication;
  * @date 2024/3/6 14:56
  */
 @Log4j2
-public class SMSCodeCredentials extends AbstractBaiduAuthentication implements ISMSCodeCredentials {
-
+public class SMSCodeCredentials implements ISMSCodeCredentials {
 
     @Override
-    public Authentication getAuthentication() {
+    public Authentication getCredential() {
         return null;
     }
 

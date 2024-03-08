@@ -2,6 +2,7 @@ package pp.weiba.thirdparty.baidu.web.client;
 
 import com.alibaba.fastjson.util.ParameterizedTypeImpl;
 import com.alibaba.fastjson.util.TypeUtils;
+import lombok.Getter;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
@@ -16,10 +17,16 @@ import java.util.concurrent.ConcurrentMap;
  * @author weiba
  * @date 2024/3/7 14:30
  */
+@Getter
 public class TypeReference<T> {
     static ConcurrentMap<Type, Type> classTypeCache
             = new ConcurrentHashMap<Type, Type>(16, 0.75f, 1);
 
+    /**
+     * -- GETTER --
+     * Gets underlying
+     * instance.
+     */
     protected final Type type;
 
     /**
@@ -121,14 +128,7 @@ public class TypeReference<T> {
             }
         }
 
-        Type key = new ParameterizedTypeImpl(argTypes, thisClass, rawType);
-        return key;
+        return new ParameterizedTypeImpl(argTypes, thisClass, rawType);
     }
 
-    /**
-     * Gets underlying {@code Type} instance.
-     */
-    public Type getType() {
-        return type;
-    }
 }

@@ -38,14 +38,24 @@ public class HttpResponse {
     private Map<String, Object> buildParams;
 
     public HttpResponse addCookies(String key, String value) {
-        if (this.cookies == null) this.cookies = new HashMap<>();
-        this.cookies.put(key, value);
+        this.cookies = addMapValue(this.cookies, key, value);
         return this;
     }
 
     public HttpResponse addheader(String key, String value) {
-        this.headers.put(key, value);
+        this.headers = addMapValue(this.headers, key, value);
         return this;
+    }
+
+    public <T> Map<String, T> addMapValue(Map<String, T> map, String key, T value) {
+        map = initMap(map);
+        map.put(key, value);
+        return map;
+    }
+
+    public <T> Map<String, T> initMap(Map<String, T> map) {
+        if (map == null) map = new HashMap<>();
+        return map;
     }
 
 }

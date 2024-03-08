@@ -1,8 +1,11 @@
 package pp.weiba.thirdparty.baidu.web.client.adapter;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.cookie.Cookie;
+import io.netty.handler.codec.http.cookie.DefaultCookie;
 import lombok.extern.log4j.Log4j2;
 import org.asynchttpclient.*;
 import org.asynchttpclient.proxy.ProxyServer;
@@ -55,17 +58,19 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
 
         @Override
         public RequestBuilder adapter(HttpRequest httpRequest) {
-            RequestBuilder requestBuilder = new RequestBuilder(httpRequest.getMethod().name(), httpRequest.getDisableUrlEncoding())
+            RequestBuilder requestBuilder = new RequestBuilder(httpRequest.getMethod().name(), httpRequest.isDisableUrlEncoding())
                     .setUrl(httpRequest.getUrl())
                     .setBody(httpRequest.getRequestBody())
                     .setRequestTimeout(httpRequest.getTimeout())
-                    .setFollowRedirect(httpRequest.getFollowRedirects());
+                    .setFollowRedirect(httpRequest.isFollowRedirect());
 
-            if (httpRequest.getParams() != null && !httpRequest.getParams().isEmpty()) {
-                httpRequest.getParams().forEach((item, value) -> requestBuilder.addQueryParam(item, JSONObject.toJSONString(value)));
+            if (httpRequest.getRequestParams() != null && !httpRequest.getRequestParams().isEmpty()) {
+                httpRequest.getRequestParams().forEach((item, value) -> requestBuilder.addQueryParam(item, JSONObject.toJSONString(value)));
             }
 
             if (httpRequest.getHeaderMap() != null && !httpRequest.getHeaderMap().isEmpty()) {
+                // 必须将Cookie单独设置，否则可能失效
+                buildCookies(httpRequest.getHeaderMap(), requestBuilder);
                 httpRequest.getHeaderMap().forEach(requestBuilder::addHeader);
             }
 
@@ -81,7 +86,30 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
                 }
             }
 
+            if (log.isDebugEnabled()) {
+                log.debug("execute adapterRequest: {}", JSONUtil.toJsonStr(requestBuilder.build()));
+            }
             return requestBuilder;
+        }
+
+        private void buildCookies(Map<String, String> headerMap, RequestBuilder requestBuilder) {
+            String cookie = headerMap.get("Cookie");
+            if (StrUtil.isNotBlank(cookie)) {
+                cookie = cookie.trim();
+                while (true) {
+                    int i = cookie.indexOf(";");
+                    if (i <= 0) break;
+                    String cookieTemp = cookie.substring(0, i);
+                    int j = cookieTemp.indexOf("=");
+                    if (j > 0) {
+                        String key = cookieTemp.substring(0, j);
+                        String value = cookieTemp.substring(j + 1);
+                        requestBuilder.addCookie(new DefaultCookie(key, value));
+                    }
+                    cookie = cookie.substring(i + 1);
+                }
+                headerMap.remove("Cookie");
+            }
         }
 
         @Override
@@ -99,7 +127,7 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
 
             List<Cookie> cookies = response.getCookies();
             if (cookies != null && !cookies.isEmpty()) {
-                cookies.forEach((item) -> responseAdapter.addheader(item.name(), item.value()));
+                cookies.forEach((item) -> responseAdapter.addCookies(item.name(), item.value()));
             }
 
             return responseAdapter;

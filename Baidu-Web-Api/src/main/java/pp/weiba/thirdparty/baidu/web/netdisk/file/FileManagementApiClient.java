@@ -2,14 +2,13 @@ package pp.weiba.thirdparty.baidu.web.netdisk.file;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.baidu.web.client.HttpRequest;
+import pp.weiba.thirdparty.baidu.web.client.AbstractApiHttpClient;
 import pp.weiba.thirdparty.baidu.web.client.IHttpClient;
-import pp.weiba.thirdparty.baidu.web.client.Method;
 import pp.weiba.thirdparty.baidu.web.client.TypeReference;
-import pp.weiba.thirdparty.baidu.web.netdisk.AbstractBaiduNetDiskApiClient;
 import pp.weiba.thirdparty.baidu.web.netdisk.UrlConstants;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 百度网盘文件管理API
@@ -18,7 +17,7 @@ import java.util.HashMap;
  * @date 2024/3/6 15:17
  */
 @Log4j2
-public class FileManagementApiClient extends AbstractBaiduNetDiskApiClient {
+public class FileManagementApiClient extends AbstractApiHttpClient {
 
     public FileManagementApiClient(IHttpClient httpClient) {
         super(httpClient);
@@ -32,16 +31,16 @@ public class FileManagementApiClient extends AbstractBaiduNetDiskApiClient {
      * @author xiaoweiba1028@gmail.com
      * @date 2022/10/11 9:36
      */
-    public CreateDirResponse createDir(String newDstPath) {
+    public CreateDirResponse createDir(Map<String, Object> buildParams, String newDstPath) {
         if (StrUtil.isBlank(newDstPath) || !newDstPath.startsWith("/")) {
             String msg = String.format("路径应以 '/' 开头! 错误路径: %s", newDstPath);
             throw new IllegalArgumentException(msg);
         }
-        return httpClient.execute(HttpRequest.urlFormatBuilder(Method.POST, UrlConstants.POST_CREATE_DIR).params(new HashMap<String, Object>() {{
+        return postExecute(UrlConstants.POST_CREATE_DIR, buildParams, new HashMap<String, Object>() {{
             put("isdir", 1);
             put("block_list", "[]");
             put("path", newDstPath);
-        }}), new TypeReference<CreateDirResponse>() {
+        }}, new TypeReference<CreateDirResponse>() {
         });
     }
 }

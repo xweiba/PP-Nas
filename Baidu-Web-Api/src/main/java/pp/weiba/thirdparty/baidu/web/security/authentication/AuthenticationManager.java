@@ -1,7 +1,6 @@
 package pp.weiba.thirdparty.baidu.web.security.authentication;
 
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.baidu.web.security.Authentication;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,4 +28,7 @@ public class AuthenticationManager {
         authenticationMap.remove(key);
     }
 
+    public static Authentication getAuthentication(String identityInformationId, String identityInformationType) {
+        return getAuthentication(identityInformationId + "_" + identityInformationType);
+    }
 }

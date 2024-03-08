@@ -1,5 +1,6 @@
 package pp.weiba.thirdparty.baidu.web.client;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;
@@ -29,8 +30,14 @@ public abstract class AbstractHttpClient<T, F> implements IHttpClient {
     public HttpResponse execute(HttpRequest request) {
         // 前置过滤
         request = dataProcess(requestProcessors, request);
+
+        if (log.isDebugEnabled()) {
+            log.debug("execute request: {}", JSONUtil.toJsonStr(request));
+        }
+
         // 适配请求数据
         T adapterRequest = httpTypeAdapter.adapter(request);
+
         // 执行请求
         F executeRequest = execute(adapterRequest);
         // 适配响应数据
@@ -107,7 +114,7 @@ public abstract class AbstractHttpClient<T, F> implements IHttpClient {
      * @date 2024/3/7 10:37
      */
     private <E> boolean checkListContains(List<E> list, Object checkObj) {
-        if (list == null || list.isEmpty() || checkObj == null) {
+        if (list == null || checkObj == null) {
             return false;
         }
         return list.stream().noneMatch(responseFilter -> responseFilter.getClass().equals(checkObj.getClass()));

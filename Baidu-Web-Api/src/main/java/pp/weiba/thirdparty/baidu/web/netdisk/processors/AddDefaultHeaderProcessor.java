@@ -27,13 +27,13 @@ public class AddDefaultHeaderProcessor implements IDataProcessor<HttpRequest> {
             put("DNT", "1");
             put("Referer", UrlConstants.HEADER_REFERER);
             put("Pragma", "no-cache");
-            put("Sec-ch-ua", "\"Microsoft Edge\";v=\"105\", \" Not;A Brand\";v=\"99\", \"Chromium\";v=\"105\"");
+            put("Sec-ch-ua", "\"Chromium\";v=\"122\", \"Not(A:Brand\";v=\"24\", \"Microsoft Edge\";v=\"122\"");
             put("Sec-ch-ua-mobile", "?0");
             put("Sec-ch-ua-platform", "\"Windows\"");
             put("Sec-Fetch-Dest", "empty");
             put("Sec-Fetch-Mode", "cors");
             put("Sec-Fetch-Site", "same-origin");
-            put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.42");
+            put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0");
             put("X-Requested-With", "XMLHttpRequest");
         }
     };

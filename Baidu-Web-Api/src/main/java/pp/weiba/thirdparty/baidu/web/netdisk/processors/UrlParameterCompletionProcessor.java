@@ -6,6 +6,8 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.thirdparty.baidu.web.client.HttpRequest;
 import pp.weiba.thirdparty.baidu.web.client.IDataProcessor;
 import pp.weiba.thirdparty.baidu.web.netdisk.utils.BaiduWebApiUtils;
+import pp.weiba.thirdparty.baidu.web.security.authentication.Authentication;
+import pp.weiba.thirdparty.baidu.web.security.authentication.AuthenticationManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,8 +37,8 @@ public class UrlParameterCompletionProcessor implements IDataProcessor<HttpReque
         if (url.contains("{bdstoken}")) {
             formatMap = initMap(formatMap);
 
-            String identityInformationId = (String) request.getBuildParams().get("identityInformationId");
-            String identityInformationType = (String) request.getBuildParams().get("identityInformationType");
+            String identityInformationId = (String) request.getBuildParams().get("authenticationId");
+            String identityInformationType = (String) request.getBuildParams().get("authenticationType");
             String bdstoken = getBDStoken(identityInformationId, identityInformationType);
 
             formatMap.put("bdstoken", bdstoken);
@@ -50,13 +52,11 @@ public class UrlParameterCompletionProcessor implements IDataProcessor<HttpReque
     }
 
     private String getBDStoken(String identityInformationId, String identityInformationType) {
-
-        return null;
-    }
-
-    private String replacePlaceholder(String str, String regex, String replacement) {
-        String replacePlaceholder = regex + "={}";
-        return str.replaceAll(replacePlaceholder, regex + "=" + replacement);
+        Authentication authentication = AuthenticationManager.getAuthentication(identityInformationId, identityInformationType);
+        if (authentication == null || authentication.getTemplateVariable() == null || StrUtil.isBlank(authentication.getTemplateVariable().getBdstoken())) {
+            return null;
+        }
+        return authentication.getTemplateVariable().getBdstoken();
     }
 
     private <T, F> Map<T, F> initMap(Map<T, F> formatMap) {

@@ -1,9 +1,8 @@
 package pp.weiba.thirdparty.baidu.web.client;
 
 import cn.hutool.core.util.StrUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
@@ -18,19 +17,18 @@ import java.util.Map;
  */
 @Log4j2
 @Accessors(chain = true)
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class HttpRequest {
 
     private String url;
 
     // url 是否需要Encode
-    private Boolean disableUrlEncoding = Boolean.FALSE;
+    private boolean disableUrlEncoding = Boolean.FALSE;
 
     private Method method = Method.GET;
 
-    private Map<String, Object> params;
+    private Map<String, Object> requestParams;
 
     private String requestBody;
 
@@ -38,42 +36,43 @@ public class HttpRequest {
 
     private Map<String, String> headerMap = new HashMap<>();
 
-    private Integer timeout;
+    private int timeout = 60000;
 
     // 设置是否打开重定向，如果打开默认重定向次数为2
-    private Boolean followRedirects;
+    private boolean followRedirect;
 
     // 重定向最大次数
-    private Integer maxRedirectCount;
+    private int maxRedirectCount = 2;
 
     // 重定向是否携带cookie 默认false
-    private Boolean followRedirectsCookie;
+    private boolean followRedirectsCookie;
 
     // 构建参数, 不参与请求
     private Map<String, Object> buildParams;
 
-    public static HttpRequest urlFormatBuilder(CharSequence urlTemplate) {
-        return urlFormatBuilder(Method.GET, urlTemplate, null);
+    public static HttpRequest urlFormatBuilder(CharSequence urlTemplate, Map<String, Object> buildParams) {
+        return urlFormatBuilder(Method.GET, urlTemplate, buildParams, null);
     }
 
-    public static HttpRequest urlFormatBuilder(CharSequence urlTemplate, Map<?, ?> urlParams) {
-        return urlFormatBuilder(Method.GET, urlTemplate, urlParams);
+    public static HttpRequest urlFormatBuilder(CharSequence urlTemplate, Map<String, Object> buildParams, Map<?, ?> urlParams) {
+        return urlFormatBuilder(Method.GET, urlTemplate, buildParams, urlParams);
     }
 
-    public static HttpRequest urlFormatBuilder(Method method, CharSequence urlTemplate) {
-        return urlFormatBuilder(method, urlTemplate, null);
+    public static HttpRequest urlFormatBuilder(Method method, CharSequence urlTemplate, Map<String, Object> buildParams) {
+        return urlFormatBuilder(method, urlTemplate, buildParams, null);
     }
 
-    public static HttpRequest urlFormatBuilder(Method method, CharSequence urlTemplate, Map<?, ?> urlParams) {
+    public static HttpRequest urlFormatBuilder(Method method, CharSequence urlTemplate, Map<String, Object> buildParams, Map<?, ?> urlParams) {
         String url = StrUtil.format(urlTemplate, urlParams);
         HttpRequest httpRequest = new HttpRequest();
         httpRequest.setUrl(url);
         httpRequest.setMethod(method);
+        httpRequest.setBuildParams(buildParams);
         return httpRequest;
     }
 
-    public HttpRequest addParam(String key, Object value) {
-        this.params = addMapValue(this.params, key, value);
+    public HttpRequest addRequestParams(String key, Object value) {
+        this.requestParams = addMapValue(this.requestParams, key, value);
         return this;
     }
 
@@ -87,19 +86,24 @@ public class HttpRequest {
         return this;
     }
 
-    public <T> Map<String, T> addMapValue(Map<String, T> map, String key, T value) {
-        if (map == null) map = new HashMap<>();
-        map.put(key, value);
-        return map;
-    }
-
-    public HttpRequest params(Map<String, Object> hashMap) {
-        this.params = hashMap;
+    public HttpRequest requestParams(Map<String, Object> hashMap) {
+        this.requestParams = hashMap;
         return this;
     }
 
     public HttpRequest handler(Map<String, String> headerMap) {
         this.headerMap = headerMap;
         return this;
+    }
+
+    public <T> Map<String, T> addMapValue(Map<String, T> map, String key, T value) {
+        map = initMap(map);
+        map.put(key, value);
+        return map;
+    }
+
+    public <T> Map<String, T> initMap(Map<String, T> map) {
+        if (map == null) map = new HashMap<>();
+        return map;
     }
 }

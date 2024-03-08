@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.security;
+package pp.weiba.thirdparty.baidu.web.security.authentication;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import pp.weiba.thirdparty.baidu.web.netdisk.base.LoginStatusResponse;
 import pp.weiba.thirdparty.baidu.web.netdisk.base.TemplateVariableResponse;
 
 /**
- * 认证信息
+ * 百度认证信息
  *
  * @author weiba
  * @date 2024/3/7 16:22

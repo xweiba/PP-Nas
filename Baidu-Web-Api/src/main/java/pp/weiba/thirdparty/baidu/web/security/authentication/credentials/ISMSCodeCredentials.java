@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.security.authentication;
+package pp.weiba.thirdparty.baidu.web.security.authentication.credentials;
 
 /**
  * 短信验证接口
@@ -6,7 +6,7 @@ package pp.weiba.thirdparty.baidu.web.security.authentication;
  * @author weiba
  * @date 2024/3/7 16:34
  */
-public interface ISMSCodeCredentials {
+public interface ISMSCodeCredentials extends ICredential {
 
     // 发送短信
     Boolean sendSMS(String phone);
