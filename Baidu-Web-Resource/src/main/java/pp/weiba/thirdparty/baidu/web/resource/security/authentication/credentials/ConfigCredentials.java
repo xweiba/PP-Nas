@@ -16,7 +16,7 @@ import java.util.Properties;
  * @date 2024/3/6 14:59
  */
 @Log4j2
-public class ConfigCredentials implements IConfigCredentials {
+public class ConfigCredentials implements IConfigCredentials<Authentication> {
 
     private final String configPath;
 

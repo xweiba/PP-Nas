@@ -92,7 +92,10 @@ public class HttpRequest {
     }
 
     public HttpRequest handler(Map<String, String> headerMap) {
-        this.headerMap = headerMap;
+        this.headerMap = initMap(this.headerMap);
+        if (headerMap != null) {
+            this.headerMap.putAll(headerMap);
+        }
         return this;
     }
 

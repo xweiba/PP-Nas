@@ -8,7 +8,7 @@ import java.util.Properties;
  * @author weiba
  * @date 2024/3/8 11:00
  */
-public interface IConfigCredentials extends ICredential {
+public interface IConfigCredentials<T> extends ICredential<T> {
 
     Properties getProperties();
 

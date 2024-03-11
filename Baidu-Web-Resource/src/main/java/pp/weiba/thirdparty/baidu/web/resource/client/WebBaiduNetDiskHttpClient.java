@@ -3,8 +3,8 @@ package pp.weiba.thirdparty.baidu.web.resource.client;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.AbstractHttpClientWrap;
 import pp.weiba.framework.core.client.IHttpClient;
+import pp.weiba.framework.core.client.IHttpClientAuthentication;
 import pp.weiba.thirdparty.baidu.web.resource.processors.AddDefaultHeaderProcessor;
-import pp.weiba.thirdparty.baidu.web.resource.processors.AddHeaderCookieProcessor;
 import pp.weiba.thirdparty.baidu.web.resource.processors.ErrorStatusProcessor;
 import pp.weiba.thirdparty.baidu.web.resource.processors.UrlParameterCompletionProcessor;
 
@@ -17,8 +17,8 @@ import pp.weiba.thirdparty.baidu.web.resource.processors.UrlParameterCompletionP
 @Log4j2
 public class WebBaiduNetDiskHttpClient extends AbstractHttpClientWrap {
 
-    public WebBaiduNetDiskHttpClient(IHttpClient httpClient) {
-        super(httpClient);
+    public WebBaiduNetDiskHttpClient(IHttpClient httpClient, IHttpClientAuthentication authentication) {
+        super(httpClient, authentication);
     }
 
     /**
@@ -26,15 +26,13 @@ public class WebBaiduNetDiskHttpClient extends AbstractHttpClientWrap {
      */
     protected void initDefaultProcessors() {
         // 全局参数补全处理
-        addRequestDataProcessor(new UrlParameterCompletionProcessor());
+        addRequestDataProcessor(new UrlParameterCompletionProcessor(authentication));
 
         // 全局参数头处理
         addRequestDataProcessor(new AddDefaultHeaderProcessor());
 
-        // 全局参数cookie处理
-        addRequestDataProcessor(new AddHeaderCookieProcessor());
-
         // 接口异常处理
         addResponseDataProcessor(new ErrorStatusProcessor());
+
     }
 }

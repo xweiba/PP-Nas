@@ -7,7 +7,6 @@ import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.UrlConstants;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 基础信息
@@ -29,8 +28,8 @@ public class BaseApiClient extends AbstractApiHttpClient {
      * @author weiba
      * @date 2024/3/7 14:57
      */
-    public CapacityResponse getCapacity(Map<String, Object> buildParams) {
-        return execute(UrlConstants.GET_QUOTA, buildParams, new TypeReference<CapacityResponse>() {
+    public CapacityResponse getCapacity() {
+        return execute(UrlConstants.GET_QUOTA, new TypeReference<CapacityResponse>() {
         });
     }
 
@@ -41,9 +40,9 @@ public class BaseApiClient extends AbstractApiHttpClient {
      * @author weiba
      * @date 2024/3/7 14:57
      */
-    public TemplateVariableResponse getTemplateVariable(Map<String, Object> buildParams) {
+    public TemplateVariableResponse getTemplateVariable() {
         String pageTemplateVariableFields = "\"bdstoken\",\"token\",\"uk\",\"isdocuser\",\"servertime\"";
-        return getPageTemplateVariable(buildParams, pageTemplateVariableFields, new TypeReference<TemplateVariableResponse>() {
+        return getPageTemplateVariable(pageTemplateVariableFields, new TypeReference<TemplateVariableResponse>() {
         });
     }
 
@@ -55,8 +54,8 @@ public class BaseApiClient extends AbstractApiHttpClient {
      * @author weiba
      * @date 2024/3/7 14:57
      */
-    public <T> T getPageTemplateVariable(Map<String, Object> buildParams, String fields, TypeReference<T> typeReference) {
-        return execute(UrlConstants.GET_TEMPLATE_VARIABLE, buildParams, new HashMap<String, String>() {{
+    public <T> T getPageTemplateVariable(String fields, TypeReference<T> typeReference) {
+        return execute(UrlConstants.GET_TEMPLATE_VARIABLE, new HashMap<String, String>() {{
             put("fields", fields);
         }}, typeReference);
     }
@@ -68,8 +67,8 @@ public class BaseApiClient extends AbstractApiHttpClient {
      * @author weiba
      * @date 2024/3/7 17:39
      */
-    public LoginStatusResponse getLoginStatus(Map<String, Object> buildParams) {
-        return execute(UrlConstants.GET_LOGIN_STATUS, buildParams, new TypeReference<LoginStatusResponse>() {
+    public LoginStatusResponse getLoginStatus() {
+        return execute(UrlConstants.GET_LOGIN_STATUS, new TypeReference<LoginStatusResponse>() {
         });
     }
 }

@@ -15,11 +15,14 @@ public abstract class AbstractHttpClientWrap implements IHttpClient {
 
     protected final IHttpClient httpClient;
 
+    protected final IHttpClientAuthentication authentication;
+
     // 延时初始化， 避免在对象构造时就执行不必要的逻辑，以提高性能和资源利用率。
     private boolean isClientConfigInitialized = false;
 
-    public AbstractHttpClientWrap(IHttpClient httpClient) {
+    public AbstractHttpClientWrap(IHttpClient httpClient, IHttpClientAuthentication authentication) {
         this.httpClient = httpClient;
+        this.authentication = authentication;
     }
 
     private synchronized void ensureClientConfigInitialized() {
@@ -31,13 +34,24 @@ public abstract class AbstractHttpClientWrap implements IHttpClient {
 
     @Override
     public HttpResponse execute(HttpRequest request) {
-        ensureClientConfigInitialized();
+        request = initExecute(request);
         return httpClient.execute(request);
+    }
+
+    private HttpRequest initExecute(HttpRequest request) {
+        ensureClientConfigInitialized();
+        request = authenticationHttpRequest(request);
+        return request;
+    }
+
+    // 处理请求认证信息
+    private HttpRequest authenticationHttpRequest(HttpRequest request) {
+        return authentication.authentication(request);
     }
 
     @Override
     public <T> T execute(HttpRequest request, TypeReference<T> typeReference) {
-        ensureClientConfigInitialized();
+        request = initExecute(request);
         return httpClient.execute(request, typeReference);
     }
 
@@ -51,6 +65,7 @@ public abstract class AbstractHttpClientWrap implements IHttpClient {
         httpClient.addResponseDataProcessor(httpResponseProcessor);
     }
 
+    // 初始化所有的请求数据处理器
     protected abstract void initDefaultProcessors();
 
     protected void initClientConfig() {

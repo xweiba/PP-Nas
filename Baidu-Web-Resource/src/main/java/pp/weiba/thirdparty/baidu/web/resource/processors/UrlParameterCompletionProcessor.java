@@ -4,10 +4,11 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.HttpRequest;
+import pp.weiba.framework.core.client.IHttpClientAuthentication;
 import pp.weiba.framework.core.convert.IDataProcessor;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduWebApiUtils;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
-import pp.weiba.thirdparty.baidu.web.resource.security.authentication.AuthenticationManager;
+import pp.weiba.thirdparty.baidu.web.resource.security.authentication.BaiduAuthenticationManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,12 @@ import java.util.Map;
  */
 @Log4j2
 public class UrlParameterCompletionProcessor implements IDataProcessor<HttpRequest> {
+
+    private final IHttpClientAuthentication httpClientAuthentication;
+
+    public UrlParameterCompletionProcessor(IHttpClientAuthentication httpClientAuthentication) {
+        this.httpClientAuthentication = httpClientAuthentication;
+    }
 
     @Override
     public HttpRequest process(HttpRequest request) {
@@ -36,10 +43,7 @@ public class UrlParameterCompletionProcessor implements IDataProcessor<HttpReque
         }
         if (url.contains("{bdstoken}")) {
             formatMap = initMap(formatMap);
-
-            String identityInformationId = (String) request.getBuildParams().get("authenticationId");
-            String identityInformationType = (String) request.getBuildParams().get("authenticationType");
-            String bdstoken = getBDStoken(identityInformationId, identityInformationType);
+            String bdstoken = getBDStoken();
 
             formatMap.put("bdstoken", bdstoken);
         }
@@ -51,8 +55,8 @@ public class UrlParameterCompletionProcessor implements IDataProcessor<HttpReque
         return request;
     }
 
-    private String getBDStoken(String identityInformationId, String identityInformationType) {
-        Authentication authentication = AuthenticationManager.getAuthentication(identityInformationId, identityInformationType);
+    private String getBDStoken() {
+        Authentication authentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
         if (authentication == null || authentication.getTemplateVariable() == null || StrUtil.isBlank(authentication.getTemplateVariable().getBdstoken())) {
             return null;
         }
