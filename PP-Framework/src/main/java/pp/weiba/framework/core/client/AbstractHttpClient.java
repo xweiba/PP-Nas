@@ -1,13 +1,10 @@
 package pp.weiba.framework.core.client;
 
-import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.core.convert.IDataProcessor;
 import pp.weiba.framework.core.convert.ITypeReferenceProcessor;
 import pp.weiba.framework.core.convert.TypeReference;
-
-import java.util.ArrayList;
-import java.util.List;
+import pp.weiba.framework.core.handler.IHandler;
+import pp.weiba.framework.utils.HandlerUtils;
 
 /**
  * HttpClient 客户端
@@ -18,11 +15,17 @@ import java.util.List;
 @Log4j2
 public abstract class AbstractHttpClient<T, F> implements IHttpClient {
 
+    // Http 请求与响应信息转换器
     private final IHttpTypeAdapter<T, F> httpTypeAdapter;
-    private final ITypeReferenceProcessor<String> typeReferenceProcessor;
-    private List<IDataProcessor<HttpRequest>> requestProcessors;
-    private List<IDataProcessor<HttpResponse>> responseProcessors;
 
+    // Http 响应body转对象-转换器
+    private final ITypeReferenceProcessor<String> typeReferenceProcessor;
+
+    // Http 请求参数处理链
+    private IHandler<HttpRequest> requestChain;
+
+    // Http 响应处理链
+    private IHandler<HttpResponse> responseChain;
 
     public AbstractHttpClient(IHttpTypeAdapter<T, F> httpTypeAdapter, ITypeReferenceProcessor<String> typeReferenceProcessor) {
         this.httpTypeAdapter = httpTypeAdapter;
@@ -31,95 +34,55 @@ public abstract class AbstractHttpClient<T, F> implements IHttpClient {
 
     @Override
     public HttpResponse execute(HttpRequest request) {
-        // 前置过滤
-        request = dataProcess(requestProcessors, request);
 
-        if (log.isDebugEnabled()) {
-            log.debug("execute request: {}", JSONUtil.toJsonStr(request));
+        // 请求参数处理器
+        if (requestChain != null) {
+            request = requestChain.handle(request);
         }
 
+        // 执行请求
+        HttpResponse adapterResponse = httpExecute(request);
+
+        // 响应信息过滤
+        if (responseChain != null) {
+            adapterResponse = responseChain.handle(adapterResponse);
+        }
+        return adapterResponse;
+    }
+
+    private HttpResponse httpExecute(HttpRequest request) {
         // 适配请求数据
         T adapterRequest = httpTypeAdapter.adapter(request);
 
         // 执行请求
         F executeRequest = execute(adapterRequest);
+
         // 适配响应数据
-        HttpResponse adapterResponse = httpTypeAdapter.adapter(executeRequest);
-        // 后置过滤
-        adapterResponse = dataProcess(responseProcessors, adapterResponse);
-        return adapterResponse;
+        return httpTypeAdapter.adapter(executeRequest);
     }
 
     @Override
-    public <T> T execute(HttpRequest request, TypeReference<T> typeReference) {
+    public <R> R execute(HttpRequest request, TypeReference<R> typeReference) {
         HttpResponse response = execute(request);
         return typeReferenceProcessor.process(response.getBody(), typeReference);
     }
 
     protected abstract F execute(T request);
 
-    @Override
-    public void addRequestDataProcessor(IDataProcessor<HttpRequest> httpRequestProcessor) {
-        requestProcessors = addDataProcessor(requestProcessors, httpRequestProcessor);
-    }
-
-    @Override
-    public void addResponseDataProcessor(IDataProcessor<HttpResponse> httpResponseProcessor) {
-        responseProcessors = addDataProcessor(responseProcessors, httpResponseProcessor);
-    }
-
-    /**
-     * 数据处理
-     *
-     * @param list 集合
-     * @param data 数据
-     * @return 数据
-     * @author weiba
-     * @date 2024/3/7 10:35
-     */
-    private <E> E dataProcess(List<IDataProcessor<E>> list, E data) {
-        if (null != list) {
-            for (IDataProcessor<E> dataProcessor : list) {
-                data = dataProcessor.process(data);
-            }
+    public void addRequestHandler(IHandler<HttpRequest> requestHandler) {
+        if (requestChain == null) {
+            requestChain = requestHandler;
+        } else {
+            HandlerUtils.addHandlerToEnd(requestChain, requestHandler, Boolean.TRUE);
         }
-        return data;
     }
 
-    /**
-     * 添加数据处理器
-     *
-     * @param list             集合
-     * @param addDataProcessor 添加数据处理器
-     * @return 集合
-     * @author weiba
-     * @date 2024/3/7 10:36
-     */
-    private <E> List<IDataProcessor<E>> addDataProcessor(List<IDataProcessor<E>> list, IDataProcessor<E> addDataProcessor) {
-        if (null == list) {
-            list = new ArrayList<>();
+    public void addResponseHandler(IHandler<HttpResponse> responseHandler) {
+        if (responseChain == null) {
+            responseChain = responseHandler;
+        } else {
+            HandlerUtils.addHandlerToEnd(responseChain, responseHandler, Boolean.TRUE);
         }
-
-        if (checkListContains(list, addDataProcessor)) {
-            list.add(addDataProcessor);
-        }
-        return list;
     }
 
-
-    /**
-     * 集合中是否包含某个类型的元素
-     *
-     * @param list     集合
-     * @param checkObj 检查对象
-     * @return 是or否
-     * @author weiba
-     * @date 2024/3/7 10:37
-     */
-    private <E> boolean checkListContains(List<E> list, Object checkObj) {
-        if (list == null || checkObj == null) {
-            return false;
-        }
-        return list.stream().noneMatch(responseFilter -> responseFilter.getClass().equals(checkObj.getClass()));
-    }
 }

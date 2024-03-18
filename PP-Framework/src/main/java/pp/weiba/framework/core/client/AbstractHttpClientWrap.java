@@ -1,8 +1,8 @@
 package pp.weiba.framework.core.client;
 
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.core.convert.IDataProcessor;
 import pp.weiba.framework.core.convert.TypeReference;
+import pp.weiba.framework.core.handler.IHandler;
 
 /**
  * HttpClient 包装器
@@ -56,13 +56,13 @@ public abstract class AbstractHttpClientWrap implements IHttpClient {
     }
 
     @Override
-    public void addRequestDataProcessor(IDataProcessor<HttpRequest> httpRequestProcessor) {
-        httpClient.addRequestDataProcessor(httpRequestProcessor);
+    public void addRequestHandler(IHandler<HttpRequest> requestHandler) {
+        httpClient.addRequestHandler(requestHandler);
     }
 
     @Override
-    public void addResponseDataProcessor(IDataProcessor<HttpResponse> httpResponseProcessor) {
-        httpClient.addResponseDataProcessor(httpResponseProcessor);
+    public void addResponseHandler(IHandler<HttpResponse> responseHandler) {
+        httpClient.addResponseHandler(responseHandler);
     }
 
     // 初始化所有的请求数据处理器

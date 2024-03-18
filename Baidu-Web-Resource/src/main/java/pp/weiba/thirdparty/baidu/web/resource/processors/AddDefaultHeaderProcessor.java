@@ -2,7 +2,7 @@ package pp.weiba.thirdparty.baidu.web.resource.processors;
 
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.HttpRequest;
-import pp.weiba.framework.core.convert.IDataProcessor;
+import pp.weiba.framework.core.convert.IProcessor;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.UrlConstants;
 
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @date 2024/3/7 16:48
  */
 @Log4j2
-public class AddDefaultHeaderProcessor implements IDataProcessor<HttpRequest> {
+public class AddDefaultHeaderProcessor implements IProcessor<HttpRequest> {
 
     public static final Map<String, String> HTTP_HEADER = new HashMap<String, String>() {
         {

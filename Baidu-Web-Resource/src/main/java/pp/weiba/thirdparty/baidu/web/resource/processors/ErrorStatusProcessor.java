@@ -3,7 +3,7 @@ package pp.weiba.thirdparty.baidu.web.resource.processors;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.HttpResponse;
-import pp.weiba.framework.core.convert.IDataProcessor;
+import pp.weiba.framework.core.convert.IProcessor;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.ErrorStatus;
 
 /**
@@ -13,7 +13,7 @@ import pp.weiba.thirdparty.baidu.web.api.netdisk.ErrorStatus;
  * @date 2024/3/7 16:01
  */
 @Log4j2
-public class ErrorStatusProcessor implements IDataProcessor<HttpResponse> {
+public class ErrorStatusProcessor implements IProcessor<HttpResponse> {
 
     @Override
     public HttpResponse process(HttpResponse request) {

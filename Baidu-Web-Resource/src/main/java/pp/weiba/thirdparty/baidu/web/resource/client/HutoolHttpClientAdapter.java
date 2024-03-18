@@ -11,7 +11,6 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.Method;
-import cn.hutool.json.JSONUtil;
 import lombok.extern.log4j.Log4j2;
 import org.junit.platform.commons.util.StringUtils;
 import pp.weiba.framework.core.client.AbstractHttpClient;
@@ -113,7 +112,7 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
             }
 
             if (log.isDebugEnabled()) {
-                log.debug("execute adapterRequest: {}", JSONUtil.toJsonStr(httpRequest));
+                log.debug("execute adapterRequest: {}", httpRequest.toString());
             }
             return httpRequest;
         }

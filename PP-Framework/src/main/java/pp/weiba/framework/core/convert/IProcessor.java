@@ -6,7 +6,7 @@ package pp.weiba.framework.core.convert;
  * @author weiba
  * @date 2024/3/7 10:25
  */
-public interface IDataProcessor<T> {
+public interface IProcessor<T> {
 
     T process(T request);
 

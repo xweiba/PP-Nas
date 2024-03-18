@@ -1,7 +1,6 @@
 package pp.weiba.thirdparty.baidu.web.resource.client;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.cookie.Cookie;
@@ -92,7 +91,7 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
             }
 
             if (log.isDebugEnabled()) {
-                log.debug("execute adapterRequest: {}", JSONUtil.toJsonStr(requestBuilder.build()));
+                log.debug("execute adapterRequest: {}", requestBuilder.build().toString());
             }
             return requestBuilder;
         }

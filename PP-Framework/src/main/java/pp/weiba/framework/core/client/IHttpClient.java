@@ -1,7 +1,7 @@
 package pp.weiba.framework.core.client;
 
-import pp.weiba.framework.core.convert.IDataProcessor;
 import pp.weiba.framework.core.convert.TypeReference;
+import pp.weiba.framework.core.handler.IHandler;
 
 /**
  * Http客户端
@@ -37,19 +37,19 @@ public interface IHttpClient {
     /**
      * 添加请求过滤器，默认实现同类型过滤器只会被添加一次
      *
-     * @param httpRequestProcessor 过滤器
+     * @param requestHandler 过滤器
      * @author weiba
      * @date 2024/3/6 17:07
      */
-    void addRequestDataProcessor(IDataProcessor<HttpRequest> httpRequestProcessor);
+    void addRequestHandler(IHandler<HttpRequest> requestHandler);
 
     /**
      * 添加响应过滤器，默认实现同类型过滤器只会被添加一次
      *
-     * @param httpResponseProcessor 过滤器
+     * @param responseHandler 过滤器
      * @author weiba
      * @date 2024/3/6 17:07
      */
-    void addResponseDataProcessor(IDataProcessor<HttpResponse> httpResponseProcessor);
+    void addResponseHandler(IHandler<HttpResponse> responseHandler);
     
 }
