@@ -50,6 +50,10 @@ public class HttpRequest {
     // 构建参数, 不参与请求
     private Map<String, Object> buildParams;
 
+    public static HttpRequest urlFormatBuilder(CharSequence urlTemplate) {
+        return urlFormatBuilder(Method.GET, urlTemplate, null, null);
+    }
+
     public static HttpRequest urlFormatBuilder(CharSequence urlTemplate, Map<String, Object> buildParams) {
         return urlFormatBuilder(Method.GET, urlTemplate, buildParams, null);
     }

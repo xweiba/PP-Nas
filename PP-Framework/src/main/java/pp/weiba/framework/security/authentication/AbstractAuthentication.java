@@ -9,13 +9,13 @@ import lombok.extern.log4j.Log4j2;
  * @date 2024/3/8 11:10
  */
 @Log4j2
-public abstract class AbstractAuthenticationBuilder<T> implements IAuthenticationBuilder<T> {
+public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
 
     protected final String authenticationId;
 
     protected final String authenticationType;
 
-    public AbstractAuthenticationBuilder(String authenticationId, String authenticationType) {
+    public AbstractAuthentication(String authenticationId, String authenticationType) {
         this.authenticationId = authenticationId;
         this.authenticationType = authenticationType;
     }
@@ -50,11 +50,18 @@ public abstract class AbstractAuthenticationBuilder<T> implements IAuthenticatio
     protected abstract T completeAuthenticationInformation(T authentication);
 
     @Override
-    public T buildAuthentication() {
+    public T login() {
         T authentication = initAuthentication();
         authentication = detectionAuthentication(authentication);
         authentication = completeAuthenticationInformation(authentication);
         return authentication;
     }
+
+    @Override
+    public void logout() {
+        doLogout();
+    }
+
+    protected abstract void doLogout();
 
 }

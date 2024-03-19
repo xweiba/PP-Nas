@@ -94,7 +94,7 @@ public abstract class AbstractHttpClient<T, F> extends BaseHandler<ExecutorParam
             } else {
                 this.executorChain.setNext(executeHandler);
             }
-            // 本类必须最后执行，因为加入的执行链必须在本类执行链之前执行
+            // 本类必须最后执行，因为加入的执行链必须在本类执行链之前执行，才能实现拦截能力。
             executeHandler.setNext(this);
         }
     }

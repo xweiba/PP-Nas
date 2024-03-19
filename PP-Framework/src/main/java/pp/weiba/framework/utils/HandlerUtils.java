@@ -20,7 +20,7 @@ public class HandlerUtils {
     public static <T> void addHandlerToEnd(IHandler<T> current, IHandler<T> newHandler, boolean isFilterDuplicates) {
         if (current == null || newHandler == null) return;
         while (true) {
-            if (isFilterDuplicates && (current == newHandler || current.getClass().equals(newHandler.getClass()))) {
+            if (isFilterDuplicates && (current == newHandler)) {
                 // 过滤重复的处理器
                 break;
             }

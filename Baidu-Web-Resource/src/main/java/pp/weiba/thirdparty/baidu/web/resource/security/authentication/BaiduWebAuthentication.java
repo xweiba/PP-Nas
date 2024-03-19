@@ -2,9 +2,9 @@ package pp.weiba.thirdparty.baidu.web.resource.security.authentication;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.security.authentication.AbstractAuthenticationBuilder;
+import pp.weiba.framework.security.authentication.AbstractAuthentication;
 import pp.weiba.framework.security.authentication.credential.ICredential;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.base.BaseApiClient;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.base.AuthenticationApiClient;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.base.LoginStatusResponse;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.base.TemplateVariableResponse;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
@@ -16,16 +16,16 @@ import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
  * @date 2024/3/8 11:10
  */
 @Log4j2
-public class BaiduWebAuthenticationBuilder extends AbstractAuthenticationBuilder<Authentication> {
+public class BaiduWebAuthentication extends AbstractAuthentication<Authentication> {
 
 
-    private final BaseApiClient baseApiClient;
+    private final AuthenticationApiClient authenticationApiClient;
 
     private final ICredential<Authentication> credential;
 
-    public BaiduWebAuthenticationBuilder(String authenticationId, String authenticationType, BaseApiClient baseApiClient, ICredential<Authentication> credential) {
+    public BaiduWebAuthentication(String authenticationId, String authenticationType, AuthenticationApiClient authenticationApiClient, ICredential<Authentication> credential) {
         super(authenticationId, authenticationType);
-        this.baseApiClient = baseApiClient;
+        this.authenticationApiClient = authenticationApiClient;
         this.credential = credential;
     }
 
@@ -44,15 +44,21 @@ public class BaiduWebAuthenticationBuilder extends AbstractAuthenticationBuilder
             log.error("百度网盘认证信息为空");
             throw new RuntimeException("百度网盟能认证信息为空");
         }
-        LoginStatusResponse loginStatus = baseApiClient.getLoginStatus();
+        LoginStatusResponse loginStatus = authenticationApiClient.getLoginStatus();
         authentication.setLoginInfo(loginStatus.getLoginInfo());
         return authentication;
     }
 
     @Override
     public Authentication completeAuthenticationInformation(Authentication authentication) {
-        TemplateVariableResponse templateVariable = baseApiClient.getTemplateVariable();
+        TemplateVariableResponse templateVariable = authenticationApiClient.getTemplateVariable();
         authentication.setTemplateVariable(templateVariable.getResult());
         return authentication;
+    }
+
+    @Override
+    protected void doLogout() {
+        authenticationApiClient.signOut(authenticationId);
+        BaiduAuthenticationManager.removeAuthentication(authenticationId, authenticationType);
     }
 }

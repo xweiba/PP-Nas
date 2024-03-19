@@ -2,6 +2,7 @@ package pp.weiba.thirdparty.baidu.web.api.netdisk.base;
 
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.AbstractApiHttpClient;
+import pp.weiba.framework.core.client.HttpResponse;
 import pp.weiba.framework.core.client.IHttpClient;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.UrlConstants;
@@ -15,9 +16,9 @@ import java.util.HashMap;
  * @date 2024/3/7 9:50
  */
 @Log4j2
-public class BaseApiClient extends AbstractApiHttpClient {
+public class AuthenticationApiClient extends AbstractApiHttpClient {
 
-    public BaseApiClient(IHttpClient httpClient) {
+    public AuthenticationApiClient(IHttpClient httpClient) {
         super(httpClient);
     }
 
@@ -71,4 +72,15 @@ public class BaseApiClient extends AbstractApiHttpClient {
         return execute(UrlConstants.GET_LOGIN_STATUS, new TypeReference<LoginStatusResponse>() {
         });
     }
+
+
+    public void signOut(String authenticationId) {
+        HttpResponse httpResponse = executeResponse(UrlConstants.GET_LOGOUT, new HashMap<String, String>() {{
+            put("AcceptType", "html");
+        }});
+        if (httpResponse.getStatusCode() == 302) {
+            log.info("退出登录成功，authenticationId:{}", authenticationId);
+        }
+    }
+
 }

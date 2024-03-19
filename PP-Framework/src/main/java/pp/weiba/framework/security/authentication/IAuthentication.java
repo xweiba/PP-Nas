@@ -6,7 +6,7 @@ package pp.weiba.framework.security.authentication;
  * @author weiba
  * @date 2024/3/7 16:26
  */
-public interface IAuthenticationBuilder<T> {
+public interface IAuthentication<T> {
 
     /**
      * 构建认证信息
@@ -15,6 +15,14 @@ public interface IAuthenticationBuilder<T> {
      * @author weiba
      * @date 2024/3/8 11:20
      */
-    T buildAuthentication();
+    T login();
+
+    /**
+     * 登出
+     *
+     * @author weiba
+     * @date 2024/3/19 14:05
+     */
+    void logout();
 
 }
