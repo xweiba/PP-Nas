@@ -1,10 +1,9 @@
-package pp.weiba.thirdparty.baidu.web.api.netdisk.file;
+package pp.weiba.thirdparty.baidu.web.api.netdisk.response;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.ApiResponse;
 
 import java.util.Date;
 
@@ -20,7 +19,7 @@ import java.util.Date;
 @Setter
 public class CreateDirResponse extends ApiResponse {
 
-    private Integer ctime;
+    private Date ctime;
     private String fsId;
     private Integer isdir;
     private Date mtime;

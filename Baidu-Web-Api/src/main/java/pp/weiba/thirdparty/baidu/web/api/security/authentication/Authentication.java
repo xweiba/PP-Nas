@@ -4,8 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.base.LoginStatusResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.base.TemplateVariableResponse;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.LoginStatusResponse;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.TemplateVariableResponse;
 
 /**
  * 百度认证信息

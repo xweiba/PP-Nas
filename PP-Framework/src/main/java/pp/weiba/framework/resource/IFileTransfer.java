@@ -4,23 +4,23 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 分片上传接口
+ * 资源传输接口
  *
  * @author weiba
  * @date 2024/3/5 15:54
  */
-public interface IMultipartUploadCapable {
+public interface IFileTransfer {
 
     /**
      * 初始化分片上传
      *
-     * @param resource 要上传的资源对象
+     * @param resourceInfo 要上传的资源对象
      * @return 上传会话标识符 uploadSessionId
      * @throws IOException 发生 I/O 错误时抛出
      * @author weiba
      * @date 2024/3/5 15:54
      */
-    String initiateMultipartUpload(Resource resource) throws IOException;
+    String initiateMultipartUpload(ResourceInfo resourceInfo) throws IOException;
 
     /**
      * 上传分片

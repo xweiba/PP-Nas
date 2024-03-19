@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j2;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ResourceCapacity {
+public class QuotaInfo {
 
     /* 已使用 */
     private long use;

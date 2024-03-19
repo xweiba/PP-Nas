@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Resource {
+public class ResourceInfo {
 
     // 资源标识
     private String id;

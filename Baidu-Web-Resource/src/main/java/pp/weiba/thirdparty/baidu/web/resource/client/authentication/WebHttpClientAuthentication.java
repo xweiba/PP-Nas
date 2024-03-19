@@ -13,9 +13,9 @@ import pp.weiba.thirdparty.baidu.web.resource.security.authentication.BaiduAuthe
  * @date 2024/3/11 10:50
  */
 @Log4j2
-public class WebBaiduHttpClientAuthentication extends AbstractHttpClientAuthentication {
+public class WebHttpClientAuthentication extends AbstractHttpClientAuthentication {
 
-    public WebBaiduHttpClientAuthentication(String authenticationId, String authenticationType) {
+    public WebHttpClientAuthentication(String authenticationId, String authenticationType) {
         super(authenticationId, authenticationType);
     }
 

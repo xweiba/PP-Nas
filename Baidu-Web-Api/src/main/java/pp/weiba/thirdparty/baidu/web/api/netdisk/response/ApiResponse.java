@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.api.netdisk;
+package pp.weiba.thirdparty.baidu.web.api.netdisk.response;
 
 import lombok.Getter;
 import lombok.Setter;

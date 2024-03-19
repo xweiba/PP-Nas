@@ -8,14 +8,14 @@ import pp.weiba.framework.core.client.IHttpClientAuthentication;
 import pp.weiba.framework.security.authentication.IAuthentication;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.framework.test.DefaultTest;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.base.AuthenticationApiClient;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.AuthenticationApiClient;
 import pp.weiba.thirdparty.baidu.web.resource.client.AsyncHttpClientAdapter;
 import pp.weiba.thirdparty.baidu.web.resource.client.WebBaiduNetDiskHttpClient;
-import pp.weiba.thirdparty.baidu.web.resource.client.authentication.WebBaiduHttpClientAuthentication;
+import pp.weiba.thirdparty.baidu.web.resource.client.authentication.WebHttpClientAuthentication;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentials.ManualSetCredentials;
 
-public class BaiduWebAuthenticationTest extends DefaultTest {
+public class WebAuthenticationTest extends DefaultTest {
 
     private static final String BDUSS = "xseE52MG5Kbk9rLUZ2RW50N3JhWGhDYWJ6MWZVcH5WSVJnWVFOaFdpVFBIeFptSUFBQUFBJCQAAAAAAAAAAAEAAADQP5MkcXExNzM4Mjg5OQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM-S7mXPku5lSU";
 
@@ -26,7 +26,7 @@ public class BaiduWebAuthenticationTest extends DefaultTest {
     static String businessType = "user";
 
     // 配置当前用户认证信息, 存储中间变量
-    protected static IHttpClientAuthentication authentication = new WebBaiduHttpClientAuthentication(businessId, businessType);
+    protected static IHttpClientAuthentication authentication = new WebHttpClientAuthentication(businessId, businessType);
 
     // 带授权的客户端
     protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new AsyncHttpClientAdapter(), authentication);

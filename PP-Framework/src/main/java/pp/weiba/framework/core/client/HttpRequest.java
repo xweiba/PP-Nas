@@ -24,7 +24,7 @@ public class HttpRequest {
     private String url;
 
     // url 是否需要Encode
-    private boolean disableUrlEncoding = Boolean.FALSE;
+    private boolean disableUrlEncoding;
 
     private Method method = Method.GET;
 
@@ -49,6 +49,9 @@ public class HttpRequest {
 
     // 构建参数, 不参与请求
     private Map<String, Object> buildParams;
+
+    // 默认开启缓存
+    private boolean disableCache;
 
     public static HttpRequest urlFormatBuilder(CharSequence urlTemplate) {
         return urlFormatBuilder(Method.GET, urlTemplate, null, null);

@@ -1,11 +1,11 @@
-package pp.weiba.thirdparty.baidu.web.api.netdisk.file;
+package pp.weiba.thirdparty.baidu.web.api.netdisk;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.AbstractApiHttpClient;
 import pp.weiba.framework.core.client.IHttpClient;
 import pp.weiba.framework.core.convert.TypeReference;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.UrlConstants;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CreateDirResponse;
 
 import java.util.HashMap;
 
@@ -43,17 +43,5 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
         });
     }
 
-    public CreateDirResponse createDir(String newDstPath, long size, String fileMd5) {
-        if (StrUtil.isBlank(newDstPath) || !newDstPath.startsWith("/")) {
-            String msg = String.format("路径应以 '/' 开头! 错误路径: %s", newDstPath);
-            throw new IllegalArgumentException(msg);
-        }
-        return postExecute(UrlConstants.POST_CREATE_DIR, new HashMap<String, Object>() {{
-            put("size", size);
-            put("block_list", "[" + fileMd5 + "]");
-            put("path", newDstPath);
-            put("rtype", 0);
-        }}, new TypeReference<CreateDirResponse>() {
-        });
-    }
+
 }

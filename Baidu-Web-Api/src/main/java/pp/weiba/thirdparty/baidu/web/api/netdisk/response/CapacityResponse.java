@@ -1,10 +1,9 @@
-package pp.weiba.thirdparty.baidu.web.api.netdisk.base;
+package pp.weiba.thirdparty.baidu.web.api.netdisk.response;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.ApiResponse;
 
 /**
  * 容量信息

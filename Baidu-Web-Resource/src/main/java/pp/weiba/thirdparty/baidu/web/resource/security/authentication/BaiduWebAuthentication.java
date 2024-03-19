@@ -4,10 +4,10 @@ import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.AbstractAuthentication;
 import pp.weiba.framework.security.authentication.credential.ICredential;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.base.AuthenticationApiClient;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.base.LoginStatusResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.base.TemplateVariableResponse;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.LoginStatusResponse;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.TemplateVariableResponse;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.AuthenticationApiClient;
 
 /**
  * 百度网盘认证信息统一处理

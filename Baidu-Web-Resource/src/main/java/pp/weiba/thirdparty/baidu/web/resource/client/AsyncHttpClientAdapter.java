@@ -69,7 +69,7 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
                     .setFollowRedirect(httpRequest.isFollowRedirect());
 
             if (httpRequest.getRequestParams() != null && !httpRequest.getRequestParams().isEmpty()) {
-                httpRequest.getRequestParams().forEach((item, value) -> requestBuilder.addQueryParam(item, JSONObject.toJSONString(value)));
+                httpRequest.getRequestParams().forEach((item, value) -> requestBuilder.addFormParam(item, value instanceof String ? (String) value : JSONObject.toJSONString(value)));
             }
 
             if (httpRequest.getHeaderMap() != null && !httpRequest.getHeaderMap().isEmpty()) {

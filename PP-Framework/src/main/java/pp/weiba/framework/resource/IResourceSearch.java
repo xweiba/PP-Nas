@@ -18,6 +18,6 @@ public interface IResourceSearch {
      * @author weiba
      * @date 2024/3/5 16:03
      */
-    List<Resource> query(ResourceQueryParams params);
+    List<ResourceInfo> query(ResourceQueryParams params);
 
 }
