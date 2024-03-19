@@ -35,4 +35,15 @@ public interface IHandler<T> {
      */
     T handle(T input);
 
+    /**
+     * 是否执行下一个处理器，用于缓存类的处理器，不往下执行了。
+     *
+     * @return 默认为true
+     * @author weiba
+     * @date 2024/3/19 11:44
+     */
+    default boolean canHandle(T input) {
+        return true;
+    }
+
 }

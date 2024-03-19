@@ -26,7 +26,7 @@ public abstract class BaseHandler<T> implements IHandler<T> {
     @Override
     public T handle(T input) {
         T result = process(input);
-        if (next != null) {
+        if (this.canHandle(result) && next != null) {
             return next.handle(result);
         }
         return result;

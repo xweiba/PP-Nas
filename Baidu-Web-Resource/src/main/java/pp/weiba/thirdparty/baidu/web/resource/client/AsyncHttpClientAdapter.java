@@ -48,7 +48,7 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
         return Dsl.asyncHttpClient(configBuilder);
     }
 
-    public Response execute(RequestBuilder request) {
+    public Response doExecute(RequestBuilder request) {
         ListenableFuture<Response> responseListenableFuture = asyncHttpClient.executeRequest(request);
         try {
             return responseListenableFuture.get();

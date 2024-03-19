@@ -1,6 +1,7 @@
 package pp.weiba.framework.core.client;
 
 import pp.weiba.framework.core.convert.TypeReference;
+import pp.weiba.framework.core.handler.ExecutorParams;
 import pp.weiba.framework.core.handler.IHandler;
 
 /**
@@ -35,7 +36,7 @@ public interface IHttpClient {
 
 
     /**
-     * 添加请求过滤器，默认实现同类型过滤器只会被添加一次
+     * 添加请求处理器，在请求前调用，默认实现同类型过滤器只会被添加一次, 按加入顺序执行
      *
      * @param requestHandler 过滤器
      * @author weiba
@@ -44,12 +45,21 @@ public interface IHttpClient {
     void addRequestHandler(IHandler<HttpRequest> requestHandler);
 
     /**
-     * 添加响应过滤器，默认实现同类型过滤器只会被添加一次
+     * 添加响应处理器，在响应后调用，默认实现同类型过滤器只会被添加一次, 按加入顺序执行
      *
      * @param responseHandler 过滤器
      * @author weiba
      * @date 2024/3/6 17:07
      */
     void addResponseHandler(IHandler<HttpResponse> responseHandler);
-    
+
+    /**
+     * 添加执行器处理器，可实现请求拦截，缓存，限流等处理，默认实现同类型过滤器只会被添加一次, 按加入顺序执行
+     *
+     * @param executeHandler 执行处理器
+     * @author weiba
+     * @date 2024/3/19 11:02
+     */
+    void addExecuteHandler(IHandler<ExecutorParams<HttpRequest, HttpResponse>> executeHandler);
+
 }

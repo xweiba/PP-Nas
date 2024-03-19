@@ -72,7 +72,7 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
     }
 
     @Override
-    protected HttpResponse execute(HttpRequest request) {
+    protected HttpResponse doExecute(HttpRequest request) {
         return request.execute();
     }
 

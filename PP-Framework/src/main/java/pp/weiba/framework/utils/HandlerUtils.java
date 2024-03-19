@@ -32,4 +32,21 @@ public class HandlerUtils {
         }
     }
 
+    public static <T> boolean handlerContains(IHandler<T> current, IHandler<T> newHandler) {
+        boolean handlerContains = false;
+        if (current == null || newHandler == null) return handlerContains;
+        while (true) {
+            if (current == newHandler || current.getClass().equals(newHandler.getClass())) {
+                // 过滤重复的处理器
+                handlerContains = true;
+                break;
+            }
+            if (current.getNext() == null) {
+                break;
+            }
+            current = current.getNext();
+        }
+        return handlerContains;
+    }
+
 }
