@@ -22,15 +22,18 @@ public class WebBaiduNetDiskHttpClient extends AbstractHttpClientWrap {
     /**
      * 添加默认处理器
      */
-    protected void initDefaultProcessors() {
+    protected void initHandlers() {
         // 全局参数补全处理
         addRequestHandler(new RequestHandler(new UrlParameterCompletionProcessor(authentication)));
 
         // 全局参数头处理
         addRequestHandler(new RequestHandler(new AddDefaultHeaderProcessor()));
 
-        // 接口异常处理
+        // 接口响应错误码处理
         addResponseHandler(new ResponseHandler(new ErrorStatusProcessor()));
+
+        // 接口添加限流，注意，限流必须最后再加进去，保证是限制实际的请求
+        addExecuteHandler(new RateLimiterExecuteHandler(2.0));
 
     }
 }

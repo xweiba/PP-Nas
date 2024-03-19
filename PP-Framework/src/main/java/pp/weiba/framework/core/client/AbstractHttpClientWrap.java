@@ -72,9 +72,9 @@ public abstract class AbstractHttpClientWrap implements IHttpClient {
     }
 
     // 初始化所有的请求数据处理器
-    protected abstract void initDefaultProcessors();
+    protected abstract void initHandlers();
 
     protected void initClientConfig() {
-        initDefaultProcessors();
+        initHandlers();
     }
 }
