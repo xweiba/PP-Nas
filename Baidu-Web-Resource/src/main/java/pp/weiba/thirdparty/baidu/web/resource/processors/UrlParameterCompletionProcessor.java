@@ -54,6 +54,12 @@ public class UrlParameterCompletionProcessor implements IProcessor<HttpRequest> 
 
             formatMap.put("bdstoken", bdstoken);
         }
+        if (url.contains("{uk}")) {
+            formatMap = initMap(formatMap);
+            Integer uk = getUk();
+
+            formatMap.put("uk", String.valueOf(uk));
+        }
 
         if (CollUtil.isNotEmpty(formatMap)) {
             url = StrUtil.format(url, formatMap);
@@ -65,9 +71,17 @@ public class UrlParameterCompletionProcessor implements IProcessor<HttpRequest> 
     private String getBDStoken() {
         Authentication authentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
         if (authentication == null || authentication.getTemplateVariable() == null || StrUtil.isBlank(authentication.getTemplateVariable().getBdstoken())) {
-            return null;
+            throw new RuntimeException("认证失败，请先登录");
         }
         return authentication.getTemplateVariable().getBdstoken();
+    }
+
+    private Integer getUk() {
+        Authentication authentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
+        if (authentication == null || authentication.getLoginInfo() == null || authentication.getLoginInfo().getUk() == null) {
+            throw new RuntimeException("认证失败，请先登录");
+        }
+        return authentication.getLoginInfo().getUk();
     }
 
     private <T, F> Map<T, F> initMap(Map<T, F> formatMap) {

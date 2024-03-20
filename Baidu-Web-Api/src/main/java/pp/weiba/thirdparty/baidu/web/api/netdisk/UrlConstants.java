@@ -1,5 +1,7 @@
 package pp.weiba.thirdparty.baidu.web.api.netdisk;
 
+import java.util.regex.Pattern;
+
 /**
  * 接口Url信息
  *
@@ -49,6 +51,42 @@ public class UrlConstants {
 
     // 分片上传成功后完成文件创建
     public static final String POST_COMPLETE_CREATE_FILE = API_PREFIX + "/create?isdir=0&rtype=1&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&logid={logid}&bdstoken={bdstoken}";
+
+    // 查询目录下的文件信息
+    public static final String GET_QUERY_DIR_CHILD = API_PREFIX + "/list?clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&dir={}&order={}&desc={}&num={}&page={}";
+
+    // 文件搜索接口
+    public static final String GET_FILE_SEARCH = API_PREFIX +
+            "/search?dp-logid={dp-logid}&dir={}&key={}&order={}&desc={}&num={}&page={}&recursion=1&clienttype=0&app_id=250528&web=1";
+
+    // 文件分享接口
+    public static final String POST_SHARE_FILES = API_DOMAIN + "/share/set?channel=chunlei&clienttype=0&web=1&channel=chunlei&web=1&app_id=250528&clienttype=0&dp-logid={dp-logid}&bdstoken={bdstoken}&logid={logid}";
+
+    // 取消文件分享
+    public static final String POST_CANCEL_SHARE_FILES = API_DOMAIN + "/share/cancel?bdstoken={bdstoken}&dp-logid={dp-logid}&channel=chunlei&clienttype=0&app_id=250528&web=1";
+
+    // 获取为分享的详细信息
+    public static final String GET_MY_SHARE_DETAIL_BY_ID = API_DOMAIN + "/share/surlinfoinrecord?shareid={}&sign={}&bdstoken={bdstoken}&channel=chunlei&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}";
+
+    // 获取我分享的文件列表
+    public static final String GET_QUERY_MY_SHARE_FILES_URL = API_DOMAIN + "/share/record?num={}&page={}&order={}&desc={}&channel=chunlei&clienttype=0&app_id=250528&dp-logid={dp-logid}&web=1";
+
+    // 获取分享中的文件详细
+    public static final String GET_QUERY_SHARE_FILES_URL = API_DOMAIN + "/share/list?channel=chunlei&web=1&app_id=250528&showempty=0&web=1&clienttype=0" +
+            "&t={}&dp-logid={dp-logid}&logid={logid}&uk={uk}" +
+            "&shareid={}&dir={}&order={}&desc={}&page={}&num={}";
+
+    // 分享验证接口
+    public static final String POST_SHARE_FILE_VERIFY_URL = API_DOMAIN + "/share/verify?channel=chunlei&web=1&app_id=250528&clienttype=0&dp-logid={dp-logid}&bdstoken={bdstoken}&logid={logid}&surl={}&t={}";
+
+    // 分享url模板
+    public static final String GET_SHARE_FILE_PAGE_TEMPLATE_URL = API_DOMAIN + "/s/{}?from=init&pwd={}";
+
+    // 分享页面 验证bdclndCookie， 正常的话该正则能取到数据
+    public static final Pattern SHARE_INIT_PAGE_PATTERN_REGEX = Pattern.compile("(?<=locals\\.mset\\()(.+?)(?=\\);)");
+
+    // 执行文件转存
+    public static final String POST_SHARE_FILE_TRANSFER_URL = API_DOMAIN + "/share/transfer?ondup=newcopy&async=1&channel=chunlei&web=1&app_id=250528&clienttype=0&dp-logid={dp-logid}&logid={logid}&bdstoken={bdstoken}&shareid={}&from={}&sekey={}";
 
 
 }
