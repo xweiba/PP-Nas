@@ -1,10 +1,7 @@
 package pp.weiba.thirdparty.baidu.web.resource.netdisk;
 
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.resource.IResourceOperation;
-import pp.weiba.framework.resource.ResourceInfo;
-import pp.weiba.framework.resource.ResourceState;
-import pp.weiba.framework.resource.ResourceType;
+import pp.weiba.framework.resource.*;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CreateDirResponse;
 
@@ -27,6 +24,11 @@ public class ResourceOperationService implements IResourceOperation {
     public ResourceInfo createDir(String newDstPath) {
         CreateDirResponse dir = fileOperationApiClient.createDir(newDstPath);
         return new ResourceInfo(dir.getFsId(), ResourceType.FOLDER, dir.getName(), ResourceState.NORMAL, null, dir.getPath(), null, null, dir.getCtime(), dir.getMtime(), dir.getCtime(), dir.getMtime());
+    }
+
+    @Override
+    public <T> ResourceInfo createResource(UploadResourceInfo<T> uploadResourceInfo) {
+        return null;
     }
 
     @Override

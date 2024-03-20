@@ -15,12 +15,12 @@ import lombok.experimental.Accessors;
 @Setter
 public class TemplateVariableResponse extends ApiResponse {
 
-    private ResultBO result;
+    private Result result;
 
     @Accessors(chain = true)
     @Getter
     @Setter
-    public static class ResultBO {
+    public static class Result {
         private String bdstoken;
         private String token;
         private Integer uk;

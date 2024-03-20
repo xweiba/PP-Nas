@@ -17,9 +17,9 @@ import pp.weiba.thirdparty.baidu.web.resource.security.authentication.credential
 
 public class WebAuthenticationTest extends DefaultTest {
 
-    private static final String BDUSS = "xseE52MG5Kbk9rLUZ2RW50N3JhWGhDYWJ6MWZVcH5WSVJnWVFOaFdpVFBIeFptSUFBQUFBJCQAAAAAAAAAAAEAAADQP5MkcXExNzM4Mjg5OQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM-S7mXPku5lSU";
+    private static final String BDUSS = "2N-WVdvZERXMDhiNG1mZ2V-bDFmblJTV34xZlhtWkpaQ2xwNno1all2LW40Q0JtSUFBQUFBJCQAAAAAAAAAAAEAAADQP5MkcXExNzM4Mjg5OQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKdT-WWnU~lld";
 
-    private static final String STOKEN = "0ccd79a263a30a809e052ae229388c5669cd5aa1b3ec8ffda4e5e86dd8c20cb1";
+    private static final String STOKEN = "f8881dc720e7dc90d5e15543df1fce72f09ba55988a731876207fb437a0916cf";
 
     // 设置客户端认证信息
     static String businessId = "1";

@@ -57,6 +57,10 @@ public class HttpRequest {
         return urlFormatBuilder(Method.GET, urlTemplate, null, null);
     }
 
+    public static HttpRequest urlFormatBuilder(Method method, CharSequence urlTemplate) {
+        return urlFormatBuilder(method, urlTemplate, null, null);
+    }
+
     public static HttpRequest urlFormatBuilder(CharSequence urlTemplate, Map<String, Object> buildParams) {
         return urlFormatBuilder(Method.GET, urlTemplate, buildParams, null);
     }
@@ -101,7 +105,9 @@ public class HttpRequest {
     public HttpRequest handler(Map<String, String> headerMap) {
         this.headerMap = initMap(this.headerMap);
         if (headerMap != null) {
-            this.headerMap.putAll(headerMap);
+            headerMap = new HashMap<>(headerMap);
+            headerMap.putAll(this.headerMap);
+            this.headerMap = headerMap;
         }
         return this;
     }

@@ -19,7 +19,7 @@ import pp.weiba.thirdparty.baidu.web.api.netdisk.response.TemplateVariableRespon
 public class Authentication {
 
     public static final String COOKIE_HEADER_FORMAT = "BDUSS={}; BDUSS_BFESS={}; STOKEN={}; ";
-    public TemplateVariableResponse.ResultBO templateVariable;
+    public TemplateVariableResponse.Result templateVariable;
     public LoginStatusResponse.LoginInfo loginInfo;
     private String bduss;
     private String stoken;

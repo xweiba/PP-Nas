@@ -53,6 +53,10 @@ public abstract class AbstractApiHttpClient {
         return httpClient.execute(httpRequest, typeReference);
     }
 
+    public <T> T execute(HttpRequest request, TypeReference<T> typeReference) {
+        return httpClient.execute(request, typeReference);
+    }
+
 
     public HttpResponse executeResponse(String url) {
         return executeResponse(Method.GET, url, null);

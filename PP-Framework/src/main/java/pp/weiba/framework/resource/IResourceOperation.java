@@ -19,6 +19,16 @@ public interface IResourceOperation {
     ResourceInfo createDir(String newDstPath);
 
     /**
+     * 资源上传接口
+     *
+     * @param uploadResourceInfo 上传资源信息
+     * @return 资源上传完成后返回资源
+     * @author weiba
+     * @date 2024/3/20 14:31
+     */
+    <T> ResourceInfo createResource(UploadResourceInfo<T> uploadResourceInfo);
+
+    /**
      * 根据资源id获取资源
      *
      * @param resourceId 资源id

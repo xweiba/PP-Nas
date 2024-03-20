@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.HttpRequest;
 import pp.weiba.framework.core.client.IHttpClientAuthentication;
 import pp.weiba.framework.core.convert.IProcessor;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduNetDiskWebScript;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduWebApiUtils;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.BaiduAuthenticationManager;
@@ -36,10 +37,16 @@ public class UrlParameterCompletionProcessor implements IProcessor<HttpRequest> 
 
         if (url.contains("{dp-logid}")) {
             formatMap = initMap(formatMap);
-
             String dpLogId = BaiduWebApiUtils.getDpLogId();
 
             formatMap.put("dp-logid", dpLogId);
+        }
+
+        if (url.contains("{logid}")) {
+            formatMap = initMap(formatMap);
+            String logid = BaiduNetDiskWebScript.getLogId();
+
+            formatMap.put("logid", logid);
         }
         if (url.contains("{bdstoken}")) {
             formatMap = initMap(formatMap);

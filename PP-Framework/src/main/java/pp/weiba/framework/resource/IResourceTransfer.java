@@ -9,7 +9,8 @@ import java.util.List;
  * @author weiba
  * @date 2024/3/5 15:54
  */
-public interface IFileTransfer {
+public interface IResourceTransfer {
+
 
     /**
      * 初始化分片上传
