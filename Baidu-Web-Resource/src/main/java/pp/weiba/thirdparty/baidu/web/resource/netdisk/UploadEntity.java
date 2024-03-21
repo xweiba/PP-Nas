@@ -19,8 +19,6 @@ public class UploadEntity {
 
     private String dstFilePath;
 
-    private String dstDirPath;
-
     private String uk;
 
     private File file;

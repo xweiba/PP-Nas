@@ -17,6 +17,7 @@ public abstract class AbstractUploadResource<T> implements IUploadResource<T> {
         String resourceId = this.checkResourceExist(uploadResourceInfo);
 
         if (StrUtil.isNotBlank(resourceId)) {
+            log.debug("文件已存在，上传结束");
             return resourceId;
         }
         return doUpload(uploadResourceInfo);

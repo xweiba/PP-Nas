@@ -20,8 +20,10 @@ public class ErrorStatusProcessor implements IProcessor<HttpResponse> {
         String body = request.getBody();
         if (StrUtil.isNotBlank(body) && body.contains("errno")) {
             int statusCode = getStatusCode(body);
-            if (statusCode != 0) {
+            // 404 表示未找到资源
+            if (statusCode != 0 && statusCode != 404) {
                 // 接口异常
+                log.debug("HttpResponse Body: {}", body);
                 throw new RuntimeException(ErrorStatus.getMessage(statusCode));
             }
         }

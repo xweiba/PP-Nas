@@ -38,7 +38,7 @@ public class ShardUploadResourceService extends AbstractShardUploadResource<Uplo
     public String preCreateResource(UploadResourceInfo<UploadEntity> uploadResourceInfo) {
         UploadEntity entity = uploadResourceInfo.getEntity();
         File file = entity.getFile();
-        PreCreateFileResponse preCreateFileResponse = uploadFileApiClient.preCreateFile(entity.getDstFilePath(), entity.getDstDirPath(), file.length(), FileUtil.lastModifiedTime(file));
+        PreCreateFileResponse preCreateFileResponse = uploadFileApiClient.preCreateFile(entity.getDstFilePath(), uploadResourceInfo.getDstDirPath(), file.length(), FileUtil.lastModifiedTime(file));
         return preCreateFileResponse.getUploadid();
     }
 
@@ -56,14 +56,14 @@ public class ShardUploadResourceService extends AbstractShardUploadResource<Uplo
     @Override
     public ShardResource<FileChunk> shardResourceUpload(UploadResourceInfo<UploadEntity> uploadResourceInfo, ShardResource<FileChunk> shardResource) {
         FileChunk entity = shardResource.getEntity();
-        BaiduNetDiskWebUploadFileResponse baiduNetDiskWebUploadFileResponse = uploadFileApiClient.shardResourceUpload(uploadResourceInfo.getUploadId(), uploadResourceInfo.getEntity().getFile(), entity, uploadResourceInfo.getDstDirPath());
+        BaiduNetDiskWebUploadFileResponse baiduNetDiskWebUploadFileResponse = uploadFileApiClient.multiPartUpload(uploadResourceInfo.getUploadId(), uploadResourceInfo.getDstDirPath(), uploadResourceInfo.getEntity().getFile(), entity);
         entity.setMd5(baiduNetDiskWebUploadFileResponse.getMd5());
         return shardResource;
     }
 
     @Override
     public String completeResourceUpload(UploadResourceInfo<UploadEntity> uploadResourceInfo, List<ShardResource<FileChunk>> shards) {
-        CreateFileResponse createFileResponse = uploadFileApiClient.completeCreateFile(uploadResourceInfo.getUploadId(), uploadResourceInfo.getEntity().getDstFilePath(), uploadResourceInfo.getEntity().getDstDirPath(), FileUtil.lastModifiedTime(uploadResourceInfo.getEntity().getFile()), uploadResourceInfo.getEntity().getFile().length(), shards.stream().map(shard -> shard.getEntity().getMd5()).collect(Collectors.toList()));
+        CreateFileResponse createFileResponse = uploadFileApiClient.completeCreateFile(uploadResourceInfo.getUploadId(), uploadResourceInfo.getEntity().getDstFilePath(), uploadResourceInfo.getDstDirPath(), FileUtil.lastModifiedTime(uploadResourceInfo.getEntity().getFile()), uploadResourceInfo.getEntity().getFile().length(), shards.stream().map(shard -> shard.getEntity().getMd5()).collect(Collectors.toList()));
         return createFileResponse.getFsId();
     }
 
@@ -71,7 +71,11 @@ public class ShardUploadResourceService extends AbstractShardUploadResource<Uplo
     @Override
     public String checkResourceExist(UploadResourceInfo<UploadEntity> uploadResourceInfo) {
         UploadEntity entity = uploadResourceInfo.getEntity();
-        FileDuplicateDetectionResponse duplicateDetectionResponse = uploadFileApiClient.uploadFileDuplicateCheck(entity.getDstFilePath(), entity.getDstDirPath(), entity.getFile(), entity.getUk());
+
+        String dstFilePath = uploadResourceInfo.getDstDirPath() + entity.getFile().getName();
+        entity.setDstFilePath(dstFilePath);
+
+        FileDuplicateDetectionResponse duplicateDetectionResponse = uploadFileApiClient.uploadFileDuplicateCheck(entity.getDstFilePath(), uploadResourceInfo.getDstDirPath(), entity.getFile(), entity.getUk());
         if (duplicateDetectionResponse != null && duplicateDetectionResponse.getInfo() != null && StrUtil.isNotEmpty(duplicateDetectionResponse.getInfo().getFsId())) {
             return duplicateDetectionResponse.getInfo().getFsId();
         }

@@ -333,7 +333,7 @@ public class UploadFileApiClient extends AbstractApiHttpClient {
                 // 选择延时最低的上传节点
                 for (String serverUrlTemp : baiduUploadPSCInfoBO.getServer()) {
                     long start = System.currentTimeMillis();
-                    executeResponse(serverUrlTemp);
+                    executeResponse("https://" + serverUrlTemp);
                     long timeTemp = System.currentTimeMillis() - start;
                     log.debug("当前上传节点：{}， 延时：{}", serverUrlTemp, timeTemp);
                     if (time != 0 && timeTemp > time) {
