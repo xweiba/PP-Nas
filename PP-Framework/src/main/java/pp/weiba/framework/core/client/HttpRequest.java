@@ -36,6 +36,9 @@ public class HttpRequest {
 
     private Map<String, String> headerMap = new HashMap<>();
 
+    // 上传文件信息
+    private UploadFile uploadFile;
+
     private int timeout = 60000;
 
     // 设置是否打开重定向，如果打开默认重定向次数为2

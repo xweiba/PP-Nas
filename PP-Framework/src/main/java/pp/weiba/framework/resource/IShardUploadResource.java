@@ -3,12 +3,12 @@ package pp.weiba.framework.resource;
 import java.util.List;
 
 /**
- * 分片上传接口，该接口应该是异步的。
+ * 分片上传接口。
  *
  * @author weiba
  * @date 2024/3/20 14:38
  */
-public interface IShardUploadResource extends IUploadResource {
+public interface IShardUploadResource<T, F> extends IUploadResource<T> {
 
     /**
      * 资源预创建接口
@@ -18,7 +18,7 @@ public interface IShardUploadResource extends IUploadResource {
      * @author weiba
      * @date 2024/3/21 9:55
      */
-    <T> String preCreateResource(UploadResourceInfo<T> uploadResourceInfo);
+    String preCreateResource(UploadResourceInfo<T> uploadResourceInfo);
 
 
     /**
@@ -29,7 +29,7 @@ public interface IShardUploadResource extends IUploadResource {
      * @author weiba
      * @date 2024/3/21 10:20
      */
-    <T> List<ShardResource<T>> shardResourceBuild(UploadResourceInfo<T> uploadResourceInfo);
+    List<ShardResource<F>> shardResourceBuild(UploadResourceInfo<T> uploadResourceInfo);
 
     /**
      * 分片文件上传
@@ -40,7 +40,7 @@ public interface IShardUploadResource extends IUploadResource {
      * @author weiba
      * @date 2024/3/21 9:59
      */
-    <T> ShardResource<T> shardResourceUpload(UploadResourceInfo<T> uploadResourceInfo, ShardResource<T> shardResource);
+    ShardResource<F> shardResourceUpload(UploadResourceInfo<T> uploadResourceInfo, ShardResource<F> shardResource);
 
 
     /**
@@ -51,6 +51,6 @@ public interface IShardUploadResource extends IUploadResource {
      * @author weiba
      * @date 2024/3/21 10:02
      */
-    <T> String completeResourceUpload(List<ShardResource<T>> shards);
+    String completeResourceUpload(UploadResourceInfo<T> uploadResourceInfo, List<ShardResource<F>> shards);
 
 }

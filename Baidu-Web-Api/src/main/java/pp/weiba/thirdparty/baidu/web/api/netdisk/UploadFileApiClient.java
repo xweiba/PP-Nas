@@ -10,6 +10,7 @@ import cn.hutool.crypto.SecureUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.*;
 import pp.weiba.framework.core.convert.TypeReference;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.request.FileChunk;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.FileDuplicateDetectionRequest;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.*;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduNetDiskWebScript;
@@ -17,10 +18,7 @@ import pp.weiba.utils.FileUtils;
 import pp.weiba.utils.JSONUtils;
 import pp.weiba.utils.StringUtils;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,7 +32,7 @@ import java.util.stream.Collectors;
  * @date 2024/3/20 9:41
  */
 @Log4j2
-public class FileTransferApiClient extends AbstractApiHttpClient {
+public class UploadFileApiClient extends AbstractApiHttpClient {
 
     /* 4Mb */
     public static final Integer UPLOAD_FILE_CHUNK_SIZE = 4194304;
@@ -50,7 +48,7 @@ public class FileTransferApiClient extends AbstractApiHttpClient {
     private static final String fastestUploadPcsServiceTagSplit = "@-@";
     private static String fastestUploadPcsServiceTag = "";
 
-    public FileTransferApiClient(IHttpClient httpClient) {
+    public UploadFileApiClient(IHttpClient httpClient) {
         super(httpClient);
     }
 
@@ -191,6 +189,41 @@ public class FileTransferApiClient extends AbstractApiHttpClient {
         return responseUploadFiles;
     }
 
+
+    public List<FileChunk> generateFileChunks(File file) {
+        List<FileChunk> chunkList = new ArrayList<>();
+        long fileLength = file.length();
+        long chunkCount = (fileLength + UPLOAD_FILE_CHUNK_SIZE - 1) / UPLOAD_FILE_CHUNK_SIZE;
+        for (long i = 0; i < chunkCount; i++) {
+            long start = i * UPLOAD_FILE_CHUNK_SIZE;
+            long length = Math.min(fileLength - start, UPLOAD_FILE_CHUNK_SIZE);
+            chunkList.add(new FileChunk(start, length, (int) i, null));
+        }
+        return chunkList;
+    }
+
+    // 修改后的方法，用于根据分片信息即时读取并上传数据
+    public BaiduNetDiskWebUploadFileResponse shardResourceUpload(String uploadId, File file, FileChunk chunk, String dstDirPath) {
+        if (file.length() <= UPLOAD_FILE_CHUNK_SIZE) {
+            String dstFilePath = dstDirPath + file.getName();
+            return multiPartUpload(uploadId, file, dstFilePath);
+        }
+
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+            byte[] buffer = new byte[(int) chunk.getLength()];
+            randomAccessFile.seek(chunk.getStart());
+            randomAccessFile.readFully(buffer);
+
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer)) {
+                log.debug(() -> StrUtil.format("Chunk size: {}, MD5: {}", chunk.getLength(), SecureUtil.md5(byteArrayInputStream)));
+                return multiPartUpload(uploadId, new InputStreamResource(byteArrayInputStream, file.getName()), dstDirPath, chunk.getPartSeq());
+            }
+        } catch (IOException e) {
+            log.error("文件分片上传失败！Exception：{}", ExceptionUtil.getMessage(e));
+            throw new RuntimeException("文件分片上传失败！", e);
+        }
+    }
+
     /**
      * 文件上传
      *
@@ -206,6 +239,18 @@ public class FileTransferApiClient extends AbstractApiHttpClient {
         return postExecute(StrUtil.format(UrlConstants.POST_UPLOAD_FILE, getFastestUploadPCSServiceUrl(), dstDirPath, uploadid, partseq), new HashMap<String, Object>() {{
             put("file", file);
         }}, new TypeReference<BaiduNetDiskWebUploadFileResponse>() {
+        });
+    }
+
+    public BaiduNetDiskWebUploadFileResponse multiPartUpload(String uploadid, String dstDirPath, File file, FileChunk chunk) {
+        UploadFile uploadFile = new UploadFile().setFile(file);
+        int partseq = 0;
+        if (chunk != null) {
+            partseq = chunk.getPartSeq();
+            uploadFile.setChunk(new UploadFileChunk(chunk.getStart(), chunk.getLength(), partseq));
+        }
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.POST, StrUtil.format(UrlConstants.POST_UPLOAD_FILE, getFastestUploadPCSServiceUrl(), dstDirPath, uploadid, partseq)).setUploadFile(uploadFile);
+        return execute(httpRequest, new TypeReference<BaiduNetDiskWebUploadFileResponse>() {
         });
     }
 

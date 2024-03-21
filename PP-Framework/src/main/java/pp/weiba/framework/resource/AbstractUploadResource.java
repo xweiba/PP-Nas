@@ -10,10 +10,10 @@ import lombok.extern.log4j.Log4j2;
  * @date 2024/3/21 10:04
  */
 @Log4j2
-public abstract class AbstractUploadResource implements IUploadResource {
+public abstract class AbstractUploadResource<T> implements IUploadResource<T> {
 
     @Override
-    public <T> String upload(UploadResourceInfo<T> uploadResourceInfo) {
+    public String upload(UploadResourceInfo<T> uploadResourceInfo) {
         String resourceId = this.checkResourceExist(uploadResourceInfo);
 
         if (StrUtil.isNotBlank(resourceId)) {
@@ -22,7 +22,7 @@ public abstract class AbstractUploadResource implements IUploadResource {
         return doUpload(uploadResourceInfo);
     }
 
-    protected abstract <T> String doUpload(UploadResourceInfo<T> uploadResourceInfo);
+    protected abstract String doUpload(UploadResourceInfo<T> uploadResourceInfo);
 
 
 }

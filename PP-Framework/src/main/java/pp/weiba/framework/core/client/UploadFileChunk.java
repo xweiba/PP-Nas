@@ -1,4 +1,4 @@
-package pp.weiba.framework.resource;
+package pp.weiba.framework.core.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,22 +6,23 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 分片资源信息
+ * 上传文件分块信息
  *
  * @author weiba
- * @date 2024/3/21 10:22
+ * @date 2024/3/21 15:00
  */
 
+@Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Accessors(chain = true)
-public class ShardResource<T> {
+public class UploadFileChunk {
 
-    // 分片后的资源
-    private T entity;
 
-    // 分片序号
+    private long start;
+
+    private long length;
+
     private int partSeq;
 
 }

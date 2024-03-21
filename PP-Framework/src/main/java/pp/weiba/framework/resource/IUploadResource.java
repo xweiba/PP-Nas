@@ -6,7 +6,7 @@ package pp.weiba.framework.resource;
  * @author weiba
  * @date 2024/3/5 15:56
  */
-public interface IUploadResource {
+public interface IUploadResource<T> {
     
     /**
      * 资源上传接口
@@ -16,7 +16,7 @@ public interface IUploadResource {
      * @author weiba
      * @date 2024/3/20 14:31
      */
-    <T> String upload(UploadResourceInfo<T> uploadResourceInfo);
+    String upload(UploadResourceInfo<T> uploadResourceInfo);
 
     /**
      * 检测资源是否存在，存在直接返回id，不存在返回空
@@ -26,6 +26,6 @@ public interface IUploadResource {
      * @author weiba
      * @date 2024/3/20 14:39
      */
-    <T> String checkResourceExist(UploadResourceInfo<T> uploadResourceInfo);
+    String checkResourceExist(UploadResourceInfo<T> uploadResourceInfo);
 
 }

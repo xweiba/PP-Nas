@@ -1,6 +1,8 @@
 package pp.weiba.thirdparty.baidu.web.resource.client;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.io.resource.InputStreamResource;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.net.url.UrlPath;
@@ -8,6 +10,7 @@ import cn.hutool.core.net.url.UrlQuery;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
+import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.Method;
@@ -15,8 +18,14 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.platform.commons.util.StringUtils;
 import pp.weiba.framework.core.client.AbstractHttpClient;
 import pp.weiba.framework.core.client.IHttpTypeAdapter;
+import pp.weiba.framework.core.client.UploadFile;
+import pp.weiba.framework.core.client.UploadFileChunk;
 import pp.weiba.framework.core.convert.StrJsonTypeReferenceProcessor;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.net.HttpCookie;
 import java.net.Proxy;
 import java.net.URL;
@@ -111,10 +120,37 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
                 }
             }
 
+            if (request.getUploadFile() != null && request.getUploadFile().getFile() != null) {
+                Object fileObj = buildUploadFile(request.getUploadFile());
+                httpRequest.form("file", fileObj);
+            }
+
             if (log.isDebugEnabled()) {
                 log.debug("execute adapterRequest: {}", httpRequest.toString());
             }
             return httpRequest;
+        }
+
+        private Object buildUploadFile(UploadFile uploadFile) {
+            File file = uploadFile.getFile();
+            UploadFileChunk chunk = uploadFile.getChunk();
+            if (chunk == null) {
+                return file;
+            } else {
+                try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+                    byte[] buffer = new byte[(int) chunk.getLength()];
+                    randomAccessFile.seek(chunk.getStart());
+                    randomAccessFile.readFully(buffer);
+
+                    try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer)) {
+                        log.debug(() -> StrUtil.format("Chunk size: {}, MD5: {}", chunk.getLength(), SecureUtil.md5(byteArrayInputStream)));
+                        return new InputStreamResource(byteArrayInputStream, file.getName());
+                    }
+                } catch (IOException e) {
+                    log.error("文件分片失败！Exception：{}", ExceptionUtil.getMessage(e));
+                    throw new RuntimeException("文件分片失败！", e);
+                }
+            }
         }
 
         @Override
