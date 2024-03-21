@@ -26,6 +26,6 @@ public interface IUploadResource {
      * @author weiba
      * @date 2024/3/20 14:39
      */
-    String checkResourceExist(UploadResourceInfo<?> uploadResourceInfo);
+    <T> String checkResourceExist(UploadResourceInfo<T> uploadResourceInfo);
 
 }
