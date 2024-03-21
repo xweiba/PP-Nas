@@ -9,7 +9,7 @@ import lombok.extern.log4j.Log4j2;
  * @date 2024/3/18 15:17
  */
 @Log4j2
-public abstract class BaseHandler<T> implements IHandler<T> {
+public abstract class AbstractHandler<T> implements IHandler<T> {
 
     private IHandler<T> next;
 

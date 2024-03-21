@@ -2,7 +2,7 @@ package pp.weiba.thirdparty.baidu.web.resource.client;
 
 import com.google.common.util.concurrent.RateLimiter;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.core.handler.BaseHandler;
+import pp.weiba.framework.core.handler.AbstractHandler;
 
 /**
  * 接口限流器
@@ -11,7 +11,7 @@ import pp.weiba.framework.core.handler.BaseHandler;
  * @date 2024/3/19 15:37
  */
 @Log4j2
-public class RateLimiterExecuteHandler<T> extends BaseHandler<T> {
+public class RateLimiterExecuteHandler<T> extends AbstractHandler<T> {
 
     private final RateLimiter rateLimiter;
 

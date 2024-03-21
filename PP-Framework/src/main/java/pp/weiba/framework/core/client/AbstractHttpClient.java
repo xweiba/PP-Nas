@@ -3,7 +3,7 @@ package pp.weiba.framework.core.client;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.ITypeReferenceProcessor;
 import pp.weiba.framework.core.convert.TypeReference;
-import pp.weiba.framework.core.handler.BaseHandler;
+import pp.weiba.framework.core.handler.AbstractHandler;
 import pp.weiba.framework.core.handler.ExecutorParams;
 import pp.weiba.framework.core.handler.IHandler;
 import pp.weiba.framework.utils.HandlerUtils;
@@ -15,7 +15,7 @@ import pp.weiba.framework.utils.HandlerUtils;
  * @date 2024/3/7 10:29
  */
 @Log4j2
-public abstract class AbstractHttpClient<T, F> extends BaseHandler<ExecutorParams<HttpRequest, HttpResponse>> implements IHttpClient {
+public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorParams<HttpRequest, HttpResponse>> implements IHttpClient {
 
     // Http 请求与响应信息转换器
     private final IHttpTypeAdapter<T, F> httpTypeAdapter;
