@@ -32,7 +32,6 @@ public class WebAuthenticationTest extends DefaultTest {
     // 用户认证信息获取接口
     private static final ICredential<Authentication> credential = new ManualSetCredentials(BDUSS, STOKEN);
     private static final String STOKEN = "98e61fd63f48bfbbb1a25243b904562040a2341acd053422d98b019749e68f01";
-
     // 创建API客户端, 补齐认证信息使用
     public static AuthenticationApiClient authenticationApiClient = new AuthenticationApiClient(httpClient);
     // 带授权的客户端
@@ -49,7 +48,7 @@ public class WebAuthenticationTest extends DefaultTest {
 
     }
 
-    //    @Test
+    @Test
     void logout() {
         baiduWebAuthentication.logout();
     }
