@@ -18,20 +18,27 @@ public class ErrorStatusProcessor implements IProcessor<HttpResponse> {
     @Override
     public HttpResponse process(HttpResponse request) {
         String body = request.getBody();
-        if (StrUtil.isNotBlank(body) && body.contains("errno")) {
-            int statusCode = getStatusCode(body);
-            // 404 表示未找到资源
-            if (statusCode != 0 && statusCode != 404) {
-                // 接口异常
-                log.debug("HttpResponse Body: {}", body);
-                throw new RuntimeException(ErrorStatus.getMessage(statusCode));
+        if (StrUtil.isNotBlank(body)) {
+            Integer statusCode = null;
+            if (body.contains("error_code")) {
+                statusCode = getStatusCode(body, "error_code");
+            } else if (body.contains("errno")) {
+                statusCode = getStatusCode(body, "errno");
+            }
+            if (statusCode != null) {
+                // 404 表示未找到资源
+                if (statusCode != 0 && statusCode != 404) {
+                    // 接口异常
+                    log.debug("HttpResponse Body: {}", body);
+                    throw new RuntimeException(ErrorStatus.getMessage(statusCode));
+                }
             }
         }
         return request;
     }
 
-    private int getStatusCode(String body) {
-        String errno = body.substring(body.indexOf("errno") + 7);
+    private int getStatusCode(String body, String key) {
+        String errno = body.substring(body.indexOf(key) + key.length() + 2);
         errno = errno.substring(0, errno.indexOf(","));
         return Integer.valueOf(errno);
     }

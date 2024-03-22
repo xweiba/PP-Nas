@@ -1,5 +1,6 @@
 package pp.weiba.thirdparty.baidu.web.resource.netdisk;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
@@ -46,17 +47,24 @@ public class ShardUploadResourceService extends AbstractShardUploadResource<Uplo
     public List<ShardResource<FileChunk>> shardResourceBuild(UploadResourceInfo<UploadEntity> uploadResourceInfo) {
         UploadEntity entity = uploadResourceInfo.getEntity();
         List<FileChunk> fileChunks = uploadFileApiClient.generateFileChunks(entity.getFile());
-        List<ShardResource<FileChunk>> shardResources = new ArrayList<>();
-        for (FileChunk fileChunk : fileChunks) {
-            shardResources.add(new ShardResource<>(fileChunk, fileChunk.getPartSeq()));
+        List<ShardResource<FileChunk>> shardResources = null;
+        if (CollUtil.isNotEmpty(fileChunks)) {
+            shardResources = new ArrayList<>();
+            for (FileChunk fileChunk : fileChunks) {
+                shardResources.add(new ShardResource<>(fileChunk, fileChunk.getPartSeq()));
+            }
         }
         return shardResources;
     }
 
     @Override
     public ShardResource<FileChunk> shardResourceUpload(UploadResourceInfo<UploadEntity> uploadResourceInfo, ShardResource<FileChunk> shardResource) {
-        FileChunk entity = shardResource.getEntity();
+        FileChunk entity = shardResource != null ? shardResource.getEntity() : null;
         BaiduNetDiskWebUploadFileResponse baiduNetDiskWebUploadFileResponse = uploadFileApiClient.multiPartUpload(uploadResourceInfo.getUploadId(), uploadResourceInfo.getDstDirPath(), uploadResourceInfo.getEntity().getFile(), entity);
+        if (entity == null) {
+            entity = new FileChunk();
+            shardResource = new ShardResource<FileChunk>().setEntity(entity).setPartSeq(0);
+        }
         entity.setMd5(baiduNetDiskWebUploadFileResponse.getMd5());
         return shardResource;
     }

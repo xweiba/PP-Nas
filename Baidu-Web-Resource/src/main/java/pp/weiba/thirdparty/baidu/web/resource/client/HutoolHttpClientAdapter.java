@@ -108,10 +108,6 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
                 request.setTimeout(TIME_OUT);
             }
 
-            if (request.getContentType() != null) {
-                httpRequest.header("Content-Type", request.getContentType());
-            }
-
             if (request.getBuildParams() != null && !request.getBuildParams().isEmpty()) {
                 for (Map.Entry<String, Object> item : request.getBuildParams().entrySet()) {
                     if (item.getKey().equals("proxyServer") && item.getValue().getClass().equals(Proxy.class)) {
@@ -122,7 +118,13 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
 
             if (request.getUploadFile() != null && request.getUploadFile().getFile() != null) {
                 Object fileObj = buildUploadFile(request.getUploadFile());
+                httpRequest.keepAlive(true);
                 httpRequest.form("file", fileObj);
+                httpRequest.contentType("multipart/form-data");
+            }
+
+            if (request.getContentType() != null) {
+                httpRequest.header("Content-Type", request.getContentType());
             }
 
             if (log.isDebugEnabled()) {
@@ -137,15 +139,17 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
             if (chunk == null) {
                 return file;
             } else {
-                try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+                // 这里不能关闭流，不然后面无法读取
+                RandomAccessFile randomAccessFile;
+                ByteArrayInputStream byteArrayInputStream;
+                try {
+                    randomAccessFile = new RandomAccessFile(file, "r");
                     byte[] buffer = new byte[(int) chunk.getLength()];
                     randomAccessFile.seek(chunk.getStart());
                     randomAccessFile.readFully(buffer);
-
-                    try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer)) {
-                        log.debug(() -> StrUtil.format("Chunk size: {}, MD5: {}", chunk.getLength(), SecureUtil.md5(byteArrayInputStream)));
-                        return new InputStreamResource(byteArrayInputStream, file.getName());
-                    }
+                    byteArrayInputStream = new ByteArrayInputStream(buffer);
+                    log.debug(() -> StrUtil.format("Chunk size: {}, MD5: {}", chunk.getLength(), SecureUtil.md5(byteArrayInputStream)));
+                    return new InputStreamResource(byteArrayInputStream, file.getName());
                 } catch (IOException e) {
                     log.error("文件分片失败！Exception：{}", ExceptionUtil.getMessage(e));
                     throw new RuntimeException("文件分片失败！", e);

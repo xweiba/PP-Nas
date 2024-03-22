@@ -33,7 +33,7 @@ public class WebBaiduNetDiskHttpClient extends AbstractHttpClientWrap {
         addResponseHandler(new ResponseHandler(new ErrorStatusProcessor()));
 
         // 接口添加限流，注意，限流必须最后再加进去，保证是限制实际的请求
-        addExecuteHandler(new RateLimiterExecuteHandler(2.0));
+        addExecuteHandler(new RateLimiterExecuteHandler(1.0));
 
     }
 }
