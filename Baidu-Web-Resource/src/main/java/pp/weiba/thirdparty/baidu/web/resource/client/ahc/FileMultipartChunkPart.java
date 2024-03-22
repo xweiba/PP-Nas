@@ -22,12 +22,15 @@ public class FileMultipartChunkPart extends FileMultipartPart {
     private final File file;
     private InputStream in;
 
+    private final long maxLength;
+
     public FileMultipartChunkPart(FileChunkPart part, byte[] boundary) {
         super(part, boundary);
         if (part.getChunk() == null) {
             throw new IllegalArgumentException("part chunk doesn't null");
         }
         file = part.getFile();
+        this.maxLength = part.getChunk().getLength() + part.getChunk().getStart();
         // 反射强制修改, test
         ReflectUtil.setFieldValue(this, "position", part.getChunk().getStart());
         ReflectUtil.setFieldValue(this, "length", part.getChunk().getLength());
@@ -77,19 +80,20 @@ public class FileMultipartChunkPart extends FileMultipartPart {
     }
 
     private long getPositionToChannel(ByteBuf target, FileChannel channel, long position, long length) throws IOException {
-        int transferred;
-        transferred = target.writeBytes(channel, position, target.writableBytes());
+        long transferred = Math.min(target.writableBytes(), maxLength - position);
+
+        transferred = target.writeBytes(channel, position, (int) transferred);
         if (transferred > 0) {
             position += transferred;
         }
 
-        if (position == this.getContentLength() || transferred < 0) {
+        if (position >= maxLength) {
             this.state = MultipartState.POST_CONTENT;
             if (channel.isOpen()) {
                 channel.close();
             }
         }
-        log.info("position:{}, length:{}, transferred:{}", position, length, transferred);
+        log.info("position:{}, maxLength: {}, length:{}, transferred:{}", position, maxLength, length, transferred);
         ReflectUtil.setFieldValue(this, "position", position);
         return transferred;
     }
