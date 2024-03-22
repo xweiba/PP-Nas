@@ -78,8 +78,7 @@ public class FileMultipartChunkPart extends FileMultipartPart {
 
     private long getPositionToChannel(ByteBuf target, FileChannel channel, long position, long length) throws IOException {
         int transferred;
-        channel.position(position);
-        transferred = target.writeBytes(channel, target.writableBytes());
+        transferred = target.writeBytes(channel, position, target.writableBytes());
         if (transferred > 0) {
             position += transferred;
         }
