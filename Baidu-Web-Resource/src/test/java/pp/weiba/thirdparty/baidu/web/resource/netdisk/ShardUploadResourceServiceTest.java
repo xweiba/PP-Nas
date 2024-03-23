@@ -87,7 +87,7 @@ class ShardUploadResourceServiceTest extends WebAuthenticationTest {
         initUploadResourceInfo();
         shardResourceBuild();
         fileChunkShardResources = new ArrayList<>();
-        if (CollUtil.isNotEmpty(shardResources)) {
+        if (CollUtil.isEmpty(shardResources)) {
             fileChunkShardResources.add(shardUploadResourceService.shardResourceUpload(uploadResourceInfo, null));
         } else {
             for (ShardResource<FileChunk> shardResource : shardResources) {
@@ -100,7 +100,7 @@ class ShardUploadResourceServiceTest extends WebAuthenticationTest {
     @Test
     void completeResourceUpload() {
         shardResourceUpload();
-        String completeResourceUpload = shardUploadResourceService.completeResourceUpload(uploadResourceInfo, shardResources);
+        String completeResourceUpload = shardUploadResourceService.completeResourceUpload(uploadResourceInfo, fileChunkShardResources);
         log.info("完成上传返回信息:{}", completeResourceUpload);
     }
 
