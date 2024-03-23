@@ -39,10 +39,10 @@ public class FileUtils {
      * @date 2022/10/10 16:06
      */
     public static String getSliceMd5(File file, int size) {
-        BufferedInputStream inputStream = FileUtil.getInputStream(file);
         byte[] lastByte = new byte[size];
-        try {
-            inputStream.read(lastByte, 0, size);
+
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+            randomAccessFile.readFully(lastByte);
         } catch (IOException e) {
             log.error("getSliceMd5 read file error: {}", file.getAbsolutePath());
             throw new RuntimeException("getSliceMd5 error");
@@ -51,11 +51,10 @@ public class FileUtils {
     }
 
     public static byte[] getSliceFile(File file, int off, int size) {
-        BufferedInputStream inputStream = FileUtil.getInputStream(file);
         byte[] lastByte = new byte[size];
-        try {
-            inputStream.skip(off);
-            inputStream.read(lastByte);
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")){
+            randomAccessFile.seek(off);
+            randomAccessFile.readFully(lastByte);
         } catch (IOException e) {
             log.error("getSliceFile read file error: {}", file.getAbsolutePath());
             throw new RuntimeException("getSliceMd5 error");
