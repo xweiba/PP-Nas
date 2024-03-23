@@ -10,8 +10,8 @@ import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.framework.test.DefaultTest;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.AuthenticationApiClient;
-import pp.weiba.thirdparty.baidu.web.resource.client.AsyncHttpClientAdapter;
 import pp.weiba.thirdparty.baidu.web.resource.client.WebBaiduNetDiskHttpClient;
+import pp.weiba.thirdparty.baidu.web.resource.client.ahc.AsyncHttpClientAdapter;
 import pp.weiba.thirdparty.baidu.web.resource.client.authentication.WebHttpClientAuthentication;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentials.ManualSetCredentials;
 

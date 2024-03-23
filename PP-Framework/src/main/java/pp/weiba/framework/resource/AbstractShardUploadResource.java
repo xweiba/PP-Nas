@@ -1,5 +1,6 @@
 package pp.weiba.framework.resource;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -56,9 +57,14 @@ public abstract class AbstractShardUploadResource<T, F> extends AbstractUploadRe
         List<ShardResource<F>> tShardResources = new ArrayList<>();
         // 并发上传
         List<Future<ShardResource<F>>> tasks = new ArrayList<>();
-        for (ShardResource<F> shardResource : shardResources) {
-            tasks.add(this.shardResourceUploadExecutor.submit(() -> shardResourceUpload(uploadResourceInfo, shardResource)));
+        if (CollUtil.isEmpty(shardResources)) {
+            tasks.add(this.shardResourceUploadExecutor.submit(() -> shardResourceUpload(uploadResourceInfo, null)));
+        } else {
+            for (ShardResource<F> shardResource : shardResources) {
+                tasks.add(this.shardResourceUploadExecutor.submit(() -> shardResourceUpload(uploadResourceInfo, shardResource)));
+            }
         }
+
         boolean isFailed = false;
         for (Future<ShardResource<F>> task : tasks) {
             try {

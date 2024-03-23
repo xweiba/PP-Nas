@@ -1,30 +1,41 @@
 package pp.weiba.thirdparty.baidu.web.resource.netdisk;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pp.weiba.framework.resource.IShardUploadResource;
+import pp.weiba.framework.resource.ShardResource;
 import pp.weiba.framework.resource.UploadResourceInfo;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.UploadFileApiClient;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.FileChunk;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.WebAuthenticationTest;
 
 import java.io.File;
+import java.util.List;
 
+@Slf4j
 class ShardUploadResourceServiceTest extends WebAuthenticationTest {
 
     IShardUploadResource<UploadEntity, FileChunk> shardUploadResourceService = new ShardUploadResourceService(new UploadFileApiClient(httpClient));
 
-    String dstUploadFileDir = "/test/319/";
-    String uploadFilePath = "C:\\Users\\admin\\Downloads\\graalvm-ee-java11-windows-amd64-21.2.0.1.zip";
+    static String dstUploadFileDir = "/111/111/";
+    static String uploadFilePath = "C:\\Users\\admin\\Downloads\\book_4x4_hasbg_1660923341337858048_2_144.0 (1).pdf";
+    //    static String uploadFilePath = "C:\\Users\\admin\\Downloads\\测试PDF.pdf";
+    static File uploadFile = new File(uploadFilePath);
 
-    UploadEntity uploadEntity = new UploadEntity().setFile(new File(uploadFilePath));
+    static UploadEntity uploadEntity = new UploadEntity().setFile(uploadFile).setDstFilePath(dstUploadFileDir + uploadFile.getName());
     UploadResourceInfo<UploadEntity> uploadResourceInfo = new UploadResourceInfo<UploadEntity>().setEntity(uploadEntity).setDstDirPath(dstUploadFileDir);
 
-    @Test
-    void upload() {
-        //
+    // 单测时使用手动指定id
+    private final String manuallySpecifyUploadId = "P1-MTAuMjA5LjE3OC4yMDg6MTcxMTA3MTk3OTo4ODA1NTkxMDE4OTM1NDY5NDQ4";
+    //    private final String manuallySpecifyUploadId = "N1-NTguMTkuMzguMTg1OjE3MTEwODM3Mzg6ODgwODc0NzYyNTczODQyMTc3Ng==";
+    private List<ShardResource<FileChunk>> shardResources;
+
+    @BeforeAll
+    static void init() {
         uploadEntity.setUk(baiduWebAuthentication.login().getLoginInfo().getUkStr());
-        String upload = shardUploadResourceService.upload(uploadResourceInfo);
-        System.out.println(upload);
     }
 
     @Test
@@ -32,25 +43,56 @@ class ShardUploadResourceServiceTest extends WebAuthenticationTest {
         /*
          * 秒传策略（现象猜测）：
          * 1. 当目录下存在这个文件，秒传成功。
-         * 2. 当目录下存在这个文件，但是被删除了，返回404。
-         * 3. 当目录从未存在这个文件，但服务器有数据，秒传成功（首次上传的公开大文件大概率会秒传成功）。
+         * 2. 当你的账号从未存在这个文件，但服务器有数据，会秒传成功。
+         * 3. 当你的账号曾经存在在这个文件，但是被手动删除了，会返回404，秒传过后应该是插入了一条记录，估计是为了防止有人用秒传做无限空间这种事, 可能有过期时间？。
          * */
+        String checkResourceExist = shardUploadResourceService.checkResourceExist(uploadResourceInfo);
+        log.info("秒传返回信息:{} (null 表示没有这个文件)", checkResourceExist);
     }
 
     @Test
     void preCreateResource() {
+        String uploadId = shardUploadResourceService.preCreateResource(uploadResourceInfo);
+        uploadResourceInfo.setUploadId(uploadId);
+        log.info("预创建返回uploadId:{}", uploadId);
+    }
 
+    void initUploadResourceInfo() {
+        if (StrUtil.isBlank(uploadResourceInfo.getUploadId())) {
+            if (StrUtil.isBlank(manuallySpecifyUploadId)) {
+                throw new IllegalArgumentException("UploadId 不能为空");
+            }
+            uploadResourceInfo.setUploadId(manuallySpecifyUploadId);
+        }
     }
 
     @Test
     void shardResourceBuild() {
+        initUploadResourceInfo();
+        shardResources = shardUploadResourceService.shardResourceBuild(uploadResourceInfo);
+        if (CollUtil.isNotEmpty(shardResources)) {
+            log.info("分片信息:{}", shardResources.toString());
+        } else {
+            log.info("文件过小不分片");
+        }
     }
 
     @Test
     void shardResourceUpload() {
+        initUploadResourceInfo();
+        shardResourceBuild();
+        ShardResource<FileChunk> fileChunkShardResource = shardUploadResourceService.shardResourceUpload(uploadResourceInfo, shardResources != null ? shardResources.get(10) : null);
+        log.info("分片上传信息:{}", fileChunkShardResource.toString());
     }
 
     @Test
     void completeResourceUpload() {
     }
+
+    @Test
+    void upload() {
+        String upload = shardUploadResourceService.upload(uploadResourceInfo);
+        System.out.println(upload);
+    }
+
 }

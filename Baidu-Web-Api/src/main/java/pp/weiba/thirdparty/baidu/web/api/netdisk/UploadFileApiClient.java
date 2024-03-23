@@ -131,6 +131,9 @@ public class UploadFileApiClient extends AbstractApiHttpClient {
      * @date 2022/10/11 14:32
      */
     public PreCreateFileResponse preCreateFile(String dstFilePath, String dstDirPath, long fileSize, Date lastModifiedTime) {
+        if (StrUtil.isBlank(dstFilePath) || StrUtil.isBlank(dstDirPath) || fileSize <= 0 || lastModifiedTime == null) {
+            throw new IllegalArgumentException("参数不能为空");
+        }
         return postExecute(UrlConstants.POST_PRE_UPLOAD_FILE, new HashMap<String, Object>() {{
             put("path", dstFilePath);
             put("autoinit", 1);
@@ -191,14 +194,18 @@ public class UploadFileApiClient extends AbstractApiHttpClient {
 
 
     public List<FileChunk> generateFileChunks(File file) {
-        List<FileChunk> chunkList = new ArrayList<>();
+        List<FileChunk> chunkList = null;
         long fileLength = file.length();
-        long chunkCount = (fileLength + UPLOAD_FILE_CHUNK_SIZE - 1) / UPLOAD_FILE_CHUNK_SIZE;
-        for (long i = 0; i < chunkCount; i++) {
-            long start = i * UPLOAD_FILE_CHUNK_SIZE;
-            long length = Math.min(fileLength - start, UPLOAD_FILE_CHUNK_SIZE);
-            chunkList.add(new FileChunk(start, length, (int) i, null));
+        if (fileLength > UPLOAD_FILE_CHUNK_SIZE) {
+            chunkList = new ArrayList<>();
+            long chunkCount = (fileLength + UPLOAD_FILE_CHUNK_SIZE - 1) / UPLOAD_FILE_CHUNK_SIZE;
+            for (long i = 0; i < chunkCount; i++) {
+                long start = i * UPLOAD_FILE_CHUNK_SIZE;
+                long length = Math.min(fileLength - start, UPLOAD_FILE_CHUNK_SIZE);
+                chunkList.add(new FileChunk(start, length, (int) i, null));
+            }
         }
+
         return chunkList;
     }
 
@@ -249,7 +256,7 @@ public class UploadFileApiClient extends AbstractApiHttpClient {
             partseq = chunk.getPartSeq();
             uploadFile.setChunk(new UploadFileChunk(chunk.getStart(), chunk.getLength(), partseq));
         }
-        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.POST, StrUtil.format(UrlConstants.POST_UPLOAD_FILE, getFastestUploadPCSServiceUrl(), dstDirPath, uploadid, partseq)).setUploadFile(uploadFile);
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.POST, StrUtil.format(UrlConstants.POST_UPLOAD_FILE, getFastestUploadPCSServiceUrl(), dstDirPath, uploadid, partseq)).setUploadFile(uploadFile).addheader("Accept", "*");
         return execute(httpRequest, new TypeReference<BaiduNetDiskWebUploadFileResponse>() {
         });
     }

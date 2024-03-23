@@ -41,7 +41,7 @@ public class UrlConstants {
     public static final String POST_PRE_UPLOAD_FILE = API_PREFIX + "/precreate?clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}";
 
     // 文件上传
-    public static final String POST_UPLOAD_FILE = "{}/rest/2.0/pcs/superfile2?method=upload&app_id=250528&channel=chunlei&clienttype=0&web=1&uploadsign=0&logid={logid}&path={}&uploadid={}&partseq={}";
+    public static final String POST_UPLOAD_FILE = "{}/rest/2.0/pcs/superfile2?method=upload&app_id=250528&channel=chunlei&clienttype=0&web=1&uploadsign=0&logid={logid}&dp-logid={dp-logid}&path={}&uploadid={}&partseq={}";
 
     // PCS API
     public static final String PCS_API_PREFIX = "https://pcs.baidu.com/rest/2.0/pcs";

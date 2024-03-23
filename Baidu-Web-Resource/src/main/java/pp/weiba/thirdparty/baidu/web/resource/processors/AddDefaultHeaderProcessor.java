@@ -38,35 +38,8 @@ public class AddDefaultHeaderProcessor implements IProcessor<HttpRequest> {
         }
     };
 
-    public static final Map<String, String> HTTP_HTML_HEADER = new HashMap<String, String>() {
-        {
-            put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
-            put("Accept-Encoding", "gzip, deflate, br");
-            put("Accept-Language", "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7");
-            put("Cache-Control", "no-cache");
-            put("Connection", "keep-alive");
-            put("DNT", "1");
-            put("Referer", UrlConstants.HEADER_REFERER);
-            put("Pragma", "no-cache");
-            put("Sec-ch-ua", "\"Chromium\";v=\"122\", \"Not(A:Brand\";v=\"24\", \"Microsoft Edge\";v=\"122\"");
-            put("Sec-ch-ua-mobile", "?0");
-            put("Sec-ch-ua-platform", "\"Windows\"");
-            put("Sec-Fetch-Dest", "empty");
-            put("Sec-Fetch-Mode", "cors");
-            put("Sec-Fetch-Site", "same-origin");
-            put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0");
-            put("X-Requested-With", "XMLHttpRequest");
-        }
-    };
-
     @Override
     public HttpRequest process(HttpRequest request) {
-        Map<String, Object> buildParams = request.getBuildParams();
-        if (buildParams != null && buildParams.get("AcceptType") != null && buildParams.get("AcceptType").equals("html")) {
-            request.handler(HTTP_HTML_HEADER);
-        } else {
-            request.handler(HTTP_JSON_HEADER);
-        }
-        return request;
+        return request.handler(HTTP_JSON_HEADER);
     }
 }

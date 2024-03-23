@@ -1,5 +1,6 @@
 package pp.weiba.framework.core.client;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,7 @@ public class HttpRequest {
 
     private Map<String, String> headerMap = new HashMap<>();
 
-    // 上传文件信息
+    // 上传文件信息, 注意https上传文件不支持零拷贝，它需要将数据读取到内存中进行加密。
     private UploadFile uploadFile;
 
     private int timeout = 60000;
@@ -108,7 +109,7 @@ public class HttpRequest {
     public HttpRequest handler(Map<String, String> headerMap) {
         this.headerMap = initMap(this.headerMap);
         if (headerMap != null) {
-            headerMap = new HashMap<>(headerMap);
+            headerMap = ObjectUtil.clone(headerMap);
             headerMap.putAll(this.headerMap);
             this.headerMap = headerMap;
         }

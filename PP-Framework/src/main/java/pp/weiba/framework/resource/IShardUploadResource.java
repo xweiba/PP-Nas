@@ -25,7 +25,7 @@ public interface IShardUploadResource<T, F> extends IUploadResource<T> {
      * 构建分片文件
      *
      * @param uploadResourceInfo 上传资源信息
-     * @return 分片实体
+     * @return 分片实体。
      * @author weiba
      * @date 2024/3/21 10:20
      */
@@ -41,7 +41,6 @@ public interface IShardUploadResource<T, F> extends IUploadResource<T> {
      * @date 2024/3/21 9:59
      */
     ShardResource<F> shardResourceUpload(UploadResourceInfo<T> uploadResourceInfo, ShardResource<F> shardResource);
-
 
     /**
      * 分片上传完成后提交完成上传
