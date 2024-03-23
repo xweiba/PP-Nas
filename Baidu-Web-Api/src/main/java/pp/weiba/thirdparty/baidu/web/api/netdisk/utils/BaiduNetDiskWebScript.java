@@ -30,7 +30,7 @@ public class BaiduNetDiskWebScript {
 
     static {
         try {
-            lib = ScriptCompiledUtils.getLibCompiledScript(BAIDU_NETDISC_SCRIPT_LIB, "js/lib/baidu");
+            lib = ScriptCompiledUtils.getLibCompiledScript(BAIDU_NETDISC_SCRIPT_LIB, BAIDU_NETDISC_SCRIPT_LIB_DIR);
             context = ThreadLocal.withInitial(() -> initContext(lib));
         } catch (Exception e) {
             log.error("BaiduNetdiscScript init error, exception: {}", ExceptionUtil.getMessage(e));

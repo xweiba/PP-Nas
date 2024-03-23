@@ -13,6 +13,7 @@ import pp.weiba.thirdparty.baidu.web.api.netdisk.request.FileChunk;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.WebAuthenticationTest;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -21,15 +22,18 @@ class ShardUploadResourceServiceTest extends WebAuthenticationTest {
     IShardUploadResource<UploadEntity, FileChunk> shardUploadResourceService = new ShardUploadResourceService(new UploadFileApiClient(httpClient));
 
     static String dstUploadFileDir = "/111/111/";
-    static String uploadFilePath = "C:\\Users\\admin\\Downloads\\book_4x4_hasbg_1660923341337858048_2_144.0 (1).pdf";
-    //    static String uploadFilePath = "C:\\Users\\admin\\Downloads\\测试PDF.pdf";
+
+    static String uploadDir = "C:\\Users\\wb\\Downloads\\";
+
+    static String uploadFilePath = uploadDir + "test.7z";
+//    static String uploadFilePath = uploadDir + "wxhelper.dll";
     static File uploadFile = new File(uploadFilePath);
 
     static UploadEntity uploadEntity = new UploadEntity().setFile(uploadFile).setDstFilePath(dstUploadFileDir + uploadFile.getName());
     UploadResourceInfo<UploadEntity> uploadResourceInfo = new UploadResourceInfo<UploadEntity>().setEntity(uploadEntity).setDstDirPath(dstUploadFileDir);
 
     // 单测时使用手动指定id
-    private final String manuallySpecifyUploadId = "P1-MTAuMjA5LjE3OC4yMDg6MTcxMTA3MTk3OTo4ODA1NTkxMDE4OTM1NDY5NDQ4";
+    private final String manuallySpecifyUploadId = "P1-MTAuMTQ0Ljc4LjE1OjE3MTExNTgyNzA6ODgyODc1NDc1MzQ1NTgyNjYwOQ==";
     //    private final String manuallySpecifyUploadId = "N1-NTguMTkuMzguMTg1OjE3MTEwODM3Mzg6ODgwODc0NzYyNTczODQyMTc3Ng==";
     private List<ShardResource<FileChunk>> shardResources;
 
@@ -77,16 +81,27 @@ class ShardUploadResourceServiceTest extends WebAuthenticationTest {
         }
     }
 
+    List<ShardResource<FileChunk>> fileChunkShardResources;
     @Test
     void shardResourceUpload() {
         initUploadResourceInfo();
         shardResourceBuild();
-        ShardResource<FileChunk> fileChunkShardResource = shardUploadResourceService.shardResourceUpload(uploadResourceInfo, shardResources != null ? shardResources.get(10) : null);
-        log.info("分片上传信息:{}", fileChunkShardResource.toString());
+        fileChunkShardResources = new ArrayList<>();
+        if (CollUtil.isNotEmpty(shardResources)) {
+            fileChunkShardResources.add(shardUploadResourceService.shardResourceUpload(uploadResourceInfo, null));
+        } else {
+            for (ShardResource<FileChunk> shardResource : shardResources) {
+                fileChunkShardResources.add(shardUploadResourceService.shardResourceUpload(uploadResourceInfo, shardResource));
+            }
+        }
+        log.info("分片上传信息:{}", fileChunkShardResources.toString());
     }
 
     @Test
     void completeResourceUpload() {
+        shardResourceUpload();
+        String completeResourceUpload = shardUploadResourceService.completeResourceUpload(uploadResourceInfo, shardResources);
+        log.info("完成上传返回信息:{}", completeResourceUpload);
     }
 
     @Test

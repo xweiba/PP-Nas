@@ -1,6 +1,7 @@
 package pp.weiba.thirdparty.baidu.web.api.security.authentication;
 
 import cn.hutool.core.util.StrUtil;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -14,8 +15,7 @@ import pp.weiba.thirdparty.baidu.web.api.netdisk.response.TemplateVariableRespon
  * @date 2024/3/7 16:22
  */
 @Accessors(chain = true)
-@Getter
-@Setter
+@Data
 public class Authentication {
 
     public static final String COOKIE_HEADER_FORMAT = "BDUSS={}; BDUSS_BFESS={}; STOKEN={}; ";

@@ -1,5 +1,6 @@
 package pp.weiba.thirdparty.baidu.web.api.netdisk.response;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -22,8 +23,7 @@ public class LoginStatusResponse extends ApiResponse {
     private LoginInfo loginInfo;
 
     @Accessors(chain = true)
-    @Getter
-    @Setter
+    @Data
     public static class LoginInfo {
         private String bdstoken;
         private String photoUrl;

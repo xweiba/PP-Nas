@@ -1,5 +1,6 @@
 package pp.weiba.thirdparty.baidu.web.api.netdisk.response;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -18,8 +19,7 @@ public class TemplateVariableResponse extends ApiResponse {
     private Result result;
 
     @Accessors(chain = true)
-    @Getter
-    @Setter
+    @Data
     public static class Result {
         private String bdstoken;
         private String token;
