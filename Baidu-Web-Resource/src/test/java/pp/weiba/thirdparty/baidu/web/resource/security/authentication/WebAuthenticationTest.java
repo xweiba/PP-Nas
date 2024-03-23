@@ -1,6 +1,7 @@
 package pp.weiba.thirdparty.baidu.web.resource.security.authentication;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pp.weiba.framework.core.client.IHttpClient;
@@ -10,11 +11,13 @@ import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.framework.test.DefaultTest;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.AuthenticationApiClient;
+import pp.weiba.thirdparty.baidu.web.resource.client.AsyncHttpClientAdapter;
 import pp.weiba.thirdparty.baidu.web.resource.client.HutoolHttpClientAdapter;
 import pp.weiba.thirdparty.baidu.web.resource.client.WebBaiduNetDiskHttpClient;
 import pp.weiba.thirdparty.baidu.web.resource.client.authentication.WebHttpClientAuthentication;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentials.ManualSetCredentials;
 
+@Slf4j
 public class WebAuthenticationTest extends DefaultTest {
 
     private static final String BDUSS = "2N-WVdvZERXMDhiNG1mZ2V-bDFmblJTV34xZlhtWkpaQ2xwNno1all2LW40Q0JtSUFBQUFBJCQAAAAAAAAAAAEAAADQP5MkcXExNzM4Mjg5OQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKdT-WWnU~lld";
@@ -27,21 +30,22 @@ public class WebAuthenticationTest extends DefaultTest {
 
     // 配置当前用户认证信息, 存储中间变量
     protected static IHttpClientAuthentication authentication = new WebHttpClientAuthentication(businessId, businessType);
-    private static final String STOKEN = "98e61fd63f48bfbbb1a25243b904562040a2341acd053422d98b019749e68f01";
+    // 带授权的客户端
+    protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new AsyncHttpClientAdapter(), authentication);
+//    protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new HutoolHttpClientAdapter(), authentication);
+
+    // 创建API客户端, 补齐认证信息使用
+    public static AuthenticationApiClient authenticationApiClient = new AuthenticationApiClient(httpClient);
 
     // 用户认证信息获取接口
     private static final ICredential<Authentication> credential = new ManualSetCredentials(BDUSS, STOKEN);
 
-    // 创建API客户端, 补齐认证信息使用
-    public static AuthenticationApiClient authenticationApiClient = new AuthenticationApiClient(httpClient);
-    // 带授权的客户端
-    //    protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new AsyncHttpClientAdapter(), authentication);
-    protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new HutoolHttpClientAdapter(), authentication);
+    public static final IAuthentication<Authentication> baiduWebAuthentication = new BaiduWebAuthentication(businessId, businessType, authenticationApiClient, credential);
 
     @BeforeAll
     static void initAuthentication() {
         Authentication authentication = baiduWebAuthentication.login();
-        System.out.println(JSON.toJSONString(authentication));
+        log.info("登录认证信息：{}", authentication.toString());
     }
 
     @Test
