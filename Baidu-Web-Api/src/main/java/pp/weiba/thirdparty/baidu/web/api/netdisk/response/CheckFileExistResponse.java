@@ -16,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class FileDuplicateDetectionResponse extends ApiResponse {
+public class CheckFileExistResponse extends ApiResponse {
 
     private Info info;
 

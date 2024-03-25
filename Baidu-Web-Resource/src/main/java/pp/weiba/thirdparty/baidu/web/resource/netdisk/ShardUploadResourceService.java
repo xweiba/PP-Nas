@@ -9,10 +9,10 @@ import pp.weiba.framework.resource.ShardResource;
 import pp.weiba.framework.resource.UploadResourceInfo;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.UploadFileApiClient;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.FileChunk;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.BaiduNetDiskWebUploadFileResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CreateFileResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.FileDuplicateDetectionResponse;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CheckFileExistResponse;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CompleteUploadFileResponse;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.PreCreateFileResponse;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.UploadFileChunkResponse;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class ShardUploadResourceService extends AbstractShardUploadResource<Uplo
     @Override
     public List<ShardResource<FileChunk>> shardResourceBuild(UploadResourceInfo<UploadEntity> uploadResourceInfo) {
         UploadEntity entity = uploadResourceInfo.getEntity();
-        List<FileChunk> fileChunks = uploadFileApiClient.generateFileChunks(entity.getFile());
+        List<FileChunk> fileChunks = uploadFileApiClient.buildFileChunks(entity.getFile());
         List<ShardResource<FileChunk>> shardResources = null;
         if (CollUtil.isNotEmpty(fileChunks)) {
             shardResources = new ArrayList<>();
@@ -60,19 +60,19 @@ public class ShardUploadResourceService extends AbstractShardUploadResource<Uplo
     @Override
     public ShardResource<FileChunk> shardResourceUpload(UploadResourceInfo<UploadEntity> uploadResourceInfo, ShardResource<FileChunk> shardResource) {
         FileChunk entity = shardResource != null ? shardResource.getEntity() : null;
-        BaiduNetDiskWebUploadFileResponse baiduNetDiskWebUploadFileResponse = uploadFileApiClient.multiPartUpload(uploadResourceInfo.getUploadId(), uploadResourceInfo.getDstDirPath(), uploadResourceInfo.getEntity().getFile(), entity);
+        UploadFileChunkResponse uploadFileChunkResponse = uploadFileApiClient.uploadFileChunk(uploadResourceInfo.getUploadId(), uploadResourceInfo.getDstDirPath(), uploadResourceInfo.getEntity().getFile(), entity);
         if (entity == null) {
             entity = new FileChunk();
             shardResource = new ShardResource<FileChunk>().setEntity(entity).setPartSeq(0);
         }
-        entity.setMd5(baiduNetDiskWebUploadFileResponse.getMd5());
+        entity.setMd5(uploadFileChunkResponse.getMd5());
         return shardResource;
     }
 
     @Override
     public String completeResourceUpload(UploadResourceInfo<UploadEntity> uploadResourceInfo, List<ShardResource<FileChunk>> shards) {
-        CreateFileResponse createFileResponse = uploadFileApiClient.completeCreateFile(uploadResourceInfo.getUploadId(), uploadResourceInfo.getEntity().getDstFilePath(), uploadResourceInfo.getDstDirPath(), FileUtil.lastModifiedTime(uploadResourceInfo.getEntity().getFile()), uploadResourceInfo.getEntity().getFile().length(), shards.stream().map(shard -> shard.getEntity().getMd5()).collect(Collectors.toList()));
-        return createFileResponse.getFsId();
+        CompleteUploadFileResponse completeUploadFileResponse = uploadFileApiClient.completeUploadFile(uploadResourceInfo.getUploadId(), uploadResourceInfo.getEntity().getDstFilePath(), uploadResourceInfo.getDstDirPath(), FileUtil.lastModifiedTime(uploadResourceInfo.getEntity().getFile()), uploadResourceInfo.getEntity().getFile().length(), shards.stream().map(shard -> shard.getEntity().getMd5()).collect(Collectors.toList()));
+        return completeUploadFileResponse.getFsId();
     }
 
 
@@ -83,7 +83,7 @@ public class ShardUploadResourceService extends AbstractShardUploadResource<Uplo
         String dstFilePath = uploadResourceInfo.getDstDirPath() + entity.getFile().getName();
         entity.setDstFilePath(dstFilePath);
 
-        FileDuplicateDetectionResponse duplicateDetectionResponse = uploadFileApiClient.uploadFileDuplicateCheck(entity.getDstFilePath(), uploadResourceInfo.getDstDirPath(), entity.getFile(), entity.getUk());
+        CheckFileExistResponse duplicateDetectionResponse = uploadFileApiClient.checkFileExist(entity.getDstFilePath(), uploadResourceInfo.getDstDirPath(), entity.getFile(), entity.getUk());
         if (duplicateDetectionResponse != null && duplicateDetectionResponse.getInfo() != null && StrUtil.isNotEmpty(duplicateDetectionResponse.getInfo().getFsId())) {
             return duplicateDetectionResponse.getInfo().getFsId();
         }

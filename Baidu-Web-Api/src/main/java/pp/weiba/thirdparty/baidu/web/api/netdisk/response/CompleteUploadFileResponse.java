@@ -18,7 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CreateFileResponse extends ApiResponse {
+public class CompleteUploadFileResponse extends ApiResponse {
 
     private Integer category;
     private Date ctime;

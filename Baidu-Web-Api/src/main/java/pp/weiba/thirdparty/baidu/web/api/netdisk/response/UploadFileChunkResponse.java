@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BaiduNetDiskWebUploadFileResponse {
+public class UploadFileChunkResponse {
 
     private String md5;
     private Integer partseq;

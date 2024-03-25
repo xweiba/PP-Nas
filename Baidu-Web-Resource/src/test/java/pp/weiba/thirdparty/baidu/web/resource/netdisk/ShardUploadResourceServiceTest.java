@@ -22,19 +22,15 @@ class ShardUploadResourceServiceTest extends WebAuthenticationTest {
     IShardUploadResource<UploadEntity, FileChunk> shardUploadResourceService = new ShardUploadResourceService(new UploadFileApiClient(httpClient));
 
     static String dstUploadFileDir = "/111/111/";
-
-    static String uploadDir = "C:\\Users\\wb\\Downloads\\";
-
-    static String uploadFilePath = uploadDir + "test.7z";
-//    static String uploadFilePath = uploadDir + "wxhelper.dll";
+    static String uploadDir = "C:\\Users\\admin\\Downloads\\";
+    static String uploadFilePath = uploadDir + "b3405a0364693f72c1051dfa967c00cb_1_5.pdf";
     static File uploadFile = new File(uploadFilePath);
 
     static UploadEntity uploadEntity = new UploadEntity().setFile(uploadFile).setDstFilePath(dstUploadFileDir + uploadFile.getName());
     UploadResourceInfo<UploadEntity> uploadResourceInfo = new UploadResourceInfo<UploadEntity>().setEntity(uploadEntity).setDstDirPath(dstUploadFileDir);
 
     // 单测时使用手动指定id
-    private final String manuallySpecifyUploadId = "P1-MTAuMTQ0Ljc4LjE1OjE3MTExNTgyNzA6ODgyODc1NDc1MzQ1NTgyNjYwOQ==";
-    //    private final String manuallySpecifyUploadId = "N1-NTguMTkuMzguMTg1OjE3MTEwODM3Mzg6ODgwODc0NzYyNTczODQyMTc3Ng==";
+    private final String manuallySpecifyUploadId = "P1-MTAuMTUxLjQzLjIyOjE3MTEzMzM4OTU6ODg3NTg5ODU2OTc1OTkyMjMwNg==";
     private List<ShardResource<FileChunk>> shardResources;
 
     @BeforeAll
@@ -81,6 +77,7 @@ class ShardUploadResourceServiceTest extends WebAuthenticationTest {
         }
     }
 
+
     List<ShardResource<FileChunk>> fileChunkShardResources;
     @Test
     void shardResourceUpload() {
@@ -107,7 +104,7 @@ class ShardUploadResourceServiceTest extends WebAuthenticationTest {
     @Test
     void upload() {
         String upload = shardUploadResourceService.upload(uploadResourceInfo);
-        System.out.println(upload);
+        log.info("上传完成：{}", upload);
     }
 
 }

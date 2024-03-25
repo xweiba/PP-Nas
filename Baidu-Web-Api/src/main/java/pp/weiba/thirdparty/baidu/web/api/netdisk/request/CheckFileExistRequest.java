@@ -19,7 +19,7 @@ import lombok.extern.log4j.Log4j2;
 @NoArgsConstructor
 @Data
 @Builder
-public class FileDuplicateDetectionRequest {
+public class CheckFileExistRequest {
 
     /* 目标绝对路径 */
     private String dstFilePath;
