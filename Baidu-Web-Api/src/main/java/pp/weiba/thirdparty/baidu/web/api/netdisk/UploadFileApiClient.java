@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * 文件传输客户端
+ * 文件上传客户端
  *
  * @author weiba
  * @date 2024/3/20 9:41
