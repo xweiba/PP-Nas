@@ -37,7 +37,7 @@ public class HttpRequest {
 
     private Map<String, String> headerMap = new HashMap<>();
 
-    // 上传文件信息, 注意https上传文件不支持零拷贝，它需要将数据读取到内存中进行加密。
+    // 上传文件信息, 注意https上传文件不支持完整的零拷贝，它需要将数据读取到内存中进行加密。
     private UploadFile uploadFile;
 
     private int timeout = 60000;

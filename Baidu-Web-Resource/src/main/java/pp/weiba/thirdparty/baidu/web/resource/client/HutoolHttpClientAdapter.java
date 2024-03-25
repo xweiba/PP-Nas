@@ -10,7 +10,6 @@ import cn.hutool.core.net.url.UrlQuery;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
-import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.Method;
@@ -117,10 +116,7 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
             }
 
             if (request.getUploadFile() != null && request.getUploadFile().getFile() != null) {
-                Object fileObj = buildUploadFile(request.getUploadFile());
-                httpRequest.keepAlive(true);
-                httpRequest.form("file", fileObj);
-                httpRequest.contentType("multipart/form-data");
+                buildUploadFile(httpRequest, request.getUploadFile());
             }
 
             if (request.getContentType() != null) {
@@ -133,23 +129,21 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
             return httpRequest;
         }
 
-        private Object buildUploadFile(UploadFile uploadFile) {
+        private void buildUploadFile(HttpRequest httpRequest, UploadFile uploadFile) {
             File file = uploadFile.getFile();
             UploadFileChunk chunk = uploadFile.getChunk();
             if (chunk == null) {
-                return file;
+                httpRequest.form("file", file);
             } else {
                 // 这里不能关闭流，不然后面无法读取
-                RandomAccessFile randomAccessFile;
-                ByteArrayInputStream byteArrayInputStream;
-                try {
-                    randomAccessFile = new RandomAccessFile(file, "r");
+                try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
                     byte[] buffer = new byte[(int) chunk.getLength()];
                     randomAccessFile.seek(chunk.getStart());
                     randomAccessFile.readFully(buffer);
-                    byteArrayInputStream = new ByteArrayInputStream(buffer);
-                    log.debug(() -> StrUtil.format("Chunk size: {}, MD5: {}", chunk.getLength(), SecureUtil.md5(byteArrayInputStream)));
-                    return new InputStreamResource(byteArrayInputStream, file.getName());
+                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
+                    // 注意，InputStream 是单向流，只能被读取一次，
+                    InputStreamResource inputStreamResource = new InputStreamResource(byteArrayInputStream, file.getName());
+                    httpRequest.form("file", inputStreamResource);
                 } catch (IOException e) {
                     log.error("文件分片失败！Exception：{}", ExceptionUtil.getMessage(e));
                     throw new RuntimeException("文件分片失败！", e);
