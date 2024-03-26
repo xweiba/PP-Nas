@@ -17,14 +17,17 @@ public class ManualSetCredentials implements IManualSetCredentials<Authenticatio
 
     private final String stoken;
 
-    public ManualSetCredentials(String bduss, String stoken) {
+    private final String baiduid;
+
+    public ManualSetCredentials(String bduss, String stoken, String baiduid) {
         this.bduss = bduss;
         this.stoken = stoken;
+        this.baiduid = baiduid;
     }
 
     @Override
     public Authentication getCredential() {
-        return new Authentication(bduss, stoken);
+        return new Authentication(bduss, stoken, baiduid);
     }
 
 }

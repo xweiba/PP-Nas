@@ -18,7 +18,7 @@ public class ErrorStatusProcessor implements IProcessor<HttpResponse> {
     @Override
     public HttpResponse process(HttpResponse request) {
         String body = request.getBody();
-        if (StrUtil.isNotBlank(body)) {
+        if (StrUtil.isNotBlank(body) && !body.contains("<!DOCTYPE html>")) {
             Integer statusCode = null;
             if (body.contains("error_code")) {
                 statusCode = getStatusCode(body, "error_code");

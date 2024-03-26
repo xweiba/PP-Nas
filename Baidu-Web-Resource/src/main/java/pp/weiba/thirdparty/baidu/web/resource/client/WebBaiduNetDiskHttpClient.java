@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.*;
 import pp.weiba.thirdparty.baidu.web.resource.processors.AddDefaultHeaderProcessor;
 import pp.weiba.thirdparty.baidu.web.resource.processors.ErrorStatusProcessor;
+import pp.weiba.thirdparty.baidu.web.resource.processors.ParameterCompletionProcessor;
 import pp.weiba.thirdparty.baidu.web.resource.processors.UrlParameterCompletionProcessor;
 
 /**
@@ -25,6 +26,7 @@ public class WebBaiduNetDiskHttpClient extends AbstractHttpClientWrap {
     protected void initHandlers() {
         // 全局参数补全处理
         addRequestHandler(new RequestHandler(new UrlParameterCompletionProcessor(authentication)));
+        addRequestHandler(new RequestHandler(new ParameterCompletionProcessor(authentication)));
 
         // 全局参数头处理
         addRequestHandler(new RequestHandler(new AddDefaultHeaderProcessor()));

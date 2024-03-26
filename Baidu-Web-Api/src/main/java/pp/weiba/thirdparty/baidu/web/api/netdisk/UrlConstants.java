@@ -89,4 +89,12 @@ public class UrlConstants {
     public static final String POST_SHARE_FILE_TRANSFER_URL = API_DOMAIN + "/share/transfer?ondup=newcopy&async=1&channel=chunlei&web=1&app_id=250528&clienttype=0&dp-logid={dp-logid}&logid={logid}&bdstoken={bdstoken}&shareid={}&from={}&sekey={}";
 
 
+    // 获取QR图片url
+    public static final String GET_QR_IMAGE = "https://passport.baidu.com/v2/api/getqrcode?lp=pc&qrloginfrom=pc&apiver=v3&tpl=netdisk&gid={}&callback={}&tt={}&logPage={}&_={}";
+
+    // 检测扫码结果
+    public static final String GET_CHECK_SCAN_QR_CALLBACK = "https://passport.baidu.com/channel/unicast?tpl=netdisk&_sdkFrom=1&apiver=v3&channel_id={}&gid={}&callback={}&tt={}&_={}";
+
+    // 扫码成功后跳转登录
+    public static final String GET_QR_LOGIN = "https://passport.baidu.com/v3/login/main/qrbdusslogin?u=https%253A%252F%252Fpan.baidu.com%252Fdisk%252Fmain%253Ffrom%253DhomeFlow%2523%252Findex&loginVersion=v4&qrcode=1&tpl=netdisk&maskId=&fileId=&apiver=v3&traceid=&alg=v3&rinfo=%7B%22fuid%22%3A%22c8c22e5754889c982a946ac77a7f8d5b%22%7D&callback={}&bduss={}&v={}&tt={}&time={}&sig={}&shaOne={}&elapsed={}";
 }

@@ -3,7 +3,9 @@ package pp.weiba.thirdparty.baidu.web.resource.netdisk;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.resource.*;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.request.FileChunk;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CreateDirResponse;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.FileDetailByFSIdResponse;
 
 /**
  * 文件操作服务
@@ -16,8 +18,11 @@ public class ResourceOperationService implements IResourceOperation {
 
     private final FileOperationApiClient fileOperationApiClient;
 
-    public ResourceOperationService(FileOperationApiClient fileOperationApiClient) {
+    private final IShardUploadResource<UploadEntity, FileChunk> shardUploadResource;
+
+    public ResourceOperationService(FileOperationApiClient fileOperationApiClient, IShardUploadResource<UploadEntity, FileChunk> shardUploadResource) {
         this.fileOperationApiClient = fileOperationApiClient;
+        this.shardUploadResource = shardUploadResource;
     }
 
     @Override
@@ -27,12 +32,14 @@ public class ResourceOperationService implements IResourceOperation {
     }
 
     @Override
-    public <T> ResourceInfo createResource(UploadResourceInfo<T> uploadResourceInfo) {
-        return null;
+    public ResourceInfo createResource(UploadResourceInfo uploadResourceInfo) {
+        String resourceId = shardUploadResource.upload(uploadResourceInfo);
+        return get(resourceId);
     }
 
     @Override
     public ResourceInfo get(String resourceId) {
+        FileDetailByFSIdResponse fileDetailByFsIds = fileOperationApiClient.getFileDetailByFsIds(resourceId);
         return null;
     }
 

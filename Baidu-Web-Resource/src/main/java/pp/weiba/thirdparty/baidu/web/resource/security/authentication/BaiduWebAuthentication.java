@@ -6,6 +6,7 @@ import pp.weiba.framework.security.authentication.AbstractAuthentication;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.LoginStatusResponse;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.TemplateVariableResponse;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.AccessToken;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.AuthenticationApiClient;
 
@@ -53,6 +54,7 @@ public class BaiduWebAuthentication extends AbstractAuthentication<Authenticatio
     public Authentication completeAuthenticationInformation(Authentication authentication) {
         TemplateVariableResponse templateVariable = authenticationApiClient.getTemplateVariable();
         authentication.setTemplateVariable(templateVariable.getResult());
+        initAccessToken();
         return authentication;
     }
 
@@ -60,5 +62,17 @@ public class BaiduWebAuthentication extends AbstractAuthentication<Authenticatio
     protected void doLogout() {
         authenticationApiClient.signOut(authenticationId);
         BaiduAuthenticationManager.removeAuthentication(authenticationId, authenticationType);
+        BaiduAuthenticationManager.removeAuthentication(authenticationId, authenticationType + "_accessToken");
     }
+
+
+    protected void initAccessToken() {
+        AccessToken accessToken = authenticationApiClient.getAccessToken();
+        if (accessToken == null) {
+            return;
+        }
+        // 存储到认证管理器， 补全的请求要使用
+        BaiduAuthenticationManager.setAuthentication(authenticationId, authenticationType + "_accessToken", accessToken);
+    }
+
 }

@@ -9,9 +9,11 @@ import pp.weiba.thirdparty.baidu.web.api.netdisk.request.OrderType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.SortType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CreateDirResponse;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.DirChildNodeResponse;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.FileDetailByFSIdResponse;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.SearchResponse;
 import pp.weiba.utils.StringUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -47,6 +49,17 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
         }}, new TypeReference<CreateDirResponse>() {
         });
     }
+
+
+    public FileDetailByFSIdResponse getFileDetailByFsIds(String fsIds) {
+        return postExecute(XpanUrlConstants.POST_FILE_MULTIMEDIA, new HashMap<String, Object>() {{
+            put("method", "filemetas");
+            put("dlink", 1);
+            put("fsids", Arrays.toString(fsIds.split(",")));
+        }}, new TypeReference<FileDetailByFSIdResponse>() {
+        });
+    }
+
 
     /**
      * 查询目录下的文件信息

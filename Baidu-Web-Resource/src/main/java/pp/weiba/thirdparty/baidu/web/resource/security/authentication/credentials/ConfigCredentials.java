@@ -35,9 +35,10 @@ public class ConfigCredentials implements IConfigCredentials<Authentication> {
         // 从配置文件中获取值
         String bduss = props.getProperty("baidu.authentication.bduss");
         String stoken = props.getProperty("baidu.authentication.stoken");
+        String baiduid = props.getProperty("baidu.authentication.baiduid");
 
         // 构建并返回 Authentication 对象
-        return new Authentication(bduss, stoken);
+        return new Authentication(bduss, stoken, baiduid);
     }
 
     @Override

@@ -15,6 +15,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.Method;
 import lombok.extern.log4j.Log4j2;
 import org.junit.platform.commons.util.StringUtils;
+import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.core.client.AbstractHttpClient;
 import pp.weiba.framework.core.client.IHttpTypeAdapter;
 import pp.weiba.framework.core.client.UploadFile;
@@ -98,6 +99,18 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
             }
             httpRequest.setMethod(tranMethod(request.getMethod().getType()));
             httpRequest.headerMap(request.getHeaderMap(), true);
+
+            if (CollUtil.isNotEmpty(request.getCookies())) {
+                StringBuilder cookieStr = new StringBuilder();
+                for (KeyValue cookie : request.getCookies()) {
+                    cookieStr.append(cookie.getKey()).append("=").append(cookie.getValue()).append(";");
+                }
+                String oldCookie = request.getHeaderMap().get("Cookie");
+                if (StrUtil.isNotBlank(oldCookie)) {
+                    cookieStr.append(oldCookie);
+                }
+                httpRequest.header("Cookie", cookieStr.toString());
+            }
             if (request.isFollowRedirect()) {
                 httpRequest.setFollowRedirects(request.isFollowRedirect());
                 httpRequest.setMaxRedirectCount(request.getMaxRedirectCount());
@@ -165,7 +178,7 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
 
             List<HttpCookie> cookies = response.getCookies();
             if (cookies != null && !cookies.isEmpty()) {
-                cookies.forEach((item) -> responseAdapter.addCookies(item.getName(), item.getValue()));
+                cookies.forEach((item) -> responseAdapter.addCookie(item.getName(), item.getValue()));
             }
 
             return responseAdapter;

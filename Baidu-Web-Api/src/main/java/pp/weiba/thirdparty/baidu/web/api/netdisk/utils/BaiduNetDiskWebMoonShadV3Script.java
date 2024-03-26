@@ -19,9 +19,9 @@ import java.util.Map;
  * @date 2024/3/20 9:54
  */
 @Log4j2
-public class BaiduNetDiskWebScript {
+public class BaiduNetDiskWebMoonShadV3Script {
 
-    private static final String BAIDU_NETDISC_SCRIPT_LIB = "BaiduNetdisc";
+    private static final String SCRIPT_LIB = "Moonshad";
 
     private static final String BAIDU_NETDISC_SCRIPT_LIB_DIR = "js/lib/baidu";
     private static final Map<String, List<String>> methodParamNameMap = new HashMap<>();
@@ -30,7 +30,7 @@ public class BaiduNetDiskWebScript {
 
     static {
         try {
-            lib = ScriptCompiledUtils.getLibCompiledScript(BAIDU_NETDISC_SCRIPT_LIB, BAIDU_NETDISC_SCRIPT_LIB_DIR);
+            lib = ScriptCompiledUtils.getLibCompiledScript(SCRIPT_LIB, BAIDU_NETDISC_SCRIPT_LIB_DIR);
             context = ThreadLocal.withInitial(() -> initContext(lib));
         } catch (Exception e) {
             log.error("BaiduNetdiscScript init error, exception: {}", ExceptionUtil.getMessage(e));
@@ -50,7 +50,7 @@ public class BaiduNetDiskWebScript {
     private static <T> T runScript(String[] params) throws ScriptException {
 
         String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
-        String scriptKey = BAIDU_NETDISC_SCRIPT_LIB + "." + methodName;
+        String scriptKey = SCRIPT_LIB + "." + methodName;
 
         CompiledScript script = ScriptCompiledUtils.getCompiledScript(scriptKey);
 
@@ -81,76 +81,58 @@ public class BaiduNetDiskWebScript {
         return null;
     }
 
-    /**
-     * encryptMd5 百度文件MD5加密方法，与js中保持一致即可。
-     *
-     * @param params : params 参数列表
-     * @return java.lang.String
-     * @author xiaoweiba1028@gmail.com
-     * @date 2022/9/22 13:29
-     */
-    public static String encryptMd5(String... params) {
+    public static int init(String... params) {
         try {
             return runScript(params);
         } catch (Exception e) {
-            log.error("encryptMd5 error! exception: {}", ExceptionUtil.getMessage(e));
-            throw new RuntimeException("encryptMd5 error");
+            log.error("OOOO00 error! exception: {}", ExceptionUtil.getMessage(e));
+            throw new RuntimeException("OOOO00 error");
         }
     }
 
-    public static String batchFileSignParams(String... params) {
+    public static String moonshad5moonsh2(String... params) {
         try {
             return runScript(params);
         } catch (Exception e) {
-            log.error("getDownloadSign error! exception: {}", ExceptionUtil.getMessage(e));
-            throw new RuntimeException("getDownloadSign error");
+            log.error("OOOO00 error! exception: {}", ExceptionUtil.getMessage(e));
+            throw new RuntimeException("OOOO00 error");
         }
     }
 
-    public static String getLogId(String... params) {
+    public static String OOO00O(String... params) {
         try {
             return runScript(params);
         } catch (Exception e) {
-            log.error("getLogId error! exception: {}", ExceptionUtil.getMessage(e));
-            throw new RuntimeException("getLogId error");
+            log.error("OOO00O error! exception: {}", ExceptionUtil.getMessage(e));
+            throw new RuntimeException("OOO00O error");
         }
     }
 
-    public static Double getDataOffset(String... params) {
+    public static String OOO000(String... params) {
         try {
             return runScript(params);
         } catch (Exception e) {
-            log.error("getDataOffset error! exception: {}", ExceptionUtil.getMessage(e));
-            throw new RuntimeException("getDataOffset error");
+            log.error("OOO000 error! exception: {}", ExceptionUtil.getMessage(e));
+            throw new RuntimeException("OOO000 error");
         }
     }
 
-    public static String makeMD5(String... params) {
+    public static String OOO0OO(String... params) {
         try {
             return runScript(params);
         } catch (Exception e) {
-            log.error("makeMD5 error! exception: {}", ExceptionUtil.getMessage(e));
-            throw new RuntimeException("makeMD5 error");
+            log.error("OOO0OO error! exception: {}", ExceptionUtil.getMessage(e));
+            throw new RuntimeException("OOO0OO error");
         }
     }
 
-    public static String loginGid(String... params) {
+    public static String O0OOO0(String... params) {
         try {
             return runScript(params);
         } catch (Exception e) {
-            log.error("guideRandom error! exception: {}", ExceptionUtil.getMessage(e));
-            throw new RuntimeException("guideRandom error");
+            log.error("O0OOO0 error! exception: {}", ExceptionUtil.getMessage(e));
+            throw new RuntimeException("O0OOO0 error");
         }
     }
-
-    public static String loginTraceId(String... params) {
-        try {
-            return runScript(params);
-        } catch (Exception e) {
-            log.error("loginTraceId error! exception: {}", ExceptionUtil.getMessage(e));
-            throw new RuntimeException("loginTraceId error");
-        }
-    }
-
 
 }

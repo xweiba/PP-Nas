@@ -4,11 +4,10 @@ import org.junit.jupiter.api.Test;
 import pp.weiba.framework.resource.IResourceOperation;
 import pp.weiba.framework.resource.ResourceInfo;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
-import pp.weiba.thirdparty.baidu.web.resource.security.authentication.WebAuthenticationTest;
 
-class ResourceOperationServiceTest extends WebAuthenticationTest {
+class ResourceOperationServiceTest extends ShardUploadResourceServiceTest {
 
-    IResourceOperation resourceOperation = new ResourceOperationService(new FileOperationApiClient(httpClient));
+    IResourceOperation resourceOperation = new ResourceOperationService(new FileOperationApiClient(httpClient), shardUploadResourceService);
 
     @Test
     void createDir() {
@@ -18,7 +17,7 @@ class ResourceOperationServiceTest extends WebAuthenticationTest {
 
     @Test
     void get() {
-
+        resourceOperation.get("891154745348288");
     }
 
     @Test

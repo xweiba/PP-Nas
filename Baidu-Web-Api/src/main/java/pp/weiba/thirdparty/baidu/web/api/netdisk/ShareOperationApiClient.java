@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.core.client.*;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.BaiduNetDiskWebQueryShareFileParams;
@@ -154,7 +155,7 @@ public class ShareOperationApiClient extends AbstractApiHttpClient {
             put("vcode", "");
             put("vcode_str", "");
         }});
-        String bdclndCookieStr = httpResponse.getCookies().get("BDCLND");
+        String bdclndCookieStr = httpResponse.getCookieValue("BDCLND");
         if (StrUtil.isBlank(bdclndCookieStr)) {
             log.error("分享地址校验失败！shareUrl:{}, password:{}", shortUrl, password);
             throw new RuntimeException("分享地址校验失败！");
@@ -184,7 +185,7 @@ public class ShareOperationApiClient extends AbstractApiHttpClient {
         }
     }
 
-    public BaiduNetDiskWebShareFileTransferResponse shareFileTransferExecute(String shareId, String shareUk, String myUk, String bdclndCookie, String dstDirPath, List<String> fsIds) {
+    public BaiduNetDiskWebShareFileTransferResponse shareFileTransferExecute(String shareId, String shareUk, String myUk, String bdclndCookieStr, String dstDirPath, List<String> fsIds) {
         if (CollUtil.isEmpty(fsIds)) {
             log.error("shareFileTransfer 失败! 分享文件不存在！");
             throw new IllegalArgumentException("shareFileTransfer 失败! 分享文件不存在！");
@@ -194,11 +195,13 @@ public class ShareOperationApiClient extends AbstractApiHttpClient {
             log.error("shareFileTransfer 失败! 不能转存自己的文件！");
             throw new IllegalArgumentException("shareFileTransfer 失败! 不能转存自己的文件！");
         }
-        String url = StrUtil.format(UrlConstants.POST_SHARE_FILE_TRANSFER_URL, shareId, shareUk, bdclndCookie.split("=")[1]);
+        String[] split = bdclndCookieStr.split("=");
+        KeyValue bdclndCookie = new KeyValue(split[0], split[1]);
+        String url = StrUtil.format(UrlConstants.POST_SHARE_FILE_TRANSFER_URL, shareId, shareUk, split[1]);
         HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.POST, url).requestParams(new HashMap<String, Object>() {{
             put("fsidlist", JSONUtils.toJsonStr(fsIds));
             put("path", dstDirPath);
-        }}).addheader("Cookie", bdclndCookie); // url中会传入bdstoken
+        }}).addCookie(bdclndCookie); // url中会传入bdstoken
         return execute(httpRequest, new TypeReference<BaiduNetDiskWebShareFileTransferResponse>() {
         });
     }

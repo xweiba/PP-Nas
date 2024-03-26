@@ -8,6 +8,7 @@ import pp.weiba.framework.core.client.IHttpClientAuthentication;
 import pp.weiba.framework.core.convert.IProcessor;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduNetDiskWebScript;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduWebApiUtils;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.AccessToken;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.BaiduAuthenticationManager;
 
@@ -60,6 +61,12 @@ public class UrlParameterCompletionProcessor implements IProcessor<HttpRequest> 
 
             formatMap.put("uk", String.valueOf(uk));
         }
+        if (url.contains("{xpan_access_token}")) {
+            formatMap = initMap(formatMap);
+            String xpan_access_token = getAccessToken();
+
+            formatMap.put("xpan_access_token", xpan_access_token);
+        }
 
         if (CollUtil.isNotEmpty(formatMap)) {
             url = StrUtil.format(url, formatMap);
@@ -82,6 +89,14 @@ public class UrlParameterCompletionProcessor implements IProcessor<HttpRequest> 
             throw new RuntimeException("认证失败，请先登录");
         }
         return authentication.getLoginInfo().getUk();
+    }
+
+    private String getAccessToken() {
+        AccessToken accessToken = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType() + "_accessToken");
+        if (accessToken == null || StrUtil.isBlank(accessToken.getAccessToken())) {
+            throw new RuntimeException("认证失败，请先登录");
+        }
+        return accessToken.getAccessToken();
     }
 
     private <T, F> Map<T, F> initMap(Map<T, F> formatMap) {

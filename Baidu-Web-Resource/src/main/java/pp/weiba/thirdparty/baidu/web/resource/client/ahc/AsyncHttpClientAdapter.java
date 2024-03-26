@@ -1,7 +1,7 @@
 package pp.weiba.thirdparty.baidu.web.resource.client.ahc;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
@@ -13,6 +13,7 @@ import org.asynchttpclient.proxy.ProxyServer;
 import org.asynchttpclient.request.body.multipart.FilePart;
 import org.asynchttpclient.request.body.multipart.InputStreamPart;
 import org.asynchttpclient.request.body.multipart.Part;
+import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.core.client.*;
 import pp.weiba.framework.core.convert.ITypeReferenceProcessor;
 import pp.weiba.framework.core.convert.StrJsonTypeReferenceProcessor;
@@ -114,9 +115,8 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
                 request.getRequestParams().forEach((item, value) -> requestBuilder.addFormParam(item, value instanceof String ? (String) value : JSONObject.toJSONString(value)));
             }
 
+            buildCookies(request, requestBuilder);
             if (request.getHeaderMap() != null && !request.getHeaderMap().isEmpty()) {
-                // 必须将Cookie单独设置，否则可能失效
-                buildCookies(request.getHeaderMap(), requestBuilder);
                 request.getHeaderMap().forEach(headers::add);
             }
 
@@ -149,23 +149,11 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
             return null;
         }
 
-        private void buildCookies(Map<String, String> headerMap, RequestBuilder requestBuilder) {
-            String cookie = headerMap.get("Cookie");
-            if (StrUtil.isNotBlank(cookie)) {
-                cookie = cookie.trim();
-                while (true) {
-                    int i = cookie.indexOf(";");
-                    if (i <= 0) break;
-                    String cookieTemp = cookie.substring(0, i);
-                    int j = cookieTemp.indexOf("=");
-                    if (j > 0) {
-                        String key = cookieTemp.substring(0, j);
-                        String value = cookieTemp.substring(j + 1);
-                        requestBuilder.addCookie(new DefaultCookie(key, value));
-                    }
-                    cookie = cookie.substring(i + 1);
+        private void buildCookies(HttpRequest request, RequestBuilder requestBuilder) {
+            if (CollUtil.isNotEmpty(request.getCookies())) {
+                for (KeyValue cookie : request.getCookies()) {
+                    requestBuilder.addCookie(new DefaultCookie(cookie.getKey(), cookie.getValue()));
                 }
-                headerMap.remove("Cookie");
             }
         }
 
@@ -184,7 +172,7 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
 
             List<Cookie> cookies = response.getCookies();
             if (cookies != null && !cookies.isEmpty()) {
-                cookies.forEach((item) -> responseAdapter.addCookies(item.name(), item.value()));
+                cookies.forEach((item) -> responseAdapter.addCookie(item.name(), item.value()));
             }
 
             return responseAdapter;
