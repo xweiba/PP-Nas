@@ -32,12 +32,12 @@ public class WebAuthenticationTest extends DefaultTest {
     protected static IHttpClientAuthentication authentication = new WebHttpClientAuthentication(businessId, businessType);
     // 用户认证信息获取接口
     private static final ICredential<Authentication> credential = new ManualSetCredentials(BDUSS, STOKEN, BAIDUID);
-
-    // 创建API客户端, 补齐认证信息使用
-    public static AuthenticationApiClient authenticationApiClient = new AuthenticationApiClient(httpClient);
     // 带授权的客户端
     //    protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new AsyncHttpClientAdapter(), authentication);
     protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new HutoolHttpClientAdapter(), authentication);
+
+    // 创建API客户端, 补齐认证信息使用
+    public static AuthenticationApiClient authenticationApiClient = new AuthenticationApiClient(httpClient);
 
     public static final IAuthentication<Authentication> baiduWebAuthentication = new BaiduWebAuthentication(businessId, businessType, authenticationApiClient, credential);
 
