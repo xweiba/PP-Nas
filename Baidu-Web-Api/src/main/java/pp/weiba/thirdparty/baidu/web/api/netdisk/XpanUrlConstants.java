@@ -24,7 +24,7 @@ public class XpanUrlConstants {
 
     // 获取 access_token, client_id 为百度开放平台中申请的应用的AppKey， 个人账号已经无法申请了,
     // https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk
-    public static final String POST_ACCESS_TOKEN = "https://openapi.baidu.com/oauth/2.0/authorize?client_id=" + CLIENT_ID + "&response_type=token&redirect_uri=oob&scope=basic,netdisk";
+    public static final String GET_ACCESS_TOKEN = "https://openapi.baidu.com/oauth/2.0/authorize?client_id=" + CLIENT_ID + "&response_type=token&redirect_uri=oob&scope=basic,netdisk";
 
     // 获取文件信息
     public static final String POST_FILE_MULTIMEDIA = XPAN_API_PREFIX + "/multimedia?access_token={xpan_access_token}";

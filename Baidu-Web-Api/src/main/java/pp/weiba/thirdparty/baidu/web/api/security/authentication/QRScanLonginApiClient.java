@@ -17,7 +17,7 @@ import java.util.Date;
  * @date 2024/3/26 10:13
  */
 @Log4j2
-public class QRImageLongin {
+public class QRScanLonginApiClient {
 
     public static String getQRImageHttpUrl(LoginQRParams loginQRParams) {
         return StrUtil.format(UrlConstants.GET_QR_IMAGE, loginQRParams.getGid(), loginQRParams.getCallback(), loginQRParams.getTt(), loginQRParams.getLogPage(), loginQRParams.get_());
@@ -27,7 +27,6 @@ public class QRImageLongin {
         String responseBody = getResponseBodyFormat(getQRImageHttpUrlResponseBody);
         return JSONUtils.toBean(responseBody, QrInfo.class);
     }
-
 
     public static String checkScanQRCallbackUrl(String channelId, String gid, String callback) {
         long tt = new Date().getTime();
@@ -55,11 +54,9 @@ public class QRImageLongin {
         return sigParams;
     }
 
-
     public static String getResponseBodyFormat(String getResponseBodyStr) {
         return getResponseBodyStr.substring(getResponseBodyStr.indexOf("{"), getResponseBodyStr.lastIndexOf(")"));
     }
-
 
     public static CheckLoginResponse buildCheckLoginResponse(String responseBodyStr) {
         JSONObject jsonObj = JSONUtils.toJSONObj(responseBodyStr);

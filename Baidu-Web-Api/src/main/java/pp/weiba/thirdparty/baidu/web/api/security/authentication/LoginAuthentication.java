@@ -1,7 +1,9 @@
 package pp.weiba.thirdparty.baidu.web.api.security.authentication;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import pp.weiba.framework.core.convert.HttpCookieDeserializer;
 
 import java.net.HttpCookie;
 import java.util.Map;
@@ -18,6 +20,7 @@ public class LoginAuthentication {
 
     private LoginResponse loginResponse;
 
+    @JSONField(name = "cookieMap", deserializeUsing = HttpCookieDeserializer.class)
     private Map<String, HttpCookie> cookieMap;
 
 }

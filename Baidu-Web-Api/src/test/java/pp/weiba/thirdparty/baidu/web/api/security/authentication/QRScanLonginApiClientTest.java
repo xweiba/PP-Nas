@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
-class QRImageLonginTest {
+class QRScanLonginApiClientTest {
 
 
     QrInfo qrResponse;
@@ -39,8 +39,8 @@ class QRImageLonginTest {
                 .setCallback(callback)
                 .setLogPage(logPage)
                 .set_(_);
-        String getQRImageHttpUrlResponseBody = HttpUtil.get(QRImageLongin.getQRImageHttpUrl(loginQRParams));
-        qrResponse = QRImageLongin.getQRImageUrl(getQRImageHttpUrlResponseBody);
+        String getQRImageHttpUrlResponseBody = HttpUtil.get(QRScanLonginApiClient.getQRImageHttpUrl(loginQRParams));
+        qrResponse = QRScanLonginApiClient.getQRImageUrl(getQRImageHttpUrlResponseBody);
         // 解析二维码
         decode = QRUtils.decode("https://" + qrResponse.getImgurl());
         // 打印到控制台
@@ -56,15 +56,15 @@ class QRImageLonginTest {
             String channelId = qrResponse.getSign();
             String gid = loginQRParams.getGid();
             String callback = loginQRParams.getCallback();
-            HttpResponse loginCheck = HttpRequest.get(QRImageLongin.checkScanQRCallbackUrl(channelId, gid, callback)).timeout(600000).execute();
-            String responseBodyStr = QRImageLongin.getResponseBodyFormat(loginCheck.body());
+            HttpResponse loginCheck = HttpRequest.get(QRScanLonginApiClient.checkScanQRCallbackUrl(channelId, gid, callback)).timeout(600000).execute();
+            String responseBodyStr = QRScanLonginApiClient.getResponseBodyFormat(loginCheck.body());
             if (responseBodyStr.contains("\"errno\":1")) {
                 log.info("等待扫码....");
             }
             if (responseBodyStr.contains("\"errno\":0")) {
                 if (responseBodyStr.contains("\\\"status\\\":0")) {
                     log.info("登录成功");
-                    checkLoginResponse = QRImageLongin.buildCheckLoginResponse(responseBodyStr);
+                    checkLoginResponse = QRScanLonginApiClient.buildCheckLoginResponse(responseBodyStr);
                     break;
                 } else {
                     log.info("已扫码，等待确认....");
@@ -80,13 +80,13 @@ class QRImageLonginTest {
     @Test
     void buildQRLoginParams() {
         loginCheck();
-        longinParams = QRImageLongin.buildQRLoginParams(checkLoginResponse.getChannelV().getV());
+        longinParams = QRScanLonginApiClient.buildQRLoginParams(checkLoginResponse.getChannelV().getV());
     }
 
     @Test
     void qrLogIn() {
         buildQRLoginParams();
-        String loginUrl = QRImageLongin.qrLogInUrl(longinParams);
+        String loginUrl = QRScanLonginApiClient.qrLogInUrl(longinParams);
         qrLogInResponse = HttpRequest.get(loginUrl).timeout(600000).execute();
         log.info(qrLogInResponse.body());
 
@@ -94,7 +94,8 @@ class QRImageLonginTest {
 
     @Test
     void generateLoginAuthentication() {
-        String body = QRImageLongin.getResponseBodyFormat(qrLogInResponse.body()).replace("'data'", "\"data\"");
+        qrLogIn();
+        String body = QRScanLonginApiClient.getResponseBodyFormat(qrLogInResponse.body()).replace("'data'", "\"data\"");
         LoginResponse bean = JSONUtils.toBean(body, LoginResponse.class);
         Map<String, HttpCookie> cookieMap = qrLogInResponse.getCookies().stream().collect(Collectors.toMap(HttpCookie::getName, item -> item));
         LoginAuthentication loginAuthentication = new LoginAuthentication().setLoginResponse(bean).setCookieMap(cookieMap);
