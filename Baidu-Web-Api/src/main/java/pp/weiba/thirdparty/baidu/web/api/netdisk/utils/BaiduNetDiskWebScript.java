@@ -152,5 +152,14 @@ public class BaiduNetDiskWebScript {
         }
     }
 
+    public static String getUniqueId(String... params) {
+        try {
+            return runScript(params);
+        } catch (Exception e) {
+            log.error("loginTraceId error! exception: {}", ExceptionUtil.getMessage(e));
+            throw new RuntimeException("loginTraceId error");
+        }
+    }
+
 
 }

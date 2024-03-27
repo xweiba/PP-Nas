@@ -4,6 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.UrlConstants;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduNetDiskWebMoonShadV3Script;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduNetDiskWebScript;
 import pp.weiba.utils.JSONUtils;
 
 import java.util.Date;
@@ -33,16 +35,24 @@ public class QRImageLongin {
         return StrUtil.format(UrlConstants.GET_CHECK_SCAN_QR_CALLBACK, channelId, gid, callback, tt, tt);
     }
 
-    public static String qrLogInUrl(String bduss) {
-        long tt = new Date().getTime();
-        // time = Math.round((new Date).getTime() / 1e3),
-        // o = a = (new Date).getTime();
-        // alg = 'v3'
-        // sig: h.encryption(i, r, e),
-        // elapsed = (new Date).getTime() - o, 最后算，计算签名花费的时间
+    public static String qrLogInUrl(LonginParams params) {
+        return StrUtil.format(UrlConstants.GET_QR_LOGIN, params.getCallback(), params.getBduss(), params.getV(), params.getTt(), params.getTime(), params.getSig(), params.getShaOne(), params.getElapsed());
+    }
 
+    public static LonginParams buildQRLoginParams(String bduss) {
+        /*
+        签名参数：
+        * {"bduss":"52daaa4c2a8651ef61ef0bcfdbf873ed","u":"https%3A%2F%2Fpan.baidu.com%2Fdisk%2Fmain%3Fredirecturl%3Dhttps%253A%252F%252Fpan.baidu.com%252Fdisk%252Fmain%253Fredirecturl%253Dhttps%25253A%25252F%25252Fpan.baidu.com%25252Fdisk%25252Fmain%25253Fredirecturl%25253Dhttps%2525253A%2525252F%2525252Fpan.baidu.com%2525252Fdisk%2525252Fmain%2525253Ffrom%2525253DhomeFlow%25252526_at_%2525253D1711434566250%25252523%2525252Findex%2525253Fcategory%2525253Dall%252526_at_%25253D1711438534882%252523%25252Findex%25253Fcategory%25253Dall%2526_at_%253D1711502742473%2523%252Findex%253Fcategory%253Dall%26_at_%3D1711504384808%23%2Findex%3Fcategory%3Dall","loginVersion":"v4","qrcode":1,"tpl":"netdisk","maskId":"","fileId":"","apiver":"v3","tt":1711506136888,"traceid":""}
+        *
+        * */
 
-        return StrUtil.format(UrlConstants.GET_QR_LOGIN, bduss, tt, tt);
+        LonginParams longinParams = new LonginParams().setBduss(bduss);
+        String sigAndShaOneStr = BaiduNetDiskWebMoonShadV3Script.O0OOO0(JSONUtils.toJsonStr(longinParams));
+        LonginParams sigParams = JSONUtils.toBean(sigAndShaOneStr, LonginParams.class);
+        String callback = BaiduNetDiskWebScript.getUniqueId("bd__cbs__");
+        sigParams.setCallback(callback);
+        sigParams.setBduss(bduss);
+        return sigParams;
     }
 
 

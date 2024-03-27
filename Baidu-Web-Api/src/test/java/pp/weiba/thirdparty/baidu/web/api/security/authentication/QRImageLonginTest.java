@@ -1,14 +1,21 @@
 package pp.weiba.thirdparty.baidu.web.api.security.authentication;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduNetDiskWebScript;
+import pp.weiba.utils.JSONUtils;
 import pp.weiba.utils.QRUtils;
 
+import java.io.File;
+import java.net.HttpCookie;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 class QRImageLonginTest {
@@ -66,12 +73,31 @@ class QRImageLonginTest {
         }
     }
 
+    public static final String LOGIN_AUTHENTICATION_FILE_PATH = "src/test/resources/loginAuthentication.json";
+    LonginParams longinParams;
+    HttpResponse qrLogInResponse;
+
+    @Test
+    void buildQRLoginParams() {
+        loginCheck();
+        longinParams = QRImageLongin.buildQRLoginParams(checkLoginResponse.getChannelV().getV());
+    }
 
     @Test
     void qrLogIn() {
-        loginCheck();
-        String loginUrl = QRImageLongin.qrLogInUrl(checkLoginResponse.getChannelV().getV());
-        HttpResponse qrLogIn = HttpRequest.get(loginUrl).timeout(600000).execute();
-        log.info(qrLogIn.body());
+        buildQRLoginParams();
+        String loginUrl = QRImageLongin.qrLogInUrl(longinParams);
+        qrLogInResponse = HttpRequest.get(loginUrl).timeout(600000).execute();
+        log.info(qrLogInResponse.body());
+
+    }
+
+    @Test
+    void generateLoginAuthentication() {
+        String body = QRImageLongin.getResponseBodyFormat(qrLogInResponse.body()).replace("'data'", "\"data\"");
+        LoginResponse bean = JSONUtils.toBean(body, LoginResponse.class);
+        Map<String, HttpCookie> cookieMap = qrLogInResponse.getCookies().stream().collect(Collectors.toMap(HttpCookie::getName, item -> item));
+        LoginAuthentication loginAuthentication = new LoginAuthentication().setLoginResponse(bean).setCookieMap(cookieMap);
+        FileUtil.writeString(JSONUtils.toJsonStr(loginAuthentication), new File(LOGIN_AUTHENTICATION_FILE_PATH), StandardCharsets.UTF_8);
     }
 }

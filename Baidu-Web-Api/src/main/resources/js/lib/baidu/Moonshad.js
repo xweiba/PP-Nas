@@ -2036,6 +2036,12 @@ var Moonshad = {
             o = "moonshad8moonsh6", a = "moonshad0moonsh1", s = "moonshad1moonsh9";
 
         function c(t, r, e) {
+            var passFingerPrint = function () {
+                var fuid = 'FOCoIC3q5fKa8fgJnwzbE67EJ49BGJeplOzf+4l4EOvDuu2RXB…XRmxxGQV+roQ+0nE4U83L/UBOqmFU2Ekb/vTs/YZwJiVxHg==';
+
+                JSON.stringify(fuid)
+
+            }
             if (!1920 || !1200) return {};
             var n = {};
             try {
@@ -2048,10 +2054,12 @@ var Moonshad = {
                     alg: i.alg,
                     sig: h.encryption(i, r, e),
                     elapsed: (new Date).getTime() - o || "",
-                    shaOne: a
-                }, window.passFingerPrint) {
-                    var s = window.passFingerPrint();
-                    n.rinfo = p({fuid: d(s.fuid)})
+                    shaOne: a,
+                    rinfo: {
+                        fuid: 'c8c22e5754889c982a946ac77a7f8d5b'
+                    }
+                }, true) {
+
                 }
             } catch (c) {
                 u(c)
@@ -2073,19 +2081,19 @@ var Moonshad = {
             }
         }
     }],
-    moonshad5moonsh2: function (t, r) {
+    OOOO00: function (t, r) {
         return this.executeLib('OOOO00', t, r);
     },
-    moonshad3moonsh0: function (t, r) {
+    OOO00O: function (t, r) {
         return this.executeLib('OOO00O', t, r);
     },
-    moonshad8moonsh6: function (t, r) {
+    OOO000: function (t, r) {
         return this.executeLib('OOO000', t, r);
     },
-    moonshad0moonsh1: function (t, r) {
+    OOO0OO: function (t, r) {
         return this.executeLib('OOO0OO', t, r);
     },
-    moonshad1moonsh9: function (t, r) {
+    O0OOO0: function (t, r) {
         return this.executeLib('O0OOO0', t, r);
     }
 }

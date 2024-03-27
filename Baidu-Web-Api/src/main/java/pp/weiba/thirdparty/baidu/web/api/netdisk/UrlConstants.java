@@ -96,5 +96,5 @@ public class UrlConstants {
     public static final String GET_CHECK_SCAN_QR_CALLBACK = "https://passport.baidu.com/channel/unicast?tpl=netdisk&_sdkFrom=1&apiver=v3&channel_id={}&gid={}&callback={}&tt={}&_={}";
 
     // 扫码成功后跳转登录
-    public static final String GET_QR_LOGIN = "https://passport.baidu.com/v3/login/main/qrbdusslogin?u=https%253A%252F%252Fpan.baidu.com%252Fdisk%252Fmain%253Ffrom%253DhomeFlow%2523%252Findex&loginVersion=v4&qrcode=1&tpl=netdisk&maskId=&fileId=&apiver=v3&traceid=&alg=v3&rinfo=%7B%22fuid%22%3A%22c8c22e5754889c982a946ac77a7f8d5b%22%7D&callback={}&bduss={}&v={}&tt={}&time={}&sig={}&shaOne={}&elapsed={}";
+    public static final String GET_QR_LOGIN = "https://passport.baidu.com/v3/login/main/qrbdusslogin?u=https%253A%252F%252Fpan.baidu.com%252Fdisk%252Fmain%253Ffrom%253DhomeFlow%2523%252Findex&loginVersion=v4&qrcode=1&tpl=netdisk&maskId=&fileId=&apiver=v3&traceid=&alg=v3&rinfo=%7B%22fuid%22%3A%22c8c22e5754889c982a946ac77a7f8d5b%22%7D&callback={}&bduss={}&v={}&tt={}&time={}sig={}&shaOne={}&elapsed={}";
 }

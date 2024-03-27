@@ -90,15 +90,6 @@ public class BaiduNetDiskWebMoonShadV3Script {
         }
     }
 
-    public static String moonshad5moonsh2(String... params) {
-        try {
-            return runScript(params);
-        } catch (Exception e) {
-            log.error("OOOO00 error! exception: {}", ExceptionUtil.getMessage(e));
-            throw new RuntimeException("OOOO00 error");
-        }
-    }
-
     public static String OOO00O(String... params) {
         try {
             return runScript(params);
