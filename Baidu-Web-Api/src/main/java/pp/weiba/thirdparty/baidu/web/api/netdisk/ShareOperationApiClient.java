@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.core.client.*;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.BaiduNetDiskWebQueryShareFileParams;
@@ -196,12 +195,11 @@ public class ShareOperationApiClient extends AbstractApiHttpClient {
             throw new IllegalArgumentException("shareFileTransfer 失败! 不能转存自己的文件！");
         }
         String[] split = bdclndCookieStr.split("=");
-        KeyValue bdclndCookie = new KeyValue(split[0], split[1]);
         String url = StrUtil.format(UrlConstants.POST_SHARE_FILE_TRANSFER_URL, shareId, shareUk, split[1]);
         HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.POST, url).requestParams(new HashMap<String, Object>() {{
             put("fsidlist", JSONUtils.toJsonStr(fsIds));
             put("path", dstDirPath);
-        }}).addCookie(bdclndCookie); // url中会传入bdstoken
+        }}).addCookie(split[0], split[1]); // url中会传入bdstoken
         return execute(httpRequest, new TypeReference<BaiduNetDiskWebShareFileTransferResponse>() {
         });
     }
