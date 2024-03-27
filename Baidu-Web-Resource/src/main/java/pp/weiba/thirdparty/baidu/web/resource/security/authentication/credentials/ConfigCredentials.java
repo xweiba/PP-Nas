@@ -16,7 +16,7 @@ import java.util.Properties;
  * @date 2024/3/6 14:59
  */
 @Log4j2
-public class ConfigCredentials implements IConfigCredentials<Authentication> {
+public class ConfigCredentials extends WebCookieCredentials implements IConfigCredentials<Authentication> {
 
     private final String configPath;
 
@@ -28,18 +28,6 @@ public class ConfigCredentials implements IConfigCredentials<Authentication> {
     }
 
     // 获取jar目录下的config.properties中的baidu.authentication.bduss和baidu.authentication.stoken
-    public Authentication getCredential() {
-
-        Properties props = getProperties();
-
-        // 从配置文件中获取值
-        String bduss = props.getProperty("baidu.authentication.bduss");
-        String stoken = props.getProperty("baidu.authentication.stoken");
-        String baiduid = props.getProperty("baidu.authentication.baiduid");
-
-        // 构建并返回 Authentication 对象
-        return new Authentication(bduss, stoken, baiduid);
-    }
 
     @Override
     public Properties getProperties() {
@@ -57,5 +45,18 @@ public class ConfigCredentials implements IConfigCredentials<Authentication> {
             return null;
         }
         return props;
+    }
+
+    @Override
+    public void buildCredential() {
+        Properties props = getProperties();
+
+        // 从配置文件中获取值
+        this.bduss = props.getProperty("baidu.authentication.bduss");
+        this.stoken = props.getProperty("baidu.authentication.stoken");
+        this.ptoken = props.getProperty("baidu.authentication.ptoken");
+        this.baiduid = props.getProperty("baidu.authentication.baiduid");
+        this.ubi = props.getProperty("baidu.authentication.ubi");
+
     }
 }

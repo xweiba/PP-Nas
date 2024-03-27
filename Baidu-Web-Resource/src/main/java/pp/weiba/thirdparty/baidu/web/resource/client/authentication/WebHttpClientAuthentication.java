@@ -1,12 +1,14 @@
 package pp.weiba.thirdparty.baidu.web.resource.client.authentication;
 
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.core.client.AbstractHttpClientAuthentication;
 import pp.weiba.framework.core.client.HttpRequest;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.BaiduAuthenticationManager;
 
+import java.net.HttpCookie;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,15 +26,15 @@ public class WebHttpClientAuthentication extends AbstractHttpClientAuthenticatio
 
     @Override
     public HttpRequest authentication(HttpRequest request) {
-        List<KeyValue> cookies = getCookies();
+        List<HttpCookie> cookies = getCookies();
         request.setCookies(cookies);
         return request;
     }
 
-    public List<KeyValue> getCookies() {
+    public List<HttpCookie> getCookies() {
         Authentication authentication = BaiduAuthenticationManager.getAuthentication(this.getAuthenticationId(), this.getAuthenticationType());
-        if (authentication != null) {
-            return authentication.getCookies();
+        if (authentication != null && CollUtil.isNotEmpty(authentication.getCookieMap())) {
+            return new ArrayList<>(authentication.getCookieMap().values());
         }
         return null;
     }

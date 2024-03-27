@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.KeyValue;
 
+import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +38,7 @@ public class HttpRequest {
 
     private String contentType;
 
-    private List<KeyValue> cookies;
+    private List<HttpCookie> cookies;
 
     private Map<String, String> headerMap = new HashMap<>();
 
@@ -102,16 +102,16 @@ public class HttpRequest {
     }
 
     public HttpRequest addCookie(String key, String value) {
-        return addCookie(new KeyValue(key, value));
+        return addCookie(new HttpCookie(key, value));
     }
 
-    public HttpRequest addCookie(KeyValue cookie) {
+    public HttpRequest addCookie(HttpCookie cookie) {
         if (this.cookies == null) this.cookies = new ArrayList<>();
         this.cookies.add(cookie);
         return this;
     }
 
-    public HttpRequest setCookies(List<KeyValue> cookies) {
+    public HttpRequest setCookies(List<HttpCookie> cookies) {
         if (this.cookies == null) this.cookies = new ArrayList<>();
         this.cookies.addAll(cookies);
         return this;

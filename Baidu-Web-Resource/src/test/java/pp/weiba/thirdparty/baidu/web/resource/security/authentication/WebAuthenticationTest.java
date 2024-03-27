@@ -22,7 +22,11 @@ public class WebAuthenticationTest extends DefaultTest {
 
     private static final String STOKEN = "85af6a69e0cc286989d75c1e43f9a2c5c8830cefc0f59352847eac97d6c2fc7f";
 
+    private static final String PTOKEN = "4231181926BBEE655529ED3D6E52E67B:FG=1";
+
     private static final String BAIDUID = "4231181926BBEE655529ED3D6E52E67B:FG=1";
+
+    private static final String UBI = "4231181926BBEE655529ED3D6E52E67B:FG=1";
 
     // 设置客户端认证信息
     static String businessId = "1";
@@ -31,7 +35,7 @@ public class WebAuthenticationTest extends DefaultTest {
     // 配置当前用户认证信息, 存储中间变量
     protected static IHttpClientAuthentication authentication = new WebHttpClientAuthentication(businessId, businessType);
     // 用户认证信息获取接口
-    private static final ICredential<Authentication> credential = new ManualSetCredentials(BDUSS, STOKEN, BAIDUID);
+    private static final ICredential<Authentication> credential = new ManualSetCredentials(BDUSS, STOKEN, PTOKEN, BAIDUID, UBI);
     // 带授权的客户端
     //    protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new AsyncHttpClientAdapter(), authentication);
     protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new HutoolHttpClientAdapter(), authentication);

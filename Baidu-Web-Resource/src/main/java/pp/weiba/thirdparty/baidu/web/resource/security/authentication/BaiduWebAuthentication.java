@@ -1,6 +1,6 @@
 package pp.weiba.thirdparty.baidu.web.resource.security.authentication;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.AbstractAuthentication;
 import pp.weiba.framework.security.authentication.credential.ICredential;
@@ -40,10 +40,10 @@ public class BaiduWebAuthentication extends AbstractAuthentication<Authenticatio
 
     @Override
     public Authentication detectionAuthentication(Authentication authentication) {
-        if (authentication == null || StrUtil.isBlank(authentication.getBduss()) || StrUtil.isBlank(authentication.getStoken())) {
+        if (authentication == null || CollUtil.isEmpty(authentication.getCookieMap())) {
             // 记录日志，抛出异常
             log.error("百度网盘认证信息为空");
-            throw new RuntimeException("百度网盟能认证信息为空");
+            throw new RuntimeException("百度网盘认证信息为空");
         }
         LoginStatusResponse loginStatus = authenticationApiClient.getLoginStatus();
         authentication.setLoginInfo(loginStatus.getLoginInfo());

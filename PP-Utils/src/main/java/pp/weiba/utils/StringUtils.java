@@ -174,4 +174,8 @@ public class StringUtils {
     }
 
 
+    public static boolean contains(String bfessCookies, String upperCaseName) {
+        if (isBlank(bfessCookies) || isBlank(upperCaseName)) return false;
+        return bfessCookies.contains("," + upperCaseName + ",");
+    }
 }

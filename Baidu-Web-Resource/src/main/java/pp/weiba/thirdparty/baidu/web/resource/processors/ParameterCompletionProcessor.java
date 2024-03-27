@@ -47,10 +47,10 @@ public class ParameterCompletionProcessor implements IProcessor<HttpRequest> {
 
     private String getStoken() {
         Authentication authentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
-        if (authentication == null || StrUtil.isBlank(authentication.getStoken())) {
+        if (authentication == null || !authentication.containsCookie("STOKEN")) {
             throw new RuntimeException("stoken 获取失败，请检查配置");
         }
-        return authentication.getStoken();
+        return authentication.getCookieValue("STOKEN");
     }
 
     private String getBDStoken() {
