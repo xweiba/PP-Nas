@@ -11,7 +11,7 @@ import pp.weiba.utils.JSONUtils;
 import java.util.Date;
 
 /**
- * 二维码扫码登录
+ * 百度 WEB 二维码扫码登录
  *
  * @author weiba
  * @date 2024/3/26 10:13
