@@ -13,7 +13,6 @@ import org.asynchttpclient.proxy.ProxyServer;
 import org.asynchttpclient.request.body.multipart.FilePart;
 import org.asynchttpclient.request.body.multipart.InputStreamPart;
 import org.asynchttpclient.request.body.multipart.Part;
-import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.core.client.*;
 import pp.weiba.framework.core.convert.ITypeReferenceProcessor;
 import pp.weiba.framework.core.convert.StrJsonTypeReferenceProcessor;
@@ -22,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -150,10 +150,17 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
         }
 
         private void buildCookies(HttpRequest request, RequestBuilder requestBuilder) {
-            if (CollUtil.isNotEmpty(request.getCookies())) {
-                for (KeyValue cookie : request.getCookies()) {
-                    requestBuilder.addCookie(new DefaultCookie(cookie.getKey(), cookie.getValue()));
+            if (CollUtil.isNotEmpty(request.getCookieMap())) {
+                for (Map.Entry<String, HttpCookie> item : request.getCookieMap().entrySet()) {
+                    DefaultCookie defaultCookie = new DefaultCookie(item.getKey(), item.getValue().getValue());
+                    defaultCookie.setDomain(item.getValue().getDomain());
+                    defaultCookie.setPath(item.getValue().getPath());
+                    defaultCookie.setSecure(item.getValue().getSecure());
+                    defaultCookie.setHttpOnly(item.getValue().isHttpOnly());
+                    defaultCookie.setMaxAge(item.getValue().getMaxAge());
+                    requestBuilder.addCookie(defaultCookie);
                 }
+
             }
         }
 
