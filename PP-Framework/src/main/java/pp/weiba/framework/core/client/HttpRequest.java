@@ -2,15 +2,15 @@ package pp.weiba.framework.core.client;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.framework.core.convert.HttpCookieDeserializer;
 
 import java.net.HttpCookie;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,7 +38,8 @@ public class HttpRequest {
 
     private String contentType;
 
-    private List<HttpCookie> cookies;
+    @JSONField(name = "cookieMap", deserializeUsing = HttpCookieDeserializer.class)
+    private Map<String, HttpCookie> cookieMap;
 
     private Map<String, String> headerMap = new HashMap<>();
 
@@ -106,14 +107,14 @@ public class HttpRequest {
     }
 
     public HttpRequest addCookie(HttpCookie cookie) {
-        if (this.cookies == null) this.cookies = new ArrayList<>();
-        this.cookies.add(cookie);
+        if (this.cookieMap == null) this.cookieMap = new HashMap<>();
+        this.cookieMap.put(cookie.getName(), cookie);
         return this;
     }
 
-    public HttpRequest setCookies(List<HttpCookie> cookies) {
-        if (this.cookies == null) this.cookies = new ArrayList<>();
-        this.cookies.addAll(cookies);
+    public HttpRequest setCookieMap(Map<String, HttpCookie> cookieMap) {
+        if (this.cookieMap == null) this.cookieMap = new HashMap<>();
+        this.cookieMap.putAll(cookieMap);
         return this;
     }
 

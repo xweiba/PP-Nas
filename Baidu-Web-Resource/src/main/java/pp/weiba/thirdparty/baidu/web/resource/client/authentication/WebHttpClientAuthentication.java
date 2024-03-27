@@ -8,8 +8,7 @@ import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.BaiduAuthenticationManager;
 
 import java.net.HttpCookie;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * web版百度Http客户端鉴权处理器
@@ -26,15 +25,15 @@ public class WebHttpClientAuthentication extends AbstractHttpClientAuthenticatio
 
     @Override
     public HttpRequest authentication(HttpRequest request) {
-        List<HttpCookie> cookies = getCookies();
-        request.setCookies(cookies);
+        Map<String, HttpCookie> cookieMap = getCookies();
+        request.setCookieMap(cookieMap);
         return request;
     }
 
-    public List<HttpCookie> getCookies() {
+    public Map<String, HttpCookie> getCookies() {
         Authentication authentication = BaiduAuthenticationManager.getAuthentication(this.getAuthenticationId(), this.getAuthenticationType());
         if (authentication != null && CollUtil.isNotEmpty(authentication.getCookieMap())) {
-            return new ArrayList<>(authentication.getCookieMap().values());
+            return authentication.getCookieMap();
         }
         return null;
     }

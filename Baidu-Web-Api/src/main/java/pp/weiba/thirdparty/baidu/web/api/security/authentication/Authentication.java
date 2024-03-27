@@ -1,8 +1,10 @@
 package pp.weiba.thirdparty.baidu.web.api.security.authentication;
 
 import cn.hutool.core.collection.CollUtil;
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import pp.weiba.framework.core.convert.HttpCookieDeserializer;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.LoginStatusResponse;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.TemplateVariableResponse;
 
@@ -24,6 +26,8 @@ public class Authentication {
 
     public TemplateVariableResponse.Result templateVariable;
     public LoginStatusResponse.LoginInfo loginInfo;
+
+    @JSONField(name = "cookieMap", deserializeUsing = HttpCookieDeserializer.class)
     private Map<String, HttpCookie> cookieMap;
 
     public Authentication(HttpCookie... cookies) {
