@@ -26,13 +26,14 @@ public class WebNetDiskAuthenticationTest extends DefaultTest {
     protected static IHttpClientAuthentication authentication = new WebHttpClientAuthentication(businessId, businessType);
     // 用户认证信息获取接口
     private static final ICredential<NetDiskAuthentication> credential = new JSONCredentials("C:\\Users\\admin\\Documents\\code\\github\\PP-Nas\\Baidu-Web-Api\\src\\test\\resources\\loginAuthentication.json");
-    public static final IAuthentication<NetDiskAuthentication> baiduWebAuthentication = new BaiduNetDiskWebAuthentication(businessId, businessType, authenticationApiClient, credential);
     //    protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new HutoolHttpClientAdapter(), authentication);
+    // 带授权的客户端
+    protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new AsyncHttpClientAdapter(), authentication);
 
     // 创建API客户端, 补齐认证信息使用
     public static AuthenticationApiClient authenticationApiClient = new AuthenticationApiClient(httpClient);
-    // 带授权的客户端
-    protected static IHttpClient httpClient = new WebBaiduNetDiskHttpClient(new AsyncHttpClientAdapter(), authentication);
+
+    public static final IAuthentication<NetDiskAuthentication> baiduWebAuthentication = new BaiduNetDiskWebAuthentication(businessId, businessType, authenticationApiClient, credential);
 
     @BeforeAll
     static void initAuthentication() {
