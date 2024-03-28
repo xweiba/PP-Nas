@@ -17,7 +17,7 @@ import java.util.Date;
  * @date 2024/3/26 10:13
  */
 @Log4j2
-public class QRScanLonginApiClient {
+public class WebQRScanLonginApiClient {
 
     public static String getQRImageHttpUrl(LoginQRParams loginQRParams) {
         return StrUtil.format(UrlConstants.GET_QR_IMAGE, loginQRParams.getGid(), loginQRParams.getCallback(), loginQRParams.getTt(), loginQRParams.getLogPage(), loginQRParams.get_());

@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.AbstractHttpClientAuthentication;
 import pp.weiba.framework.core.client.HttpRequest;
-import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.BaiduAuthenticationManager;
 
 import java.net.HttpCookie;
@@ -25,15 +25,15 @@ public class WebHttpClientAuthentication extends AbstractHttpClientAuthenticatio
 
     @Override
     public HttpRequest authentication(HttpRequest request) {
-        Map<String, HttpCookie> cookieMap = getCookies();
-        request.setCookieMap(cookieMap);
+        Map<String, HttpCookie> cookies = getCookies();
+        request.setCookieMap(cookies);
         return request;
     }
 
     public Map<String, HttpCookie> getCookies() {
-        Authentication authentication = BaiduAuthenticationManager.getAuthentication(this.getAuthenticationId(), this.getAuthenticationType());
-        if (authentication != null && CollUtil.isNotEmpty(authentication.getCookieMap())) {
-            return authentication.getCookieMap();
+        NetDiskAuthentication netDiskAuthentication = BaiduAuthenticationManager.getAuthentication(this.getAuthenticationId(), this.getAuthenticationType());
+        if (netDiskAuthentication != null && CollUtil.isNotEmpty(netDiskAuthentication.getDomainCookieMap())) {
+            return netDiskAuthentication.getDomainCookieMap();
         }
         return null;
     }

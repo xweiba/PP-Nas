@@ -3,7 +3,7 @@ package pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentia
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.credential.IConfigCredentials;
-import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -16,15 +16,19 @@ import java.util.Properties;
  * @date 2024/3/6 14:59
  */
 @Log4j2
-public class ConfigCredentials extends WebCookieCredentials implements IConfigCredentials<Authentication> {
+public class ConfigCredentials extends WebCookieCredentials implements IConfigCredentials<NetDiskAuthentication> {
 
-    private final String configPath;
+    private final String DEFAULT_CONFIG_PATH = "config.properties";
+
+    private String configPath = DEFAULT_CONFIG_PATH;
 
     public ConfigCredentials(String configPath) {
-        if (StrUtil.isBlank(configPath)) {
-            configPath = "config.properties";
+        if (StrUtil.isNotBlank(configPath)) {
+            this.configPath = configPath;
         }
-        this.configPath = configPath;
+    }
+
+    public ConfigCredentials() {
     }
 
     // 获取jar目录下的config.properties中的baidu.authentication.bduss和baidu.authentication.stoken

@@ -20,13 +20,13 @@ import java.util.Date;
 @Slf4j
 class AccessTokenApiClientTest {
 
-    public static final LoginAuthentication loginAuthentication = JSON.parseObject(FileUtil.readString("C:\\Users\\admin\\Documents\\code\\github\\PP-Nas\\Baidu-Web-Api\\src\\test\\resources\\loginAuthentication.json", StandardCharsets.UTF_8), LoginAuthentication.class);
+    public static final WebOAuthLoginAuthentication WEB_O_AUTH_LOGIN_AUTHENTICATION = JSON.parseObject(FileUtil.readString("C:\\Users\\admin\\Documents\\code\\github\\PP-Nas\\Baidu-Web-Api\\src\\test\\resources\\loginAuthentication.json", StandardCharsets.UTF_8), WebOAuthLoginAuthentication.class);
 
     AccessToken accessToken;
     private String locationUrl;
 
     public static HttpRequest buildHttpRequest(String url, Method method) {
-        Collection<HttpCookie> cookies = loginAuthentication.getCookieMap().values();
+        Collection<HttpCookie> cookies = WEB_O_AUTH_LOGIN_AUTHENTICATION.getCookieMap().values();
         // 调用 openapi authorize 页面获取 ACCESS_TOKEN
         HttpRequest httpRequest = HttpRequest.of(url).setMethod(method);
         httpRequest.cookie(cookies);

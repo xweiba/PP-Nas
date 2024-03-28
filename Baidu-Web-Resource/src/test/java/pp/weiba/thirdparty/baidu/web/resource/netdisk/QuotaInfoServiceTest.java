@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import pp.weiba.framework.resource.IQuotaManager;
 import pp.weiba.framework.resource.QuotaInfo;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.CapacityApiClient;
-import pp.weiba.thirdparty.baidu.web.resource.security.authentication.WebAuthenticationTest;
+import pp.weiba.thirdparty.baidu.web.resource.security.authentication.WebNetDiskAuthenticationTest;
 
 @Slf4j
-class QuotaInfoServiceTest extends WebAuthenticationTest {
+class QuotaInfoServiceTest extends WebNetDiskAuthenticationTest {
 
     IQuotaManager resourceCapacity = new QuotaManagerService(new CapacityApiClient(httpClient));
 

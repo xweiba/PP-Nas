@@ -12,6 +12,4 @@ public interface IConfigCredentials<T> extends ICredential<T> {
 
     Properties getProperties();
 
-    void buildCredential();
-
 }

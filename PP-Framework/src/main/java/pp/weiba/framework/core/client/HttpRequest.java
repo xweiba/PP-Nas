@@ -1,5 +1,6 @@
 package pp.weiba.framework.core.client;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -49,19 +50,19 @@ public class HttpRequest {
     private int timeout = 60000;
 
     // 设置是否打开重定向，如果打开默认重定向次数为2
-    private boolean followRedirect;
+    private Boolean followRedirect = false;
 
     // 重定向最大次数
-    private int maxRedirectCount = 2;
+    private Integer maxRedirectCount = 2;
 
     // 重定向是否携带cookie 默认false
-    private boolean followRedirectsCookie;
+    private Boolean followRedirectsCookie = false;
 
     // 构建参数, 不参与请求
     private Map<String, Object> buildParams;
 
     // 默认开启缓存
-    private boolean disableCache;
+    private Boolean disableCache = false;
 
     public static HttpRequest urlFormatBuilder(CharSequence urlTemplate) {
         return urlFormatBuilder(Method.GET, urlTemplate, null, null);
@@ -105,21 +106,21 @@ public class HttpRequest {
     public HttpRequest addCookie(String key, String value) {
         return addCookie(new HttpCookie(key, value));
     }
+    private Boolean htmlRequest = false;
 
     public HttpRequest addCookie(HttpCookie cookie) {
-        if (this.cookieMap == null) this.cookieMap = new HashMap<>();
-        this.cookieMap.put(cookie.getName(), cookie);
+        if (cookie != null && StrUtil.isNotBlank(cookie.getName()) && StrUtil.isNotBlank(cookie.getValue())) {
+            if (this.cookieMap == null) this.cookieMap = new HashMap<>();
+            this.cookieMap.put(cookie.getName(), cookie);
+        }
         return this;
     }
 
     public HttpRequest setCookieMap(Map<String, HttpCookie> cookieMap) {
-        if (this.cookieMap == null) this.cookieMap = new HashMap<>();
-        this.cookieMap.putAll(cookieMap);
-        return this;
-    }
-
-    public HttpRequest addBuildParams(String key, String value) {
-        this.buildParams = addMapValue(this.buildParams, key, value);
+        if (CollUtil.isNotEmpty(cookieMap)) {
+            if (this.cookieMap == null) this.cookieMap = new HashMap<>();
+            this.cookieMap.putAll(cookieMap);
+        }
         return this;
     }
 
@@ -147,5 +148,17 @@ public class HttpRequest {
     public <T> Map<String, T> initMap(Map<String, T> map) {
         if (map == null) map = new HashMap<>();
         return map;
+    }
+
+    public HttpRequest addBuildParams(String key, Object value) {
+        this.buildParams = addMapValue(this.buildParams, key, value);
+        return this;
+    }
+
+    public Object getBuildParam(String name) {
+        if (this.buildParams != null) {
+            return this.buildParams.get(name);
+        }
+        return null;
     }
 }

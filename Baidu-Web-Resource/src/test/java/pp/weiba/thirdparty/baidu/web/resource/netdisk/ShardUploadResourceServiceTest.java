@@ -10,14 +10,14 @@ import pp.weiba.framework.resource.ShardResource;
 import pp.weiba.framework.resource.UploadResourceInfo;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.UploadFileApiClient;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.FileChunk;
-import pp.weiba.thirdparty.baidu.web.resource.security.authentication.WebAuthenticationTest;
+import pp.weiba.thirdparty.baidu.web.resource.security.authentication.WebNetDiskAuthenticationTest;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-class ShardUploadResourceServiceTest extends WebAuthenticationTest {
+class ShardUploadResourceServiceTest extends WebNetDiskAuthenticationTest {
 
     IShardUploadResource<UploadEntity, FileChunk> shardUploadResourceService = new ShardUploadResourceService(new UploadFileApiClient(httpClient));
 

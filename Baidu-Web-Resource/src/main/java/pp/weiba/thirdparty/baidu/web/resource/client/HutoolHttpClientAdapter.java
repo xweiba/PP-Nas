@@ -20,6 +20,7 @@ import pp.weiba.framework.core.client.IHttpTypeAdapter;
 import pp.weiba.framework.core.client.UploadFile;
 import pp.weiba.framework.core.client.UploadFileChunk;
 import pp.weiba.framework.core.convert.StrJsonTypeReferenceProcessor;
+import pp.weiba.utils.HttpCookieUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -81,6 +82,7 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
 
     @Override
     protected HttpResponse doExecute(HttpRequest request) {
+        // HttpRequest.of(request.getUrl()).cookie(request.cookie).execute().body();
         return request.execute();
     }
 
@@ -100,12 +102,12 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
             httpRequest.headerMap(request.getHeaderMap(), true);
 
             if (CollUtil.isNotEmpty(request.getCookieMap())) {
-                httpRequest.cookie(request.getCookieMap().values());
+                httpRequest.cookie(HttpCookieUtils.getCookiesString(request.getCookieMap().values()));
             }
-            if (request.isFollowRedirect()) {
+            if (request.getFollowRedirect()) {
                 httpRequest.setFollowRedirects(true);
                 httpRequest.setMaxRedirectCount(request.getMaxRedirectCount());
-                httpRequest.setFollowRedirectsCookie(request.isFollowRedirectsCookie());
+                httpRequest.setFollowRedirectsCookie(request.getFollowRedirectsCookie());
             }
             if (request.getTimeout() == 0) {
                 request.setTimeout(TIME_OUT);

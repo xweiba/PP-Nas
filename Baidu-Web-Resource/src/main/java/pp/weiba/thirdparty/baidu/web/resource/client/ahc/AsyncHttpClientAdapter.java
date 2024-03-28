@@ -2,6 +2,7 @@ package pp.weiba.thirdparty.baidu.web.resource.client.ahc;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
@@ -9,6 +10,7 @@ import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.DefaultCookie;
 import lombok.extern.log4j.Log4j2;
 import org.asynchttpclient.*;
+import org.asynchttpclient.netty.handler.intercept.DumpRedirect30xInterceptor;
 import org.asynchttpclient.proxy.ProxyServer;
 import org.asynchttpclient.request.body.multipart.FilePart;
 import org.asynchttpclient.request.body.multipart.InputStreamPart;
@@ -53,13 +55,30 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
     }
 
     private AsyncHttpClient buildClient(DefaultAsyncHttpClientConfig.Builder configBuilder) {
-        return Dsl.asyncHttpClient(configBuilder);
+        AsyncHttpClient instance = Dsl.asyncHttpClient(configBuilder);
+        DumpRedirect30xInterceptor.resetRedirect30xInterceptor(instance);
+        return instance;
+    }
+
+    @Override
+    protected void initRequest(HttpRequest request) {
+        super.initRequest(request);
+
+        if (request.getFollowRedirect() && request.getMaxRedirectCount() != null && request.getMaxRedirectCount() > 0 && request.getMaxRedirectCount() != this.asyncHttpClient.getConfig().getMaxRedirects()) {
+            ReflectUtil.setFieldValue(this.asyncHttpClient.getConfig(), "maxRedirects", request.getMaxRedirectCount());
+        }
     }
 
     public Response doExecute(RequestBuilder request) {
-        ListenableFuture<Response> responseListenableFuture = asyncHttpClient.executeRequest(request);
+        Request build = request.build();
+        ListenableFuture<Response> responseListenableFuture = asyncHttpClient.executeRequest(build);
         try {
-            return responseListenableFuture.get();
+            Response response = responseListenableFuture.get();
+            List<Cookie> cookies = response.getCookies();
+            if (CollUtil.isEmpty(cookies) && CollUtil.isNotEmpty(build.getCookies())) {
+                ReflectUtil.setFieldValue(response, "cookies", build.getCookies());
+            }
+            return response;
         } catch (InterruptedException | ExecutionException e) {
             log.error("请求执行失败", e);
             throw new RuntimeException(e);
@@ -109,7 +128,7 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
                     .setBody(request.getRequestBody())
                     .setHeaders(headers)
                     .setRequestTimeout(request.getTimeout())
-                    .setFollowRedirect(request.isFollowRedirect());
+                    .setFollowRedirect(request.getFollowRedirect());
 
             if (request.getRequestParams() != null && !request.getRequestParams().isEmpty()) {
                 request.getRequestParams().forEach((item, value) -> requestBuilder.addFormParam(item, value instanceof String ? (String) value : JSONObject.toJSONString(value)));
@@ -143,10 +162,6 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
                 log.debug("execute adapterRequest: {}", requestBuilder.build().toString());
             }
             return requestBuilder;
-        }
-
-        private Object buildUploadFile(UploadFile uploadFile) {
-            return null;
         }
 
         private void buildCookies(HttpRequest request, RequestBuilder requestBuilder) {

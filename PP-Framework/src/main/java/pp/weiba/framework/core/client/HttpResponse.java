@@ -1,15 +1,16 @@
 package pp.weiba.framework.core.client;
 
+import cn.hutool.core.collection.CollUtil;
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.KeyValue;
+import pp.weiba.framework.core.convert.HttpCookieDeserializer;
 
-import java.util.ArrayList;
+import java.net.HttpCookie;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,14 +36,15 @@ public class HttpResponse {
 
     private Map<String, String> headers;
 
-    private List<KeyValue> cookies;
+    @JSONField(name = "cookieMap", deserializeUsing = HttpCookieDeserializer.class)
+    private Map<String, HttpCookie> cookieMap;
 
     // 构建参数, 不参与请求
     private Map<String, Object> buildParams;
 
     public HttpResponse addCookie(String key, String value) {
-        if (this.cookies == null) this.cookies = new ArrayList<>();
-        this.cookies.add(new KeyValue(key, value));
+        if (CollUtil.isEmpty(this.cookieMap)) this.cookieMap = new HashMap<>();
+        this.cookieMap.put(key, new HttpCookie(key, value));
         return this;
     }
 
@@ -64,12 +66,8 @@ public class HttpResponse {
 
     public String getCookieValue(String cookieKey) {
         String cookieValue = "";
-        if (this.cookies != null) {
-            for (KeyValue cookie : this.cookies) {
-                if (cookie.getKey().equals(cookieKey)) {
-                    cookieValue = cookie.getValue();
-                }
-            }
+        if (this.cookieMap != null && this.cookieMap.containsKey(cookieKey)) {
+            cookieValue = this.cookieMap.get(cookieKey).getValue();
         }
 
         return cookieValue;

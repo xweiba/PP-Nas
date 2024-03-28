@@ -38,8 +38,13 @@ public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorP
         this.executorChain = this;
     }
 
+    protected void initRequest(HttpRequest request) {
+    }
+
     @Override
     public HttpResponse execute(HttpRequest request) {
+
+        initRequest(request);
 
         // 请求参数处理器
         if (requestChain != null) {

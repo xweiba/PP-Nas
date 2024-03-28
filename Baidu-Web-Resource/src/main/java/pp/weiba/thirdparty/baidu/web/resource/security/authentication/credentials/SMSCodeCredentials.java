@@ -2,7 +2,7 @@ package pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentia
 
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.credential.ISMSCodeCredentials;
-import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
 
 /**
  * 短信验证
@@ -14,7 +14,7 @@ import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
 public class SMSCodeCredentials implements ISMSCodeCredentials {
 
     @Override
-    public Authentication getCredential() {
+    public NetDiskAuthentication getCredential() {
         return null;
     }
 

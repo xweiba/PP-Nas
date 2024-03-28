@@ -9,7 +9,7 @@ import pp.weiba.framework.core.convert.IProcessor;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduNetDiskWebScript;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduWebApiUtils;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.AccessToken;
-import pp.weiba.thirdparty.baidu.web.api.security.authentication.Authentication;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.BaiduAuthenticationManager;
 
 import java.util.HashMap;
@@ -76,19 +76,19 @@ public class UrlParameterCompletionProcessor implements IProcessor<HttpRequest> 
     }
 
     private String getBDStoken() {
-        Authentication authentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
-        if (authentication == null || authentication.getTemplateVariable() == null || StrUtil.isBlank(authentication.getTemplateVariable().getBdstoken())) {
+        NetDiskAuthentication netDiskAuthentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
+        if (netDiskAuthentication == null || netDiskAuthentication.getTemplateVariable() == null || StrUtil.isBlank(netDiskAuthentication.getTemplateVariable().getBdstoken())) {
             throw new RuntimeException("认证失败，请先登录");
         }
-        return authentication.getTemplateVariable().getBdstoken();
+        return netDiskAuthentication.getTemplateVariable().getBdstoken();
     }
 
     private Integer getUk() {
-        Authentication authentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
-        if (authentication == null || authentication.getLoginInfo() == null || authentication.getLoginInfo().getUk() == null) {
+        NetDiskAuthentication netDiskAuthentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
+        if (netDiskAuthentication == null || netDiskAuthentication.getLoginInfo() == null || netDiskAuthentication.getLoginInfo().getUk() == null) {
             throw new RuntimeException("认证失败，请先登录");
         }
-        return authentication.getLoginInfo().getUk();
+        return netDiskAuthentication.getLoginInfo().getUk();
     }
 
     private String getAccessToken() {

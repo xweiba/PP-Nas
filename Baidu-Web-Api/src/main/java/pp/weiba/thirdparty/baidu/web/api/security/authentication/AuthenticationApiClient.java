@@ -75,13 +75,38 @@ public class AuthenticationApiClient extends AbstractApiHttpClient {
         }
     }
 
-    public AccessToken getAccessToken() {
+    public AccessToken getAccessToken(WebOAuthLoginAuthentication webOAuthLoginAuthentication) {
         // 必须扫码或短信等方式登录拿到完整Cookie，再获取，否则会获取失败，因为它中间会跳转oath。
-        HttpRequest request = HttpRequest.urlFormatBuilder(Method.GET, XpanUrlConstants.GET_ACCESS_TOKEN)
-                .setFollowRedirect(true)
-                .setFollowRedirectsCookie(true)
-                .setMaxRedirectCount(2);
-        HttpResponse httpResponse = executeResponse(request);
+        HttpResponse httpResponse = oauthDomain(webOAuthLoginAuthentication, XpanUrlConstants.GET_ACCESS_TOKEN);
+        AccessToken accessToken = buildAccessToken(httpResponse);
+        String oauthstokenStr = null;
+        if (httpResponse.getCookieMap().containsKey("OAUTHSTOKEN")) {
+            oauthstokenStr = httpResponse.getCookieMap().get("OAUTHSTOKEN").getValue();
+        } else if (httpResponse.getCookieMap().containsKey("OAUTHSTOKEN_BFESS")) {
+            oauthstokenStr = httpResponse.getCookieMap().get("OAUTHSTOKEN_BFESS").getValue();
+        }
+        if (accessToken == null && StrUtil.isNotBlank(oauthstokenStr)) {
+            HttpRequest request = HttpRequest.urlFormatBuilder(Method.GET, XpanUrlConstants.GET_ACCESS_TOKEN)
+                    .setFollowRedirect(true)
+                    .setCookieMap(webOAuthLoginAuthentication.getCookieMap())
+                    .addCookie("OAUTHSTOKEN", oauthstokenStr)
+                    .addCookie("OAUTHSTOKEN_BFESS", oauthstokenStr)
+                    .setFollowRedirect(false)
+                    .setHtmlRequest(true);
+            httpResponse = executeResponse(request);
+            accessToken = buildAccessToken(httpResponse);
+        }
+
+        if (accessToken == null) {
+            String msg = "获取accessToken失败, 账号登录状态异常, 请核实Cookies是否正常！";
+            log.error(msg);
+            throw new RuntimeException(msg);
+        }
+
+        return accessToken;
+    }
+
+    public AccessToken buildAccessToken(HttpResponse httpResponse) {
         if (httpResponse.getStatusCode() == 302) {
             String locationUrl = httpResponse.getHeaders().get("Location");
             if (StrUtil.isNotBlank(locationUrl) && locationUrl.contains("access_token")) {
@@ -100,10 +125,22 @@ public class AuthenticationApiClient extends AbstractApiHttpClient {
                 String scope = String.valueOf(query.get("scope"));
                 return new AccessToken(new Date(expiresIn), accessToken, session_secret, scope);
             }
-            log.error("获取accessToken失败, locationUrl异常：{}", locationUrl);
         }
-        String msg = "获取accessToken失败, 账号登录状态异常, 请核实Cookies是否正常！";
-        log.error(msg);
-        throw new RuntimeException(msg);
+        return null;
+    }
+
+    public HttpResponse oauthDomain(WebOAuthLoginAuthentication webOAuthLoginAuthentication, String domain) {
+        return oauthDomain(webOAuthLoginAuthentication, domain, 100);
+    }
+
+    public HttpResponse oauthDomain(WebOAuthLoginAuthentication webOAuthLoginAuthentication, String domain, int maxRedirectCount) {
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(domain);
+        httpRequest.setCookieMap(webOAuthLoginAuthentication.getCookieMap())
+                .setFollowRedirect(true)
+                .setFollowRedirectsCookie(true)
+                .setMaxRedirectCount(maxRedirectCount)
+                .setTimeout(600000000)
+                .setHtmlRequest(true);
+        return executeResponse(httpRequest);
     }
 }

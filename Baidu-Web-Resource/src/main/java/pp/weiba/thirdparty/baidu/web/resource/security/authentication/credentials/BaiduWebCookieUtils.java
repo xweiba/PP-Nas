@@ -24,28 +24,29 @@ public class BaiduWebCookieUtils {
 
     private static final String BFESS_COOKIES = ",STOKEN,PTOKEN,BDUSS,BAIDUID,UBI,";
 
+    private static final String NOT_TRANSFORM_COOKIES = ",csrfToken,newlogin,";
+
     public static List<HttpCookie> buildLoginCookies(String name, String value) {
-        String upperCaseName = name.toUpperCase();
+        String nameTemp = (StringUtils.contains(NOT_TRANSFORM_COOKIES, name) ? name : name.toUpperCase());
         List<HttpCookie> cookies = new ArrayList<>();
-        cookies.add(buildLoginCookie(upperCaseName, value, false));
-        if (StringUtils.contains(BFESS_COOKIES, upperCaseName)) {
-            cookies.add(buildLoginCookie(upperCaseName, value, true));
+        cookies.add(buildLoginCookie(nameTemp, value, false));
+        if (StringUtils.contains(BFESS_COOKIES, nameTemp)) {
+            cookies.add(buildLoginCookie(nameTemp, value, true));
         }
         return cookies;
     }
 
 
     public static HttpCookie buildLoginCookie(String name, String value, boolean addBfess) {
-        String upperCaseName = name.toUpperCase() + (addBfess ? "_BFESS" : "");
-        HttpCookie httpCookie = new HttpCookie(upperCaseName, value);
+        String nameTemp = (StringUtils.contains(NOT_TRANSFORM_COOKIES, name) ? name : name.toUpperCase()) + (addBfess ? "_BFESS" : "");
+        HttpCookie httpCookie = new HttpCookie(nameTemp, value);
         httpCookie.setDiscard(false);
-        if (StringUtils.contains(PASSPORT_COOKIES, upperCaseName)) {
+        if (StringUtils.contains(PASSPORT_COOKIES, nameTemp)) {
             httpCookie.setDomain(PASSPORT_DOMAIN);
         } else {
             httpCookie.setDomain(DOMAIN);
         }
         httpCookie.setHttpOnly(false);
-        httpCookie.setMaxAge(0);
         httpCookie.setPath("/");
         httpCookie.setSecure(true);
         httpCookie.setVersion(0);

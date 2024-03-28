@@ -52,10 +52,13 @@ public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
     @Override
     public T login() {
         T authentication = initAuthentication();
+        domainLogin(authentication);
         authentication = detectionAuthentication(authentication);
         authentication = completeAuthenticationInformation(authentication);
         return authentication;
     }
+
+    protected abstract void domainLogin(T authentication);
 
     @Override
     public void logout() {

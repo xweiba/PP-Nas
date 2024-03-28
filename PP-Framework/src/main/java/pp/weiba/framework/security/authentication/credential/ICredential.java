@@ -8,6 +8,10 @@ package pp.weiba.framework.security.authentication.credential;
  */
 public interface ICredential<T> {
 
+    default void buildCredential() {
+
+    }
+
     T getCredential();
 
 }
