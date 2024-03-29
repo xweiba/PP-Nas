@@ -53,7 +53,7 @@ public class JSONUtils {
     }
 
     public static String toJsonPrettyStr(Object result) {
-        return JSON.toJSONString(result, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
+        return JSON.toJSONString(result, SerializerFeature.PrettyFormat, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat);
     }
 

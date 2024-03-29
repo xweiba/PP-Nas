@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
-import pp.weiba.thirdparty.baidu.web.api.security.authentication.WebOAuthLoginAuthentication;
 
 import java.nio.charset.StandardCharsets;
 
@@ -16,21 +15,20 @@ import java.nio.charset.StandardCharsets;
  * @date 2024/3/6 14:59
  */
 @Log4j2
-public class JSONCredentials extends WebCookieCredentials implements ICredential<NetDiskAuthentication> {
+public class NetDiskJSONCredentials extends WebCookieCredentials implements ICredential<NetDiskAuthentication> {
 
     private final String jsonFilePath;
 
-    public JSONCredentials(String jsonFilePath) {
+    public NetDiskJSONCredentials(String jsonFilePath) {
         this.jsonFilePath = jsonFilePath;
     }
 
     @Override
-    public void buildCredential() {
-        WebOAuthLoginAuthentication webOAuthLoginAuthentication = JSON.parseObject(FileUtil.readString(jsonFilePath, StandardCharsets.UTF_8), WebOAuthLoginAuthentication.class);
-        if (webOAuthLoginAuthentication == null) {
+    protected NetDiskAuthentication buildNetDiskAuthentication() {
+        NetDiskAuthentication diskAuthentication = JSON.parseObject(FileUtil.readString(jsonFilePath, StandardCharsets.UTF_8), NetDiskAuthentication.class);
+        if (diskAuthentication == null) {
             throw new IllegalArgumentException("jsonFilePath is not found");
         }
-        initCookies(webOAuthLoginAuthentication.getCookieMap());
+        return diskAuthentication;
     }
-
 }

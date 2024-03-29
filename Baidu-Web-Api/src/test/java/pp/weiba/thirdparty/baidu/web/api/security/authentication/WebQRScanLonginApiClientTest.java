@@ -6,6 +6,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduNetDiskWebScript;
 import pp.weiba.utils.JSONUtils;
@@ -26,9 +27,13 @@ class WebQRScanLonginApiClientTest {
     QrInfo qrResponse;
     LoginQRParams loginQRParams;
     CheckLoginResponse checkLoginResponse;
+
     private String decode = "https://wappass.baidu.com/wp/?qrlogin&t=1711424040&error=0&sign=e565566abb3969216b11e204e1453072&cmd=login&lp=pc&tpl=netdisk&adapter=3&logPage=pc_loginv5_1711424038%2ClogPage%3Aloginv5&qrloginfrom=pc&local=%E6%AD%A6%E6%B1%89";
 
-    public static final String NET_DISK_LOGIN_AUTHENTICATION_FILE_PATH = "src/test/resources/netDiskLoginAuthentication.json";
+    // Web OAUTH 认证信息, 可通过此信息登录百度其他应用
+    public static final String OAUTH_AUTHENTICATION_JSON_FILE_PATH = "C:\\Users\\admin\\Documents\\code\\github\\PP-Nas\\Baidu-Web-Api\\src\\test\\resources\\oauthAuthentication.json";
+
+    public static final String NET_DISK_LOGIN_AUTHENTICATION_FILE_PATH = "C:\\Users\\admin\\Documents\\code\\github\\PP-Nas\\Baidu-Web-Api\\src\\test\\resources\\netDiskLoginAuthentication.json";
 
     @Test
     void getQRImage() {
@@ -51,8 +56,6 @@ class WebQRScanLonginApiClientTest {
         log.info(decode);
         QRUtils.printQr(decode);
     }
-
-    public static final String LOGIN_AUTHENTICATION_FILE_PATH = "src/test/resources/loginAuthentication.json";
     LonginParams longinParams;
     HttpResponse qrLogInResponse;
 
@@ -97,16 +100,18 @@ class WebQRScanLonginApiClientTest {
     }
 
     @Test
+    @Disabled
     void generateLoginAuthentication() {
         qrLogIn();
         String body = WebQRScanLonginApiClient.getResponseBodyFormat(qrLogInResponse.body()).replace("'data'", "\"data\"");
         LoginResponse bean = JSONUtils.toBean(body, LoginResponse.class);
         Map<String, HttpCookie> cookieMap = qrLogInResponse.getCookies().stream().collect(Collectors.toMap(HttpCookie::getName, item -> item));
         WebOAuthLoginAuthentication webOAuthLoginAuthentication = new WebOAuthLoginAuthentication(bean, cookieMap);
-        FileUtil.writeString(JSONUtils.toJsonStr(webOAuthLoginAuthentication), new File(LOGIN_AUTHENTICATION_FILE_PATH), StandardCharsets.UTF_8);
+        FileUtil.writeString(JSONUtils.toJsonPrettyStr(webOAuthLoginAuthentication), new File(OAUTH_AUTHENTICATION_JSON_FILE_PATH), StandardCharsets.UTF_8);
     }
 
     @Test
+    @Disabled
     void generateBaiduNetDiskLoginAuthentication() {
         HttpRequest httpRequest = AccessTokenApiClientTest.buildHttpRequest("https://pan.baidu.com/disk/home", Method.GET);
         httpRequest.setFollowRedirects(true);
@@ -114,6 +119,6 @@ class WebQRScanLonginApiClientTest {
         httpRequest.setMaxRedirectCount(100);
         HttpResponse execute = httpRequest.execute();
         List<HttpCookie> cookies = execute.getCookies();
-        FileUtil.writeString(JSONUtils.toJsonStr(cookies), new File(NET_DISK_LOGIN_AUTHENTICATION_FILE_PATH), StandardCharsets.UTF_8);
+        FileUtil.writeString(JSONUtils.toJsonPrettyStr(cookies), new File(NET_DISK_LOGIN_AUTHENTICATION_FILE_PATH), StandardCharsets.UTF_8);
     }
 }

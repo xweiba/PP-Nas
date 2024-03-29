@@ -7,6 +7,7 @@ import pp.weiba.framework.core.handler.AbstractHandler;
 import pp.weiba.framework.core.handler.ExecutorParams;
 import pp.weiba.framework.core.handler.IHandler;
 import pp.weiba.framework.utils.HandlerUtils;
+import pp.weiba.utils.JSONUtils;
 
 /**
  * HttpClient 客户端
@@ -106,16 +107,20 @@ public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorP
 
     @Override
     protected ExecutorParams<HttpRequest, HttpResponse> process(ExecutorParams<HttpRequest, HttpResponse> input) {
+        HttpRequest request = input.getInput();
         // 适配请求数据
-        T adapterRequest = httpTypeAdapter.adapter(input.getInput());
+        T adapterRequest = httpTypeAdapter.adapter(request);
 
+        log.debug(() -> String.format("HttpRequest：\n%s", JSONUtils.toJsonPrettyStr(request)));
         // 执行请求
-        F executeRequest = doExecute(adapterRequest);
+        F response = doExecute(adapterRequest);
 
         // 适配响应数据
-        HttpResponse adapter = httpTypeAdapter.adapter(executeRequest);
-        input.setOutput(adapter);
+        HttpResponse adapter = httpTypeAdapter.adapter(response);
 
+        log.debug(() -> String.format("HttpResponse：\n%s", JSONUtils.toJsonPrettyStr(adapter)));
+
+        input.setOutput(adapter);
         return input;
     }
 }

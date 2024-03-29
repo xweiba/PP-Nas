@@ -128,10 +128,6 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
             if (request.getContentType() != null) {
                 httpRequest.header("Content-Type", request.getContentType());
             }
-
-            if (log.isDebugEnabled()) {
-                log.debug("execute adapterRequest: {}", httpRequest.toString());
-            }
             return httpRequest;
         }
 

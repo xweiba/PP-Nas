@@ -3,6 +3,7 @@ package pp.weiba.thirdparty.baidu.web.api.security.authentication;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import pp.weiba.framework.core.convert.HttpCookieDeserializer;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public class WebOAuthLoginAuthentication {
 
     public WebOAuthLoginAuthentication(Map<String, HttpCookie> cookieMap) {

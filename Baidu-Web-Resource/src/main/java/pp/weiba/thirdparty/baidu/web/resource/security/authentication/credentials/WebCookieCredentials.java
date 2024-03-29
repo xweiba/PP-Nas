@@ -55,6 +55,10 @@ public abstract class WebCookieCredentials implements ICredential<NetDiskAuthent
     @Override
     public NetDiskAuthentication getCredential() {
         buildCredential();
+        return buildNetDiskAuthentication();
+    }
+
+    protected NetDiskAuthentication buildNetDiskAuthentication() {
         List<HttpCookie> cookieList = new ArrayList();
         addCookie(cookieList, "bduss", bduss);
         addCookie(cookieList, "stoken", stoken);

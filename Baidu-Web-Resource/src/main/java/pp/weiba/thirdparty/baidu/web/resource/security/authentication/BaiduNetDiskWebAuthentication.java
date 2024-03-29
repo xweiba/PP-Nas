@@ -13,6 +13,7 @@ import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthenti
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.WebOAuthLoginAuthentication;
 
 import java.net.HttpCookie;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -61,10 +62,14 @@ public class BaiduNetDiskWebAuthentication extends AbstractAuthentication<NetDis
     @Override
     protected void domainLogin(NetDiskAuthentication netDiskAuthentication) {
         // accessToken
-        openApiLogin(netDiskAuthentication);
-        // 网盘认证
-        netDiskLogin(netDiskAuthentication);
+        if (netDiskAuthentication.getAccessToken() == null) {
+            openApiLogin(netDiskAuthentication);
+        }
 
+        // 网盘认证
+        if (netDiskAuthentication.getTemplateVariable() == null) {
+            netDiskLogin(netDiskAuthentication);
+        }
         // 存储到认证管理器， 后面请求时要使用
         BaiduAuthenticationManager.setAuthentication(authenticationId, authenticationType, netDiskAuthentication);
     }
@@ -74,9 +79,11 @@ public class BaiduNetDiskWebAuthentication extends AbstractAuthentication<NetDis
         WebOAuthLoginAuthentication webOAuthLoginAuthentication = netDiskAuthentication.getWebOAuthLoginAuthentication();
 
         HttpResponse httpResponse = authenticationApiClient.oauthDomain(webOAuthLoginAuthentication, "https://pan.baidu.com/disk/home");
-        // 获取网盘认证信息
-        Map<String, HttpCookie> netDiskDomainCookieMap = httpResponse.getCookieMap();
 
+        Map<String, HttpCookie> netDiskDomainCookieMap = new HashMap<>();
+        // 获取网盘认证信息
+        HttpCookie stoekn = httpResponse.getCookieMap().get("STOKEN");
+        netDiskDomainCookieMap.put("STOKEN", stoekn);
         netDiskDomainCookieMap.put("BDUSS", webOAuthLoginAuthentication.getCookieMap().get("BDUSS"));
         netDiskDomainCookieMap.put("BDUSS_BFESS", webOAuthLoginAuthentication.getCookieMap().get("BDUSS_BFESS"));
         netDiskDomainCookieMap.put("BAIDUID", webOAuthLoginAuthentication.getCookieMap().get("BAIDUID"));
