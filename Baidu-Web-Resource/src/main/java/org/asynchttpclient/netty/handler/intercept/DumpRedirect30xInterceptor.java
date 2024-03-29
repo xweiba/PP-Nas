@@ -152,6 +152,8 @@ public class DumpRedirect30xInterceptor extends Redirect30xInterceptor {
         }
     }
 
+    public static final String ADD_302_COOKIE_TAG = "add_302_";
+
     private Collection<Cookie> propagatedCookies(List<Cookie> cookies, HttpHeaders responseHeaders) {
 
         for (Map.Entry<String, String> responseHeader : responseHeaders) {
@@ -163,18 +165,18 @@ public class DumpRedirect30xInterceptor extends Redirect30xInterceptor {
                     String value = itemCookie[1];
                     if (value.equals("deleted")) {
                         cookies.removeIf(cookie -> cookie.name().equals(name));
+                        cookies.removeIf(cookie -> cookie.name().equals(ADD_302_COOKIE_TAG + name));
                     } else {
                         if (cookies.stream().anyMatch(cookie -> cookie.name().equals(name))) {
                             cookies.removeIf(cookie -> cookie.name().equals(name));
                             cookies.removeIf(cookie -> cookie.name().equals(name + "_BFESS"));
                         }
+                        cookies.add(new DefaultCookie(ADD_302_COOKIE_TAG + name, value));
                         cookies.add(new DefaultCookie(name, value));
                     }
                 }
             }
         }
-
-
         return cookies;
     }
 

@@ -73,12 +73,7 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
         Request build = request.build();
         ListenableFuture<Response> responseListenableFuture = asyncHttpClient.executeRequest(build);
         try {
-            Response response = responseListenableFuture.get();
-            List<Cookie> cookies = response.getCookies();
-            if (CollUtil.isEmpty(cookies) && CollUtil.isNotEmpty(build.getCookies())) {
-                ReflectUtil.setFieldValue(response, "cookies", build.getCookies());
-            }
-            return response;
+            return responseListenableFuture.get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("请求执行失败", e);
             throw new RuntimeException(e);
@@ -156,10 +151,6 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
                 UploadFileChunk chunk = request.getUploadFile().getChunk();
                 customizeMultipartFormData(file, chunk, requestBuilder, headers);
                 //                multipartFormData(chunk, requestBuilder, file);
-            }
-
-            if (log.isDebugEnabled()) {
-                log.debug("execute adapterRequest: {}", requestBuilder.build().toString());
             }
             return requestBuilder;
         }
