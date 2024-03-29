@@ -14,7 +14,7 @@ public class WebNetDiskAuthenticationTest extends InitAuthenticationTest {
     static void init() {
         InitAuthenticationTest.initAhcClientBaiduWebAuthentication();
         NetDiskAuthentication netDiskAuthentication = baiduWebAuthentication.login();
-        log.info(Log.formatJson("netDiskAuthentication:{}", netDiskAuthentication));
+        log.debug(Log.formatJson("netDiskAuthentication:{}", netDiskAuthentication));
     }
 
     /*

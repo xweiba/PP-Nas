@@ -14,7 +14,7 @@ public class StackTraceUtils {
         for (StackTraceElement stackTraceElement : stackTrace) {
             if (stackMethodNameDepth > 3) break;
             String className = stackTraceElement.getClassName();
-            if (className.equals("java.lang.Thread") || className.startsWith("weiba.pp.framework.utils")) {
+            if (className.equals("java.lang.Thread") || !className.startsWith("pp.weiba") || className.startsWith("pp.weiba.utils")) {
                 continue;
             } else {
                 stackMethodName = stackTraceElement.getFileName().split("\\.")[0] + "." + stackTraceElement.getMethodName() + "()-" + stackMethodName;

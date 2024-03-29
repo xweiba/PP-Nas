@@ -1,8 +1,6 @@
 package pp.weiba.utils;
 
-import cn.hutool.core.util.StrUtil;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Supplier;
 
 /**
  * @author xiaoweiba1028@gmail.com
@@ -12,29 +10,26 @@ import org.apache.logging.log4j.util.Supplier;
 public class Log {
 
     public static void info(Logger log, String format, Object... args) {
-        log.info(formatJson(format(format), args));
+        log.info(JSONUtils.formatJson(formatGetStackMethodName(format), args));
     }
 
     public static void debug(Logger log, String format, Object... args) {
-        log.debug(formatJson(format(format), args));
+        log.debug(JSONUtils.formatJson(formatGetStackMethodName(format), args));
     }
 
     public static void error(Logger log, String format, Object... args) {
-        log.error(formatJson(format(format), args));
+        log.error(JSONUtils.formatJson(formatGetStackMethodName(format), args));
     }
 
-    private static String format(String format) {
-        return StackTraceUtils.getStackMethodName() + ":\n" + format + "\n";
+    private static String formatGetStackMethodName(String format) {
+        return StackTraceUtils.getStackMethodName() + ":\n" + format;
     }
 
-    public static Supplier<?> formatJson(String format, Object... args) {
-        return () -> {
-            Object[] argsTemp = ArrayUtils.argsToJsonStr(true, args);
-            if (argsTemp != null && argsTemp.length > 0) {
-                return StrUtil.format(format, argsTemp);
-            }
-            return format;
-        };
+    public static org.apache.logging.log4j.util.Supplier<?> formatJson(String format, Object... args) {
+        return formatJson(format, false, args);
     }
 
+    public static org.apache.logging.log4j.util.Supplier<?> formatJson(String format, boolean newline, Object... args) {
+        return () -> JSONUtils.formatJson(formatGetStackMethodName(format), newline, args).get();
+    }
 }

@@ -26,7 +26,7 @@ public class ArrayUtils {
         for (int i = 0; i < args.length; i++) {
             Object arg = args[i];
             if (arg == null || arg instanceof String) continue;
-            args[i] = (newline ? "/n" : "") + JSONUtils.toJsonPrettyStr(arg);
+            args[i] = (newline ? "\n" : "") + JSONUtils.toJsonPrettyStr(arg);
         }
         return args;
     }

@@ -73,7 +73,7 @@ public class InitAuthenticationTest extends DefaultTest {
         NetDiskAuthentication netDiskAuthentication = baiduWebAuthentication.login();
 
         FileUtil.writeString(JSONUtils.toJsonPrettyStr(netDiskAuthentication), NET_DISK_AUTHENTICATION_JSON_FILE_PATH, Charset.defaultCharset());
-        log.info("登录认证信息：{}", netDiskAuthentication);
+        log.debug("登录认证信息：{}", netDiskAuthentication);
     }
 
     protected static IHttpClientAuthentication buildHttpClientAuthentication() {

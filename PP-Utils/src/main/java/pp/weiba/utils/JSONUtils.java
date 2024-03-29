@@ -1,5 +1,6 @@
 package pp.weiba.utils;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -81,5 +82,19 @@ public class JSONUtils {
             }
             return null;
         }
+    }
+
+    public static Supplier<?> formatJson(String format, Object... args) {
+        return formatJson(format, false, args);
+    }
+
+    public static Supplier<?> formatJson(String format, boolean newline, Object... args) {
+        return () -> {
+            Object[] argsTemp = ArrayUtils.argsToJsonStr(newline, args);
+            if (argsTemp != null && argsTemp.length > 0) {
+                return StrUtil.format(format, argsTemp);
+            }
+            return format;
+        };
     }
 }
