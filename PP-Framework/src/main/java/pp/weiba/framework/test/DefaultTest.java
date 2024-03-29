@@ -14,7 +14,7 @@ import org.apache.logging.log4j.core.config.Configurator;
 public class DefaultTest {
 
     static {
-        Configurator.setAllLevels("ROOT", Level.INFO);
+        Configurator.setAllLevels("", Level.INFO);
     }
 
 }

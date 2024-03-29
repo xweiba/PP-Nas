@@ -21,12 +21,12 @@ public class ArrayUtils {
         return array == null || array.length == 0;
     }
 
-    public static Object[] argsToJsonStr(Object... args) {
+    public static Object[] argsToJsonStr(boolean newline, Object... args) {
         if (args == null || args.length == 0) return null;
         for (int i = 0; i < args.length; i++) {
             Object arg = args[i];
             if (arg == null || arg instanceof String) continue;
-            args[i] = JSONUtils.toJsonStr(arg);
+            args[i] = (newline ? "/n" : "") + JSONUtils.toJsonPrettyStr(arg);
         }
         return args;
     }

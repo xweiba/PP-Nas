@@ -12,24 +12,24 @@ import org.apache.logging.log4j.util.Supplier;
 public class Log {
 
     public static void info(Logger log, String format, Object... args) {
-        log.info(messageSupplier(format(format), args));
+        log.info(formatJson(format(format), args));
     }
 
     public static void debug(Logger log, String format, Object... args) {
-        log.debug(messageSupplier(format(format), args));
+        log.debug(formatJson(format(format), args));
     }
 
     public static void error(Logger log, String format, Object... args) {
-        log.error(messageSupplier(format(format), args));
+        log.error(formatJson(format(format), args));
     }
 
     private static String format(String format) {
         return StackTraceUtils.getStackMethodName() + ":\n" + format + "\n";
     }
 
-    public static Supplier<?> messageSupplier(String format, Object... args) {
+    public static Supplier<?> formatJson(String format, Object... args) {
         return () -> {
-            Object[] argsTemp = ArrayUtils.argsToJsonStr(args);
+            Object[] argsTemp = ArrayUtils.argsToJsonStr(true, args);
             if (argsTemp != null && argsTemp.length > 0) {
                 return StrUtil.format(format, argsTemp);
             }
