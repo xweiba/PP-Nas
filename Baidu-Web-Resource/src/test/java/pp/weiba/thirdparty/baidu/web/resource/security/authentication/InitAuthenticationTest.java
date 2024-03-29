@@ -1,7 +1,7 @@
 package pp.weiba.thirdparty.baidu.web.resource.security.authentication;
 
 import cn.hutool.core.io.FileUtil;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import pp.weiba.utils.JSONUtils;
 
 import java.nio.charset.Charset;
 
-@Slf4j
+@Log4j2
 public class InitAuthenticationTest extends DefaultTest {
 
     // Web OAUTH 认证信息, 可通过此信息登录百度其他应用

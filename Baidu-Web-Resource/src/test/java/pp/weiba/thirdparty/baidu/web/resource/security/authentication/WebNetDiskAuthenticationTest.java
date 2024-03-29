@@ -1,19 +1,19 @@
 package pp.weiba.thirdparty.baidu.web.resource.security.authentication;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
 
-@Slf4j
+@Log4j2
 public class WebNetDiskAuthenticationTest extends InitAuthenticationTest {
 
     @BeforeAll
     static void init() {
         InitAuthenticationTest.initAhcClientBaiduWebAuthentication();
         NetDiskAuthentication netDiskAuthentication = baiduWebAuthentication.login();
-        log.info("登录认证信息：{}", netDiskAuthentication.toString());
+        log.debug(() -> String.format("netDiskAuthentication:%s", netDiskAuthentication.toString()));
     }
 
     /*

@@ -2,7 +2,7 @@ package pp.weiba.thirdparty.baidu.web.resource.netdisk;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pp.weiba.framework.resource.IShardUploadResource;
@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
+@Log4j2
 class ShardUploadResourceServiceTest extends WebNetDiskAuthenticationTest {
 
     IShardUploadResource<UploadEntity, FileChunk> shardUploadResourceService = new ShardUploadResourceService(new UploadFileApiClient(httpClient));
