@@ -48,9 +48,7 @@ public class JSONUtils {
     }
 
     private static void printLog(Object result, String msg) {
-        String stackMethodName = StackTraceUtils.getStackMethodName();
-        if (stackMethodName.startsWith("AbstractLogger.")) return;
-        Log.debug(log, "result: {}\nmsg:{}", result, StringUtils.isBlank(msg) ? "" : msg);
+        LogUtils.debug(log, "result: {}\nmsg:{}", result, StringUtils.isBlank(msg) ? "" : msg);
     }
 
     public static String toJsonPrettyStr(Object result) {

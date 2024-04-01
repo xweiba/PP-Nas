@@ -10,16 +10,16 @@ public class StackTraceUtils {
     public static String getStackMethodName() {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         String stackMethodName = "";
-        int stackMethodNameDepth = 0;
+        //        int stackMethodNameDepth = 0;
         for (StackTraceElement stackTraceElement : stackTrace) {
-            if (stackMethodNameDepth > 3) break;
+            //            if (stackMethodNameDepth > 3) break;
             String className = stackTraceElement.getClassName();
             if (className.equals("java.lang.Thread") || !className.startsWith("pp.weiba") || className.startsWith("pp.weiba.utils")) {
                 continue;
             } else {
                 stackMethodName = stackTraceElement.getFileName().split("\\.")[0] + "." + stackTraceElement.getMethodName() + "()-" + stackMethodName;
             }
-            stackMethodNameDepth++;
+            //            stackMethodNameDepth++;
         }
         return stackMethodName.substring(0, stackMethodName.length() - 1);
     }

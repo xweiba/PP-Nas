@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import pp.weiba.framework.resource.IResourceOperation;
 import pp.weiba.framework.resource.ResourceInfo;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
-import pp.weiba.utils.Log;
+import pp.weiba.utils.LogUtils;
 
 @Log4j2
 class ResourceOperationServiceTest extends ShardUploadResourceServiceTest {
@@ -15,13 +15,13 @@ class ResourceOperationServiceTest extends ShardUploadResourceServiceTest {
     @Test
     void createDir() {
         ResourceInfo dir = resourceOperation.createDir("/test/319");
-        Log.info(log, "{}", dir);
+        LogUtils.info(log, dir);
     }
 
     @Test
     void get() {
         ResourceInfo resourceInfo = resourceOperation.get("891154745348288");
-        Log.info(log, "{}", resourceInfo);
+        LogUtils.info(log, resourceInfo);
     }
 
     @Test
