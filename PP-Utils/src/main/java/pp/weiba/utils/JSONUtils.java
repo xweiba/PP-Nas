@@ -4,13 +4,15 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.alibaba.fastjson.parser.DefaultJSONParser;
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
+import com.alibaba.fastjson.serializer.JSONSerializer;
+import com.alibaba.fastjson.serializer.ObjectSerializer;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -20,11 +22,9 @@ import java.util.Date;
 
 @Log4j2
 public class JSONUtils {
-
+    public static SerializeConfig config = new SerializeConfig();
     static {
-        ParserConfig globalInstance = ParserConfig.getGlobalInstance();
-        globalInstance.putDeserializer(Date.class, new BaiduNetDiskDateDeserializer());
-
+        config.put(Date.class, DateFixDeserializer.instance);
     }
 
     public static <T> T toBean(String body, Class<T> tClass) {
@@ -54,7 +54,7 @@ public class JSONUtils {
     }
 
     public static String toJsonPrettyStr(Object result) {
-        return JSON.toJSONString(result, SerializerFeature.PrettyFormat, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteMapNullValue,
+        return JSON.toJSONString(result, config, SerializerFeature.PrettyFormat, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat);
     }
 
@@ -72,15 +72,23 @@ public class JSONUtils {
         return result;
     }
 
-    private static class BaiduNetDiskDateDeserializer implements ObjectDeserializer {
+    private static class DateFixDeserializer implements ObjectSerializer {
+        public static final DateFixDeserializer instance = new DateFixDeserializer();
+
+        private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         @Override
-        public <T> T deserialze(DefaultJSONParser parser, Type type, Object fieldName) {
-            Long value = parser.parseObject(Long.class);
-            if (value <= 9999999999L) {// 百度网盘时间都是秒，补成毫秒
-                Date dateTime = new Date(value * 1000);
-                return (T) dateTime;
+        public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features) throws IOException {
+            if (object == null) {
+                serializer.writeNull();
+                return;
             }
-            return null;
+
+            Date date = (Date) object;
+            // 毫秒时间戳长度应为13
+            long time = MathUtils.padZero(date.getTime(), 13);
+            // 转为可读的时间格式
+            serializer.write(FORMAT.format(new Date(time)));
         }
     }
 

@@ -1,11 +1,16 @@
 package pp.weiba.thirdparty.baidu.web.resource.netdisk;
 
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.framework.Digest;
+import pp.weiba.framework.DigestType;
 import pp.weiba.framework.resource.*;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.FileChunk;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CreateDirResponse;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.FileDetailByFSIdResponse;
+import pp.weiba.utils.FileUtils;
+
+import java.util.ArrayList;
 
 /**
  * 文件操作服务
@@ -40,6 +45,24 @@ public class ResourceOperationService implements IResourceOperation {
     @Override
     public ResourceInfo get(String resourceId) {
         FileDetailByFSIdResponse fileDetailByFsIds = fileOperationApiClient.getFileDetailByFsIds(resourceId);
+        if (fileDetailByFsIds != null && fileDetailByFsIds.getList() != null && fileDetailByFsIds.getList().size() > 0) {
+            FileDetailByFSIdResponse.ListBO listBO = fileDetailByFsIds.getList().get(0);
+            return new ResourceInfo().setId(listBO.getFsId())
+                    .setType(listBO.getIsdir() == 0 ? ResourceType.FILE : ResourceType.FOLDER)
+                    .setName(listBO.getFilename())
+                    .setState(ResourceState.NORMAL)
+                    .setSize(listBO.getSize())
+                    .setPath(listBO.getPath())
+                    .setExt(FileUtils.getExtByFileName(listBO.getFilename()))
+                    .setDigests(new ArrayList<Digest>() {{
+                        add(new Digest(DigestType.MD5, listBO.getMd5()));
+                    }})
+                    .setCreateTime(listBO.getServerCtime())
+                    .setUpdateTime(listBO.getServerMtime())
+                    .setServerCreateTime(listBO.getServerCtime())
+                    .setServerUpdateTime(listBO.getServerMtime())
+                    ;
+        }
         return null;
     }
 

@@ -10,15 +10,15 @@ import org.apache.logging.log4j.Logger;
 public class Log {
 
     public static void info(Logger log, String format, Object... args) {
-        log.info(JSONUtils.formatJson(formatGetStackMethodName(format), args));
+        log.info(formatJson(formatGetStackMethodName(format), args));
     }
 
     public static void debug(Logger log, String format, Object... args) {
-        log.debug(JSONUtils.formatJson(formatGetStackMethodName(format), args));
+        log.debug(formatJson(formatGetStackMethodName(format), args));
     }
 
     public static void error(Logger log, String format, Object... args) {
-        log.error(JSONUtils.formatJson(formatGetStackMethodName(format), args));
+        log.error(formatJson(formatGetStackMethodName(format), args));
     }
 
     private static String formatGetStackMethodName(String format) {

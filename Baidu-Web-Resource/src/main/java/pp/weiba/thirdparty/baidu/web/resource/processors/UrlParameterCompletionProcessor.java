@@ -76,27 +76,36 @@ public class UrlParameterCompletionProcessor implements IProcessor<HttpRequest> 
     }
 
     private String getBDStoken() {
-        NetDiskAuthentication netDiskAuthentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
-        if (netDiskAuthentication == null || netDiskAuthentication.getTemplateVariable() == null || StrUtil.isBlank(netDiskAuthentication.getTemplateVariable().getBdstoken())) {
+        NetDiskAuthentication netDiskAuthentication = getNetDiskAuthentication();
+        if (netDiskAuthentication.getTemplateVariable() == null || StrUtil.isBlank(netDiskAuthentication.getTemplateVariable().getBdstoken())) {
             throw new RuntimeException("认证失败，请先登录");
         }
         return netDiskAuthentication.getTemplateVariable().getBdstoken();
     }
 
     private Integer getUk() {
-        NetDiskAuthentication netDiskAuthentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
-        if (netDiskAuthentication == null || netDiskAuthentication.getLoginInfo() == null || netDiskAuthentication.getLoginInfo().getUk() == null) {
+        NetDiskAuthentication netDiskAuthentication = getNetDiskAuthentication();
+        if (netDiskAuthentication.getLoginInfo() == null || netDiskAuthentication.getLoginInfo().getUk() == null) {
             throw new RuntimeException("认证失败，请先登录");
         }
         return netDiskAuthentication.getLoginInfo().getUk();
     }
 
     private String getAccessToken() {
-        AccessToken accessToken = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType() + "_accessToken");
+        NetDiskAuthentication netDiskAuthentication = getNetDiskAuthentication();
+        AccessToken accessToken = netDiskAuthentication.getAccessToken();
         if (accessToken == null || StrUtil.isBlank(accessToken.getAccessToken())) {
             throw new RuntimeException("认证失败，请先登录");
         }
         return accessToken.getAccessToken();
+    }
+
+    private NetDiskAuthentication getNetDiskAuthentication() {
+        NetDiskAuthentication netDiskAuthentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
+        if (netDiskAuthentication == null) {
+            throw new RuntimeException("认证失败，请先登录");
+        }
+        return netDiskAuthentication;
     }
 
     private <T, F> Map<T, F> initMap(Map<T, F> formatMap) {

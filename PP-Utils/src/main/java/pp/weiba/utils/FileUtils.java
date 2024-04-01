@@ -162,4 +162,11 @@ public class FileUtils {
         if (resource == null || StringUtils.isBlank(resource.getPath())) return "";
         return resource.getPath();
     }
+
+    public static String getExtByFileName(String fileName) {
+        if (StringUtils.isNotBlank(fileName) && fileName.lastIndexOf(".") >= 0) {
+            return fileName.substring(fileName.lastIndexOf(".") + 1);
+        }
+        return "";
+    }
 }
