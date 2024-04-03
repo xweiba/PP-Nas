@@ -52,12 +52,12 @@ public interface IResourceOperation {
      * 对指定资源进行重命名。
      *
      * @param resourceInfo    要重命名的资源
-     * @param newResourceInfo 重命名后的新资源
+     * @param newName 新命名
      * @return 重命名操作是否成功
      * @author weiba
      * @date 2024/3/5 15:43
      */
-    Boolean rename(ResourceInfo resourceInfo, ResourceInfo newResourceInfo);
+    Boolean rename(ResourceInfo resourceInfo, String newName);
 
     /**
      * 将资源移动到新的位置。

@@ -97,4 +97,10 @@ public class UrlConstants {
 
     // 扫码成功后跳转登录
     public static final String GET_QR_LOGIN = "https://passport.baidu.com/v3/login/main/qrbdusslogin?u=https%253A%252F%252Fpan.baidu.com%252Fdisk%252Fmain%253Ffrom%253DhomeFlow%2523%252Findex&loginVersion=v4&qrcode=1&tpl=netdisk&maskId=&fileId=&apiver=v3&traceid=&alg=v3&rinfo=%7B%22fuid%22%3A%22c8c22e5754889c982a946ac77a7f8d5b%22%7D&callback={}&bduss={}&v={}&tt={}&time={}sig={}&shaOne={}&elapsed={}";
+
+    // 文件管理异步任务接口
+    public static final String POST_ASYNC_FILE_MANAGER = API_PREFIX + "/filemanager?async=2&onnest=fail&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&bdstoken={bdstoken}&opera={}";
+
+    // 异步任务结果查询接口
+    public static final String GET_SYNC_TASK_URL = API_DOMAIN + "/share/taskquery?clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&taskid={taskid}";
 }

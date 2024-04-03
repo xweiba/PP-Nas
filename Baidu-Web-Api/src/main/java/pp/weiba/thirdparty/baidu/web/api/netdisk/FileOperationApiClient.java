@@ -1,16 +1,15 @@
 package pp.weiba.thirdparty.baidu.web.api.netdisk;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.AbstractApiHttpClient;
 import pp.weiba.framework.core.client.IHttpClient;
 import pp.weiba.framework.core.convert.TypeReference;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.request.AsyncTaskType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.OrderType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.SortType;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CreateDirResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.DirChildNodeResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.FileDetailByFSIdResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.SearchResponse;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.response.*;
 import pp.weiba.utils.StringUtils;
 
 import java.util.Arrays;
@@ -51,12 +50,56 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
     }
 
 
-    public FileDetailByFSIdResponse getFileDetailByFsIds(String fsIds) {
+    /**
+     * 根据FsIds获取资源信息
+     *
+     * @param fsIds 资源id
+     * @return 资源信息
+     * @author weiba
+     * @date 2024/4/1 13:43
+     */
+    public FileDetailByFSIdResponse getFileInfoByFsIds(String fsIds) {
         return postExecute(XpanUrlConstants.POST_FILE_MULTIMEDIA, new HashMap<String, Object>() {{
             put("method", "filemetas");
             put("dlink", 1);
             put("fsids", Arrays.toString(fsIds.split(",")));
         }}, new TypeReference<FileDetailByFSIdResponse>() {
+        });
+    }
+
+
+    /**
+     * 文件操作异步接口
+     *
+     * @param opera     任务类型
+     * @param paramsMap 参数
+     * @return 任务新增结果
+     * @author weiba
+     * @date 2024/4/1 13:58
+     */
+    public <T> FileOperaAsyncTaskResponse<T> fileOperaAsyncTask(AsyncTaskType opera, HashMap<String, Object> paramsMap) {
+        if (opera == null || CollUtil.isEmpty(paramsMap)) {
+            throw new IllegalArgumentException("参数不能为空");
+        }
+        return postExecute(StrUtil.format(UrlConstants.POST_ASYNC_FILE_MANAGER, opera.getValue()), paramsMap, new TypeReference<FileOperaAsyncTaskResponse<T>>() {
+        });
+    }
+
+    /**
+     * 查询异步任务结果
+     *
+     * @param taskId 任务id
+     * @return 任务结果
+     * @author weiba
+     * @date 2024/4/1 13:58
+     */
+    public <T> AsyncTaskResponse<T> getAsyncTaskResult(Long taskId) {
+        if (taskId == null) {
+            throw new IllegalArgumentException("taskId 不能为空");
+        }
+        return execute(UrlConstants.GET_SYNC_TASK_URL, new HashMap<String, String>() {{
+            put("taskid", String.valueOf(taskId));
+        }}, new TypeReference<AsyncTaskResponse<T>>() {
         });
     }
 
