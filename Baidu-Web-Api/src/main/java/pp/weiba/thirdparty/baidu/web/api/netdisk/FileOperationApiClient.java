@@ -9,6 +9,7 @@ import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.AsyncTaskType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.OrderType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.SortType;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.request.TaskExecuteType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.*;
 import pp.weiba.utils.StringUtils;
 
@@ -72,17 +73,18 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
      * 文件操作异步接口
      *
      * @param opera     任务类型
+     * @param executeType 任务执行类型 1:同步 2:异步
      * @param paramsMap 参数
      * @return 任务新增结果
      * @author weiba
      * @date 2024/4/1 13:58
      */
-    public <T> FileOperaAsyncTaskResponse<T> fileOperaAsyncTask(AsyncTaskType opera, HashMap<String, Object> paramsMap) {
+    public <T> FileOperaAsyncTaskResponse<T> fileOperaAsyncTask(AsyncTaskType opera, TaskExecuteType executeType, HashMap<String, Object> paramsMap) {
         if (opera == null || CollUtil.isEmpty(paramsMap)) {
             throw new IllegalArgumentException("参数不能为空");
         }
-        return postExecute(StrUtil.format(UrlConstants.POST_ASYNC_FILE_MANAGER, opera.getValue()), paramsMap, new TypeReference<FileOperaAsyncTaskResponse<T>>() {
-        });
+        return postExecute(UrlConstants.POST_ASYNC_FILE_MANAGER, paramsMap, new TypeReference<FileOperaAsyncTaskResponse<T>>() {
+        }, opera.getValue(), executeType.getValue());
     }
 
     /**
@@ -97,7 +99,7 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
         if (taskId == null) {
             throw new IllegalArgumentException("taskId 不能为空");
         }
-        return execute(UrlConstants.GET_SYNC_TASK_URL, new HashMap<String, String>() {{
+        return execute(UrlConstants.GET_SYNC_TASK, new HashMap<String, String>() {{
             put("taskid", String.valueOf(taskId));
         }}, new TypeReference<AsyncTaskResponse<T>>() {
         });

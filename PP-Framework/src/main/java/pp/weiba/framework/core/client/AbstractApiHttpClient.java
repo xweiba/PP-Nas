@@ -1,5 +1,6 @@
 package pp.weiba.framework.core.client;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.TypeReference;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 @Log4j2
 public abstract class AbstractApiHttpClient {
 
-    protected final IHttpClient httpClient;
+    private final IHttpClient httpClient;
 
     public AbstractApiHttpClient(IHttpClient httpClient) {
         this.httpClient = httpClient;
@@ -24,12 +25,20 @@ public abstract class AbstractApiHttpClient {
         return execute(Method.GET, url, null, typeReference);
     }
 
+    public <T> T execute(String url, TypeReference<T> typeReference, Object... urlFormatVals) {
+        return execute(Method.GET, StrUtil.format(url, urlFormatVals), null, typeReference);
+    }
+
     public <T> T execute(String url, Map<?, ?> urlParams, TypeReference<T> typeReference) {
         return execute(Method.GET, url, urlParams, typeReference);
     }
 
     public <T> T postExecute(String url, Map<String, Object> requestParams, TypeReference<T> typeReference) {
         return execute(Method.POST, url, null, requestParams, typeReference);
+    }
+
+    public <T> T postExecute(String url, Map<String, Object> requestParams, TypeReference<T> typeReference, Object... urlFormatVals) {
+        return execute(Method.POST, StrUtil.format(url, urlFormatVals), null, requestParams, typeReference);
     }
 
     public <T> T postExecuteUrlParams(String url, Map<?, ?> urlParams, TypeReference<T> typeReference) {

@@ -29,7 +29,7 @@ class ResourceOperationServiceTest extends ShardUploadResourceServiceTest {
 
     @Test
     void delete() {
-        LogUtils.info(log, resourceOperation.delete(new ResourceInfo().setPath("/test/319_20240403_165225")));
+        LogUtils.info(log, resourceOperation.delete(new ResourceInfo().setPath("/111/111/X1sL/test.txt")));
     }
 
     @Test

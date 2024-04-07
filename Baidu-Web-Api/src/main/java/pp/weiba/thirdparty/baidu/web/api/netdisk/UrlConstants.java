@@ -98,9 +98,18 @@ public class UrlConstants {
     // 扫码成功后跳转登录
     public static final String GET_QR_LOGIN = "https://passport.baidu.com/v3/login/main/qrbdusslogin?u=https%253A%252F%252Fpan.baidu.com%252Fdisk%252Fmain%253Ffrom%253DhomeFlow%2523%252Findex&loginVersion=v4&qrcode=1&tpl=netdisk&maskId=&fileId=&apiver=v3&traceid=&alg=v3&rinfo=%7B%22fuid%22%3A%22c8c22e5754889c982a946ac77a7f8d5b%22%7D&callback={}&bduss={}&v={}&tt={}&time={}sig={}&shaOne={}&elapsed={}";
 
-    // 文件管理异步任务接口
-    public static final String POST_ASYNC_FILE_MANAGER = API_PREFIX + "/filemanager?async=2&onnest=fail&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&bdstoken={bdstoken}&opera={}";
+    // 文件管理异步任务接口 async=1 同步 async=2 异步
+    public static final String POST_ASYNC_FILE_MANAGER = API_PREFIX + "/filemanager?opera={}&async={}&onnest=fail&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&bdstoken={bdstoken}";
 
     // 异步任务结果查询接口
-    public static final String GET_SYNC_TASK_URL = API_DOMAIN + "/share/taskquery?clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&taskid={taskid}";
+    public static final String GET_SYNC_TASK = API_DOMAIN + "/share/taskquery?clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&taskid={taskid}";
+
+    // 回收站分页查询接口
+    public static final String GET_QUERY_RECYCLES = API_PREFIX + "/recycle/list/?clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&num={}&page={}";
+
+    // 删除回收站文件接口
+    public static final String POST_RECYCLE_DEL_URL = API_PREFIX + "/recycle/delete?channel=chunlei&async=1&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&bdstoken={bdstoken}";
+
+    // 文件还原
+    public static final String POST_RECYCLE_RESTORE_URL = API_PREFIX + "/recycle/restore?channel=chunlei&async=1&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&bdstoken={bdstoken}";
 }

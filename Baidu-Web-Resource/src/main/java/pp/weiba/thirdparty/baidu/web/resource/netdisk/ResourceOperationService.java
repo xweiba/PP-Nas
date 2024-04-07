@@ -7,10 +7,7 @@ import pp.weiba.framework.Digest;
 import pp.weiba.framework.DigestType;
 import pp.weiba.framework.resource.*;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.request.AsyncTaskType;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.request.FileChunk;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.request.MoveOrCopyRequest;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.request.RenameRequest;
+import pp.weiba.thirdparty.baidu.web.api.netdisk.request.*;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.AsyncTaskResponse;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CreateDirResponse;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.FileDetailByFSIdResponse;
@@ -84,7 +81,7 @@ public class ResourceOperationService implements IResourceOperation {
             throw new IllegalArgumentException("path 不能为空");
         }
 
-        AsyncTaskResponse<AsyncTaskResponse.Delete> responseFileManagerBO = fileOperaSynchronous(AsyncTaskType.DELETE, new HashMap<String, Object>() {{
+        FileOperaAsyncTaskResponse<AsyncTaskResponse.Delete> responseFileManagerBO = fileOperaSync(AsyncTaskType.DELETE, new HashMap<String, Object>() {{
             put("filelist", JSONUtils.toJsonStr(Arrays.asList(delPath.split(","))));
         }});
         return Boolean.TRUE;
@@ -98,7 +95,7 @@ public class ResourceOperationService implements IResourceOperation {
         List<RenameRequest> renameFiles = new ArrayList<RenameRequest>() {{
             add(new RenameRequest(resourceInfo.getId(), resourceInfo.getPath(), newName));
         }};
-        AsyncTaskResponse<AsyncTaskResponse.FromTo> filelist = fileOperaSynchronous(AsyncTaskType.RENAME, new HashMap<String, Object>() {{
+        FileOperaAsyncTaskResponse<AsyncTaskResponse.FromTo> filelist = fileOperaSync(AsyncTaskType.RENAME, new HashMap<String, Object>() {{
             put("filelist", JSONUtils.toJsonStr(renameFiles));
         }});
         return Boolean.TRUE;
@@ -109,7 +106,7 @@ public class ResourceOperationService implements IResourceOperation {
         if (resourceInfo == null || newResourceInfo == null || StrUtil.isBlank(resourceInfo.getPath()) || StrUtil.isBlank(newResourceInfo.getPath()) || StrUtil.isBlank(newResourceInfo.getName())) {
             throw new IllegalArgumentException("参数不能为空");
         }
-        AsyncTaskResponse<AsyncTaskResponse.FromTo> filelist = fileOperaSynchronous(AsyncTaskType.MOVE, resourceInfo, newResourceInfo);
+        FileOperaAsyncTaskResponse<AsyncTaskResponse.FromTo> filelist = fileOperaSync(AsyncTaskType.MOVE, resourceInfo, newResourceInfo);
         return Boolean.TRUE;
     }
 
@@ -119,23 +116,29 @@ public class ResourceOperationService implements IResourceOperation {
         if (resourceInfo == null || newResourceInfo == null || StrUtil.isBlank(resourceInfo.getPath()) || StrUtil.isBlank(newResourceInfo.getPath()) || StrUtil.isBlank(newResourceInfo.getName())) {
             throw new IllegalArgumentException("参数不能为空");
         }
-        AsyncTaskResponse<AsyncTaskResponse.FromTo> filelist = fileOperaSynchronous(AsyncTaskType.COPY, resourceInfo, newResourceInfo);
+        FileOperaAsyncTaskResponse<AsyncTaskResponse.FromTo> filelist = fileOperaSync(AsyncTaskType.COPY, resourceInfo, newResourceInfo);
         return Boolean.TRUE;
     }
 
-    public <T> AsyncTaskResponse<T> fileOperaSynchronous(AsyncTaskType opera, ResourceInfo resourceInfo, ResourceInfo newResourceInfo) {
+    public <T> FileOperaAsyncTaskResponse<T> fileOperaSync(AsyncTaskType opera, ResourceInfo resourceInfo, ResourceInfo newResourceInfo) {
         List<MoveOrCopyRequest> params = new ArrayList<MoveOrCopyRequest>() {{
             add(new MoveOrCopyRequest(resourceInfo.getPath(), newResourceInfo.getPath(), newResourceInfo.getName()));
         }};
 
-        AsyncTaskResponse<T> filelist = fileOperaSynchronous(opera, new HashMap<String, Object>() {{
+        FileOperaAsyncTaskResponse<T> filelist = fileOperaSync(opera, new HashMap<String, Object>() {{
             put("filelist", JSONUtils.toJsonStr(params));
         }});
         return filelist;
     }
 
-    public <T> AsyncTaskResponse<T> fileOperaSynchronous(AsyncTaskType opera, HashMap<String, Object> paramsMap) {
-        FileOperaAsyncTaskResponse<T> responseFileManagerBO = fileOperationApiClient.fileOperaAsyncTask(opera, paramsMap);
+    public <T> FileOperaAsyncTaskResponse<T> fileOperaSync(AsyncTaskType opera, HashMap<String, Object> paramsMap) {
+        // 同步返回的 没有 taskid
+        FileOperaAsyncTaskResponse<T> result = fileOperationApiClient.fileOperaAsyncTask(opera, TaskExecuteType.SYNC, paramsMap);
+        return result;
+    }
+
+    public <T> AsyncTaskResponse<T> fileOperaASync(AsyncTaskType opera, HashMap<String, Object> paramsMap) {
+        FileOperaAsyncTaskResponse<T> responseFileManagerBO = fileOperationApiClient.fileOperaAsyncTask(opera, TaskExecuteType.ASYNC, paramsMap);
         AsyncTaskResponse<T> responseAsyncTaskBO = null;
         while (true) {
             responseAsyncTaskBO = fileOperationApiClient.getAsyncTaskResult(responseFileManagerBO.getTaskid());
