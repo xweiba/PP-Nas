@@ -54,22 +54,21 @@ public class ResourceOperationService implements IResourceOperation {
     public ResourceInfo get(String resourceId) {
         FileDetailByFSIdResponse fileDetailByFsIds = fileOperationApiClient.getFileInfoByFsIds(resourceId);
         if (fileDetailByFsIds != null && fileDetailByFsIds.getList() != null && fileDetailByFsIds.getList().size() > 0) {
-            FileDetailByFSIdResponse.ListBO listBO = fileDetailByFsIds.getList().get(0);
-            return new ResourceInfo().setId(listBO.getFsId())
-                    .setType(listBO.getIsdir() == 0 ? ResourceType.FILE : ResourceType.FOLDER)
-                    .setName(listBO.getFilename())
+            FileDetailByFSIdResponse.ListBO item = fileDetailByFsIds.getList().get(0);
+            return new ResourceInfo().setId(item.getFsId())
+                    .setType(item.getIsdir() == 0 ? ResourceType.FILE : ResourceType.FOLDER)
+                    .setName(item.getFilename())
                     .setState(ResourceState.NORMAL)
-                    .setSize(listBO.getSize())
-                    .setPath(listBO.getPath())
-                    .setExt(FileUtils.getExtByFileName(listBO.getFilename()))
+                    .setSize(item.getSize())
+                    .setPath(item.getPath())
+                    .setExt(FileUtils.getExtByFileName(item.getFilename()))
                     .setDigests(new ArrayList<Digest>() {{
-                        add(new Digest(DigestType.MD5, listBO.getMd5()));
+                        add(new Digest(DigestType.MD5, item.getMd5()));
                     }})
-                    .setCreateTime(listBO.getServerCtime())
-                    .setUpdateTime(listBO.getServerMtime())
-                    .setServerCreateTime(listBO.getServerCtime())
-                    .setServerUpdateTime(listBO.getServerMtime())
-                    ;
+                    .setCreateTime(item.getServerCtime())
+                    .setUpdateTime(item.getServerMtime())
+                    .setServerCreateTime(item.getServerCtime())
+                    .setServerUpdateTime(item.getServerMtime());
         }
         return null;
     }

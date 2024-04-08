@@ -26,7 +26,13 @@ public class ShareOperationService implements IShareOperation {
     @Override
     public ShareInfo create(String ids, String password, Integer expireDay) {
         ShareFileResponse shareFileResponse = shareOperationClient.shareFiles(ids, password, ShareExpireTime.getByValue(expireDay));
-        return null;
+        ShareInfo shareInfo = new ShareInfo()
+                .setShareId(shareFileResponse.getShareid())
+                .setPassword(password)
+                .setLink(shareFileResponse.getLink())
+                .setCreateTime(shareFileResponse.getCtime())
+                .setExpireTime(shareFileResponse.getExpiretime());
+        return shareInfo;
     }
 
     @Override

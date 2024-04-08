@@ -6,10 +6,10 @@ import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.*;
 import pp.weiba.framework.core.convert.TypeReference;
+import pp.weiba.framework.resource.SortType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.BaiduNetDiskWebQueryShareFileParams;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.QueryShareOrderType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.ShareExpireTime;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.request.SortType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.*;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduNetDiskWebScript;
 import pp.weiba.utils.JSONUtils;
@@ -57,7 +57,6 @@ public class ShareOperationApiClient extends AbstractApiHttpClient {
             put("fid_list", StrUtil.format("[{}]", fsIds));
         }}, new TypeReference<ShareFileResponse>() {
         });
-        responseShareFileBO.setLink(responseShareFileBO.getLink() + "?pwd=" + password);
         return responseShareFileBO;
     }
 

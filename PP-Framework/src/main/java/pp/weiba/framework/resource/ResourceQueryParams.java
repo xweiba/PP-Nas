@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.Properties;
-
 /**
  * 资源查询参数
  *
@@ -27,8 +25,9 @@ public class ResourceQueryParams {
     /* 关键字 */
     private String keyWord;
 
-    /* 排序字段 */
-    private Properties sortFields;
+    private OrderType orderType = OrderType.TIME;
+
+    private SortType sortType = SortType.DESC;
 
     private Integer pageNo;
 

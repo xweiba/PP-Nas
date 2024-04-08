@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.api.netdisk.request;
+package pp.weiba.framework.resource;
 
 import cn.hutool.core.util.StrUtil;
 

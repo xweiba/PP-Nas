@@ -3,6 +3,8 @@ package pp.weiba.framework.resource;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
  * 分享信息
  *
@@ -14,6 +16,15 @@ import lombok.experimental.Accessors;
 public class ShareInfo {
 
     private String shareId;
+
+    private String link;
+
+    private String password;
+
+    private Date createTime;
+
+    /* 过期时间 */
+    private Date expireTime;
 
 
 }

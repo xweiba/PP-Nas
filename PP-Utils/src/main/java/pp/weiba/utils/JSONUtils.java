@@ -4,6 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.parser.DefaultJSONParser;
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.alibaba.fastjson.serializer.SerializeConfig;
@@ -22,9 +25,11 @@ import java.util.Date;
 
 @Log4j2
 public class JSONUtils {
-    public static SerializeConfig config = new SerializeConfig();
     static {
-        config.put(Date.class, DateFixDeserializer.instance);
+        SerializeConfig serializeConfig = SerializeConfig.global;
+        serializeConfig.put(Date.class, DateFixSerializer.instance);
+        ParserConfig parserConfig = ParserConfig.global;
+        parserConfig.putDeserializer(Date.class, DateFixDeserializer.instance);
     }
 
     public static <T> T toBean(String body, Class<T> tClass) {
@@ -42,7 +47,15 @@ public class JSONUtils {
     }
 
     public static <T> T toBean(String body, TypeReference<T> typeReference, String msg) {
-        T result = JSON.parseObject(body, typeReference.getType());
+        return toBean(body, typeReference.getType(), msg);
+    }
+
+    public static <T> T toBean(String body, Type type) {
+        return toBean(body, type, null);
+    }
+
+    public static <T> T toBean(String body, Type type, String msg) {
+        T result = JSON.parseObject(body, type);
         printLog(result, msg);
         return result;
     }
@@ -52,8 +65,7 @@ public class JSONUtils {
     }
 
     public static String toJsonPrettyStr(Object result) {
-        return JSON.toJSONString(result, config, SerializerFeature.PrettyFormat, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteMapNullValue,
-                SerializerFeature.WriteDateUseDateFormat);
+        return JSON.toJSONString(result, SerializerFeature.PrettyFormat, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
     }
 
     public static JSONObject toJSONObj(String text) {
@@ -70,8 +82,8 @@ public class JSONUtils {
         return result;
     }
 
-    private static class DateFixDeserializer implements ObjectSerializer {
-        public static final DateFixDeserializer instance = new DateFixDeserializer();
+    private static class DateFixSerializer implements ObjectSerializer {
+        public static final DateFixSerializer instance = new DateFixSerializer();
 
         private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -87,6 +99,20 @@ public class JSONUtils {
             long time = MathUtils.padZero(date.getTime(), 13);
             // 转为可读的时间格式
             serializer.write(FORMAT.format(new Date(time)));
+        }
+    }
+
+    private static class DateFixDeserializer implements ObjectDeserializer {
+        public static final DateFixDeserializer instance = new DateFixDeserializer();
+
+        @Override
+        public <T> T deserialze(DefaultJSONParser parser, Type type, Object fieldName) {
+            // 从parser中获取日期字符串
+            String value = parser.parseObject(String.class);
+            long srcTime = Long.parseLong(value);
+            long newTime = MathUtils.padZero(srcTime, 13);
+            // 自定义解析日期字符串为Date对象
+            return (T) new Date(newTime);
         }
     }
 

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
  * @author xiaoweiba1028@gmail.com
  * @date 2022/10/11
@@ -18,9 +20,9 @@ public class ShareFileResponse extends ApiResponse {
 
     private String aheadmsg;
     private String createsharetipsLdlj;
-    private Integer ctime;
+    private Date ctime;
     private Integer expiredType;
-    private Integer expiretime;
+    private Date expiretime;
     private Integer imagetype;
     private String link;
     private String newno;

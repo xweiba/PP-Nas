@@ -112,4 +112,8 @@ public class UrlConstants {
 
     // 文件还原
     public static final String POST_RECYCLE_RESTORE_URL = API_PREFIX + "/recycle/restore?channel=chunlei&async=1&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&bdstoken={bdstoken}";
+
+    // 文件搜索
+    public static final String GET_SERACH = API_PREFIX +
+            "/search?dir={}&key={}&order={}&desc={}&num={}&page={}&recursion=1&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}";
 }

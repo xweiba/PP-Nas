@@ -3,6 +3,7 @@ package pp.weiba.thirdparty.baidu.web.api.netdisk.request;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import pp.weiba.framework.resource.SortType;
 
 @Data
 @Accessors(chain = true)

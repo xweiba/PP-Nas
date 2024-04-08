@@ -1,8 +1,8 @@
 package pp.weiba.framework.core.convert;
 
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.utils.JSONUtils;
 
 /**
  * Json 类型转换器
@@ -16,7 +16,7 @@ public class StrJsonTypeReferenceProcessor implements ITypeReferenceProcessor<St
     @Override
     public <T> T process(String data, TypeReference<T> typeReference) {
         if (StrUtil.isNotBlank(data)) {
-            return JSON.parseObject(data, typeReference.getType());
+            return JSONUtils.toBean(data, typeReference.getType());
         }
         return null;
     }
