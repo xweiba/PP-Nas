@@ -15,6 +15,7 @@ public class DefaultTest {
 
     static {
         Configurator.setAllLevels("", Level.INFO);
+        Configurator.setAllLevels("", Level.DEBUG);
     }
 
 }

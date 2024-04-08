@@ -39,21 +39,22 @@ public class ShareOperationApiClient extends AbstractApiHttpClient {
      * @param fsIds           : fsIds 分享文件标识集合, ',' 分隔
      * @param shareExpireTime : shareFileTime 分享时间
      * @param password        : password 指定密码，4位
-     * @return weiba.pp.components.netdisc.bd.web.bo.BaiduNetDiskWebShareFileResponse
-     * @author xiaoweiba1028@gmail.com
-     * @date 2022/10/11 16:41
+     * @return 分享信息
+     * @author weiba
+     * @date 2024/4/8 14:33
      */
     public ShareFileResponse shareFiles(String fsIds, String password, ShareExpireTime shareExpireTime) {
         if (StrUtil.isBlank(fsIds) || StrUtil.isBlank(password) || password.length() != 4) {
             log.error("参数错误！ fsIds: {}, sharePeriod: {}, password: {}", JSONUtils.toJsonStr(fsIds), shareExpireTime, password);
             throw new IllegalArgumentException("参数错误！");
         }
+        ShareExpireTime expireTime = shareExpireTime == null ? ShareExpireTime.DAY1 : shareExpireTime;
         ShareFileResponse responseShareFileBO = postExecute(UrlConstants.POST_SHARE_FILES, new HashMap<String, Object>() {{
             put("channel_list", "[]");
-            put("period", shareExpireTime == null ? ShareExpireTime.DAY1 : shareExpireTime);
+            put("period", expireTime.getValue());
             put("pwd", password);
             put("schannel", "4");
-            put("fid_list", JSONUtils.toJsonStr(Arrays.asList(fsIds.split(","))));
+            put("fid_list", StrUtil.format("[{}]", fsIds));
         }}, new TypeReference<ShareFileResponse>() {
         });
         responseShareFileBO.setLink(responseShareFileBO.getLink() + "?pwd=" + password);
