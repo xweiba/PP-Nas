@@ -23,7 +23,7 @@ class ResourceOperationServiceTest extends ShardUploadResourceServiceTest {
 
     @Test
     void get() {
-        resourceInfo = resourceOperation.get("891154745348288");
+        resourceInfo = resourceOperation.get("478735016803432");
         LogUtils.info(log, resourceInfo);
     }
 

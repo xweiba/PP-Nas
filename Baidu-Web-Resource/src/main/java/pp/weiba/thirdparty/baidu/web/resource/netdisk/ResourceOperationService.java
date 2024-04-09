@@ -41,7 +41,7 @@ public class ResourceOperationService implements IResourceOperation {
     @Override
     public ResourceInfo createDir(String newDstPath) {
         CreateDirResponse dir = fileOperationApiClient.createDir(newDstPath);
-        return new ResourceInfo(dir.getFsId(), ResourceType.FOLDER, dir.getName(), ResourceStatus.NORMAL, null, dir.getPath(), null, null, dir.getCtime(), dir.getMtime(), dir.getCtime(), dir.getMtime());
+        return new ResourceInfo(dir.getFsId(), ResourceType.FOLDER, dir.getName(), ResourceStatus.NORMAL, null, dir.getPath(), null, null, null, dir.getCtime(), dir.getMtime(), dir.getCtime(), dir.getMtime());
     }
 
     @Override

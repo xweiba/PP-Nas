@@ -20,7 +20,7 @@ import java.util.Date;
 @Log4j2
 class AccessTokenApiClientTest {
 
-    public static final WebOAuthLoginAuthentication WEB_O_AUTH_LOGIN_AUTHENTICATION = JSON.parseObject(FileUtil.readString("C:\\Users\\admin\\Documents\\code\\github\\PP-Nas\\Baidu-Web-Api\\src\\test\\resources\\loginAuthentication.json", StandardCharsets.UTF_8), WebOAuthLoginAuthentication.class);
+    public static final WebOAuthLoginAuthentication WEB_O_AUTH_LOGIN_AUTHENTICATION = JSON.parseObject(FileUtil.readString("C:\\Users\\admin\\Documents\\code\\github\\PP-Nas\\Baidu-Web-Api\\src\\test\\resources\\oauthAuthentication.json", StandardCharsets.UTF_8), WebOAuthLoginAuthentication.class);
 
     AccessToken accessToken;
     private String locationUrl;

@@ -55,10 +55,6 @@ public class UrlConstants {
     // 查询目录下的文件信息
     public static final String GET_QUERY_DIR_CHILD = API_PREFIX + "/list?clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&dir={}&order={}&desc={}&num={}&page={}";
 
-    // 文件搜索接口
-    public static final String GET_FILE_SEARCH = API_PREFIX +
-            "/search?dp-logid={dp-logid}&dir={}&key={}&order={}&desc={}&num={}&page={}&recursion=1&clienttype=0&app_id=250528&web=1";
-
     // 文件分享url 前缀
     public static final String SHARE_PREFIX = API_DOMAIN + "/s/1";
 
@@ -116,7 +112,8 @@ public class UrlConstants {
     // 文件还原
     public static final String POST_RECYCLE_RESTORE_URL = API_PREFIX + "/recycle/restore?channel=chunlei&async=1&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}&bdstoken={bdstoken}";
 
-    // 文件搜索
+    // 文件搜索, 该接口num是失效的，一直是1000
     public static final String GET_SERACH = API_PREFIX +
             "/search?dir={}&key={}&order={}&desc={}&num={}&page={}&recursion=1&clienttype=0&app_id=250528&web=1&dp-logid={dp-logid}";
+
 }

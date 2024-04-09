@@ -34,6 +34,7 @@ public class FileDetailByFSIdResponse {
     @Data
     public static class ListBO {
         private Integer category;
+        // dlink 大于20Mb的需要添加 User-Agent: pan.baidu.com 和 BDUSS Cookie 才能下载，小于20Mb的不能添加, 它不是真实下载地址，推荐追踪302获取到真实下载地址再推给下载器
         private String dlink;
         private String filename;
         private String fsId;
