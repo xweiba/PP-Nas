@@ -1,10 +1,7 @@
 package pp.weiba.framework.resource;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * 资源查询参数
@@ -12,10 +9,7 @@ import lombok.extern.log4j.Log4j2;
  * @author weiba
  * @date 2024/3/5 16:00
  */
-@Log4j2
 @Accessors(chain = true)
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class ResourceQueryParams {
 
@@ -25,7 +19,7 @@ public class ResourceQueryParams {
     /* 关键字 */
     private String keyWord;
 
-    private OrderType orderType = OrderType.TIME;
+    private OrderType orderType = OrderType.CREATE_TIME;
 
     private SortType sortType = SortType.DESC;
 

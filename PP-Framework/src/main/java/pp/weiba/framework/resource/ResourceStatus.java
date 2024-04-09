@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 
 @Getter
-public enum ResourceState {
+public enum ResourceStatus {
 
     NORMAL(0), // 正常
     RECYCLE(1), // 回收
@@ -21,13 +21,13 @@ public enum ResourceState {
 
     private final Integer type;
 
-    ResourceState(Integer type) {
+    ResourceStatus(Integer type) {
         this.type = type;
     }
 
-    public static ResourceState get(Integer type) {
+    public static ResourceStatus get(Integer type) {
         if (type != null) {
-            for (ResourceState entity : ResourceState.values()) {
+            for (ResourceStatus entity : ResourceStatus.values()) {
                 if (Objects.equals(entity.getType(), type)) {
                     return entity;
                 }
@@ -35,4 +35,12 @@ public enum ResourceState {
         }
         return null;
     }
+
+
+    @Override
+    public String toString() {
+        return type.toString();
+    }
+
+
 }

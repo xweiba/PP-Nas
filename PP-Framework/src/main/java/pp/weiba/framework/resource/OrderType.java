@@ -4,6 +4,10 @@ public enum OrderType {
 
     SIZE("size"),
     TIME("time"),
+    // bd share order type
+    CREATE_TIME("ctime"),
+    OTHER("other"),
+    FILE_NAME("server_filename"),
     NAME("name");
 
     private final String value;

@@ -98,7 +98,7 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
             if (CollUtil.isNotEmpty(request.getRequestParams())) {
                 httpRequest.form(request.getRequestParams());
             }
-            httpRequest.setMethod(tranMethod(request.getMethod().getType()));
+            httpRequest.setMethod(tranMethod(request.getMethod().getValue()));
             httpRequest.headerMap(request.getHeaderMap(), true);
 
             if (CollUtil.isNotEmpty(request.getCookieMap())) {

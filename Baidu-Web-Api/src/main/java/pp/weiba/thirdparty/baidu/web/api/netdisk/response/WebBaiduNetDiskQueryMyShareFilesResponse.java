@@ -8,11 +8,6 @@ import lombok.experimental.SuperBuilder;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author xiaoweiba1028@gmail.com
- * @description 百度批量取消分享接口Response
- * @date 2023/5/23 0:14
- */
 @NoArgsConstructor
 @Accessors(chain = true)
 @Data
@@ -35,10 +30,10 @@ public class WebBaiduNetDiskQueryMyShareFilesResponse {
         private int bitmap;
         private int channel;
         private String channelInfo;
-        private int ctime;
+        private Date ctime;
         private int dCnt;
         private String description;
-        private int dtime;
+        private Date dtime;
         private Date expiredTime;
         private int expiredType;
         private List<String> fsIds;

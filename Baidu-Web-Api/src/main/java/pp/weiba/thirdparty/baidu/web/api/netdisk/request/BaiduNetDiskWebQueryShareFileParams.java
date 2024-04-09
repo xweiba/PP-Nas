@@ -1,24 +1,25 @@
 package pp.weiba.thirdparty.baidu.web.api.netdisk.request;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.resource.SortType;
 
 @Data
 @Accessors(chain = true)
-@Builder
 public class BaiduNetDiskWebQueryShareFileParams {
 
     private String shareId;
 
-    private String token;
+    private String shareUk;
+
+    private KeyValue verifyCookie;
 
     private String dir;
 
-    private QueryShareOrderType order;
+    private QueryShareOrderType orderType;
 
-    private SortType desc;
+    private SortType sortType = SortType.DESC;
 
     private Integer pageNo;
 

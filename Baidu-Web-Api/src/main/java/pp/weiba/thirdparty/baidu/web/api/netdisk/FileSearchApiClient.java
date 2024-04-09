@@ -53,13 +53,13 @@ public class FileSearchApiClient extends AbstractApiHttpClient {
             log.error("资源搜索异常， keyWord不能为空");
             throw new IllegalArgumentException("资源搜索异常， keyWord不能为空");
         }
-        if (orderType == null) orderType = OrderType.TIME;
+        if (orderType == null) orderType = OrderType.CREATE_TIME;
         if (sortType == null) sortType = SortType.DESC;
         if (pageSize == null || pageSize == 0) pageSize = 10;
         if (pageNo == null || pageNo == 0) pageNo = 1;
 
-        return execute(UrlConstants.GET_SERACH, new TypeReference<BaiduNetDiskWebSearchFilePathResponse>() {
-        }, path, keyWord, orderType, sortType, pageSize, pageNo);
+        return execute(new TypeReference<BaiduNetDiskWebSearchFilePathResponse>() {
+        }, UrlConstants.GET_SERACH, path, keyWord, orderType, sortType, pageSize, pageNo);
     }
 
     /**
@@ -79,7 +79,7 @@ public class FileSearchApiClient extends AbstractApiHttpClient {
             log.error("queryPathFiles error! dstPath:{}", dstPath);
             throw new IllegalArgumentException("queryPathFiles error!");
         }
-        if (orderType == null) orderType = OrderType.TIME;
+        if (orderType == null) orderType = OrderType.CREATE_TIME;
         if (desc == null) desc = SortType.DESC;
         if (pageSize == null) pageSize = 100;
         if (pageNo == null) pageNo = 1;

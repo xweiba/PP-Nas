@@ -59,6 +59,9 @@ public class UrlConstants {
     public static final String GET_FILE_SEARCH = API_PREFIX +
             "/search?dp-logid={dp-logid}&dir={}&key={}&order={}&desc={}&num={}&page={}&recursion=1&clienttype=0&app_id=250528&web=1";
 
+    // 文件分享url 前缀
+    public static final String SHARE_PREFIX = API_DOMAIN + "/s/1";
+
     // 文件分享接口
     public static final String POST_SHARE_FILES = API_DOMAIN + "/share/set?channel=chunlei&clienttype=0&web=1&channel=chunlei&web=1&app_id=250528&clienttype=0&dp-logid={dp-logid}&bdstoken={bdstoken}&logid={logid}";
 
@@ -73,14 +76,14 @@ public class UrlConstants {
 
     // 获取分享中的文件详细
     public static final String GET_QUERY_SHARE_FILES_URL = API_DOMAIN + "/share/list?channel=chunlei&web=1&app_id=250528&showempty=0&web=1&clienttype=0" +
-            "&t={}&dp-logid={dp-logid}&logid={logid}&uk={uk}" +
-            "&shareid={}&dir={}&order={}&desc={}&page={}&num={}";
+            "&dp-logid={dp-logid}&logid={logid}&bdstoken={bdstoken}" +
+            "&t={}&shareid={}&uk={}&dir={}&order={}&desc={}&page={}&num={}";
 
     // 分享验证接口
     public static final String POST_SHARE_FILE_VERIFY_URL = API_DOMAIN + "/share/verify?channel=chunlei&web=1&app_id=250528&clienttype=0&dp-logid={dp-logid}&bdstoken={bdstoken}&logid={logid}&surl={}&t={}";
 
     // 分享url模板
-    public static final String GET_SHARE_FILE_PAGE_TEMPLATE_URL = API_DOMAIN + "/s/{}?from=init&pwd={}";
+    public static final String GET_SHARE_FILE_PAGE_TEMPLATE_URL = API_DOMAIN + "/s/1{}?from=init";
 
     // 分享页面 验证bdclndCookie， 正常的话该正则能取到数据
     public static final Pattern SHARE_INIT_PAGE_PATTERN_REGEX = Pattern.compile("(?<=locals\\.mset\\()(.+?)(?=\\);)");

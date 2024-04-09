@@ -20,20 +20,25 @@ public enum Method {
     CONNECT("connect"),
     PATCH("patch");
 
-    private final String type;
+    private final String value;
 
-    Method(String type) {
-        this.type = type;
+    Method(String value) {
+        this.value = value;
     }
 
     public static Method get(String type) {
         if (type != null) {
             for (Method entity : Method.values()) {
-                if (Objects.equals(entity.getType(), type)) {
+                if (Objects.equals(entity.getValue(), type)) {
                     return entity;
                 }
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 }

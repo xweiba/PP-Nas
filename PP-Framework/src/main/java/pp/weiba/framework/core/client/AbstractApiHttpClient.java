@@ -25,7 +25,7 @@ public abstract class AbstractApiHttpClient {
         return execute(Method.GET, url, null, typeReference);
     }
 
-    protected <T> T execute(String url, TypeReference<T> typeReference, Object... urlFormatVals) {
+    protected <T> T execute(TypeReference<T> typeReference, String url, Object... urlFormatVals) {
         return execute(Method.GET, StrUtil.format(url, urlFormatVals), null, typeReference);
     }
 
@@ -37,7 +37,7 @@ public abstract class AbstractApiHttpClient {
         return execute(Method.POST, url, null, requestParams, typeReference);
     }
 
-    protected <T> T postExecute(String url, Map<String, Object> requestParams, TypeReference<T> typeReference, Object... urlFormatVals) {
+    protected <T> T postExecute(Map<String, Object> requestParams, TypeReference<T> typeReference, String url, Object... urlFormatVals) {
         return execute(Method.POST, StrUtil.format(url, urlFormatVals), null, requestParams, typeReference);
     }
 

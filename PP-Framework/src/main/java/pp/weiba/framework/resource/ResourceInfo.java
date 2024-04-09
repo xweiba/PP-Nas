@@ -33,7 +33,7 @@ public class ResourceInfo {
     private String name;
 
     // 资源状态
-    private ResourceState state = ResourceState.NORMAL;
+    private ResourceStatus state = ResourceStatus.NORMAL;
 
     // 资源大小
     private Long size;

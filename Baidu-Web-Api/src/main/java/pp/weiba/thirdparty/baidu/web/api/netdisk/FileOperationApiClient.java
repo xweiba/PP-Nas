@@ -83,8 +83,8 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
         if (opera == null || CollUtil.isEmpty(paramsMap)) {
             throw new IllegalArgumentException("参数不能为空");
         }
-        return postExecute(UrlConstants.POST_ASYNC_FILE_MANAGER, paramsMap, new TypeReference<FileOperaAsyncTaskResponse<T>>() {
-        }, opera.getValue(), executeType.getValue());
+        return postExecute(paramsMap, new TypeReference<FileOperaAsyncTaskResponse<T>>() {
+        }, UrlConstants.POST_ASYNC_FILE_MANAGER, opera.getValue(), executeType.getValue());
     }
 
     /**

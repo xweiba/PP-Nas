@@ -36,8 +36,8 @@ public class RecycleApiClient extends AbstractApiHttpClient {
      * @date 2024/4/7 9:23
      */
     public RecycleQueryResponse query(int pageSize, int pageNo) {
-        return execute(UrlConstants.GET_QUERY_RECYCLES, new TypeReference<RecycleQueryResponse>() {
-        }, pageSize, pageNo);
+        return execute(new TypeReference<RecycleQueryResponse>() {
+        }, UrlConstants.GET_QUERY_RECYCLES, pageSize, pageNo);
     }
 
 
@@ -51,8 +51,6 @@ public class RecycleApiClient extends AbstractApiHttpClient {
      */
     public RecycleDeleteResponse deleteByFsIds(String fsIds) {
         if (StrUtil.isBlank(fsIds)) throw new IllegalArgumentException("fsId 不能为空");
-        List<String> fsIdList = ArrayUtils.asListAndFilterNull(fsIds.split(","));
-
         RecycleDeleteResponse result = postExecute(UrlConstants.POST_RECYCLE_DEL_URL,
                 new HashMap<String, Object>() {{
                     put("fidlist", StrUtil.format("[{}]", fsIds));
