@@ -4,7 +4,6 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
-import cn.hutool.http.Method;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import java.io.File;
 import java.net.HttpCookie;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -32,8 +30,6 @@ class WebQRScanLonginApiClientTest {
 
     // Web OAUTH 认证信息, 可通过此信息登录百度其他应用
     public static final String OAUTH_AUTHENTICATION_JSON_FILE_PATH = "C:\\Users\\admin\\Documents\\code\\github\\PP-Nas\\Baidu-Web-Api\\src\\test\\resources\\oauthAuthentication.json";
-
-    public static final String NET_DISK_LOGIN_AUTHENTICATION_FILE_PATH = "C:\\Users\\admin\\Documents\\code\\github\\PP-Nas\\Baidu-Web-Api\\src\\test\\resources\\netDiskLoginAuthentication.json";
 
     @Test
     void getQRImage() {
@@ -108,17 +104,5 @@ class WebQRScanLonginApiClientTest {
         Map<String, HttpCookie> cookieMap = qrLogInResponse.getCookies().stream().collect(Collectors.toMap(HttpCookie::getName, item -> item));
         WebOAuthLoginAuthentication webOAuthLoginAuthentication = new WebOAuthLoginAuthentication(bean, cookieMap);
         FileUtil.writeString(JSONUtils.toJsonPrettyStr(webOAuthLoginAuthentication), new File(OAUTH_AUTHENTICATION_JSON_FILE_PATH), StandardCharsets.UTF_8);
-    }
-
-    @Test
-    @Disabled
-    void generateBaiduNetDiskLoginAuthentication() {
-        HttpRequest httpRequest = AccessTokenApiClientTest.buildHttpRequest("https://pan.baidu.com/disk/home", Method.GET);
-        httpRequest.setFollowRedirects(true);
-        httpRequest.setFollowRedirectsCookie(true);
-        httpRequest.setMaxRedirectCount(100);
-        HttpResponse execute = httpRequest.execute();
-        List<HttpCookie> cookies = execute.getCookies();
-        FileUtil.writeString(JSONUtils.toJsonPrettyStr(cookies), new File(NET_DISK_LOGIN_AUTHENTICATION_FILE_PATH), StandardCharsets.UTF_8);
     }
 }
