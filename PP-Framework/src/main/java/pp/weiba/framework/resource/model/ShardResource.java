@@ -1,4 +1,4 @@
-package pp.weiba.framework.resource;
+package pp.weiba.framework.resource.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

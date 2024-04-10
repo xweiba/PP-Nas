@@ -1,6 +1,7 @@
 package pp.weiba.framework.resource;
 
 import pp.weiba.framework.KeyValue;
+import pp.weiba.framework.resource.model.*;
 
 import java.util.List;
 import java.util.Map;

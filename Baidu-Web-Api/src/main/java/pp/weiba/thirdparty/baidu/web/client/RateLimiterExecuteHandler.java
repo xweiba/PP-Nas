@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.resource.client;
+package pp.weiba.thirdparty.baidu.web.client;
 
 import com.google.common.util.concurrent.RateLimiter;
 import lombok.extern.log4j.Log4j2;

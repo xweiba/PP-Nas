@@ -1,11 +1,11 @@
-package pp.weiba.thirdparty.baidu.web.resource.client;
+package pp.weiba.thirdparty.baidu.web.client;
 
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.*;
-import pp.weiba.thirdparty.baidu.web.resource.processors.AddDefaultHeaderProcessor;
-import pp.weiba.thirdparty.baidu.web.resource.processors.ErrorStatusProcessor;
-import pp.weiba.thirdparty.baidu.web.resource.processors.ParameterCompletionProcessor;
-import pp.weiba.thirdparty.baidu.web.resource.processors.UrlParameterCompletionProcessor;
+import pp.weiba.thirdparty.baidu.web.client.processors.AddDefaultHeaderProcessor;
+import pp.weiba.thirdparty.baidu.web.client.processors.ErrorStatusProcessor;
+import pp.weiba.thirdparty.baidu.web.client.processors.ParameterCompletionProcessor;
+import pp.weiba.thirdparty.baidu.web.client.processors.UrlParameterCompletionProcessor;
 
 /**
  * 百度网盘抽象客户端
@@ -20,22 +20,25 @@ public class WebBaiduNetDiskHttpClient extends AbstractHttpClientWrap {
         super(httpClient, authentication);
     }
 
-    /**
-     * 添加默认处理器
-     */
-    protected void initHandlers() {
+    @Override
+    protected void initRequestHandlers() {
         // 全局参数补全处理
         addRequestHandler(new RequestHandler(new UrlParameterCompletionProcessor(authentication)));
         addRequestHandler(new RequestHandler(new ParameterCompletionProcessor(authentication)));
 
         // 全局参数头处理
         addRequestHandler(new RequestHandler(new AddDefaultHeaderProcessor()));
+    }
 
+    @Override
+    protected void initResponseHandlers() {
         // 接口响应错误码处理
         addResponseHandler(new ResponseHandler(new ErrorStatusProcessor()));
+    }
 
+    @Override
+    protected void initExecuteHandlers() {
         // 接口添加限流，注意，限流必须最后再加进去，保证是限制实际的请求
-        addExecuteHandler(new RateLimiterExecuteHandler(1.0));
-
+        addExecuteHandler(new RateLimiterExecuteHandler<>(1.0));
     }
 }

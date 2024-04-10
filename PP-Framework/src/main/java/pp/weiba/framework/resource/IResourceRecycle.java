@@ -1,5 +1,7 @@
 package pp.weiba.framework.resource;
 
+import pp.weiba.framework.resource.model.ResourceRecycleInfo;
+
 import java.util.List;
 
 /**

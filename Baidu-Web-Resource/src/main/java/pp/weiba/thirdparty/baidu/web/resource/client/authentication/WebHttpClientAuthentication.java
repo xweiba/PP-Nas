@@ -5,7 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.AbstractHttpClientAuthentication;
 import pp.weiba.framework.core.client.HttpRequest;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
-import pp.weiba.thirdparty.baidu.web.resource.security.authentication.BaiduAuthenticationManager;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.BaiduAuthenticationManager;
 
 import java.net.HttpCookie;
 import java.util.Map;

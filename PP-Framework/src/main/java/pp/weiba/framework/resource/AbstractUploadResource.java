@@ -2,6 +2,7 @@ package pp.weiba.framework.resource;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.framework.resource.model.UploadResourceInfo;
 
 /**
  * 资源上传抽象

@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentials;
+package pp.weiba.thirdparty.baidu.web.api.security.authentication;
 
 import pp.weiba.utils.StringUtils;
 

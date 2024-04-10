@@ -3,6 +3,8 @@ package pp.weiba.framework.resource;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.framework.resource.model.ShardResource;
+import pp.weiba.framework.resource.model.UploadResourceInfo;
 
 import java.util.ArrayList;
 import java.util.List;

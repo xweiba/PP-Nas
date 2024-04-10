@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.resource.security.authentication;
+package pp.weiba.thirdparty.baidu.web.client.security.authentication;
 
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.AbstractAuthenticationManager;

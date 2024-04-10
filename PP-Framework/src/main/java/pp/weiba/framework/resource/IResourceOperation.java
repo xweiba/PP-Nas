@@ -1,5 +1,8 @@
 package pp.weiba.framework.resource;
 
+import pp.weiba.framework.resource.model.ResourceInfo;
+import pp.weiba.framework.resource.model.UploadResourceInfo;
+
 /**
  * 资源操作接口，用于提供资源的管理功能，包括删除、重命名、移动和复制等操作。
  *

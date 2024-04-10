@@ -1,4 +1,4 @@
-package pp.weiba.framework.resource;
+package pp.weiba.framework.resource.model;
 
 /**
  * 分享资源信息

@@ -4,7 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import pp.weiba.framework.resource.IResourceOperation;
-import pp.weiba.framework.resource.ResourceInfo;
+import pp.weiba.framework.resource.model.ResourceInfo;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
 import pp.weiba.utils.LogUtils;
 

@@ -1,5 +1,8 @@
 package pp.weiba.framework.resource;
 
+import pp.weiba.framework.resource.model.ShardResource;
+import pp.weiba.framework.resource.model.UploadResourceInfo;
+
 import java.util.List;
 
 /**

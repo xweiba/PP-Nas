@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.resource.processors;
+package pp.weiba.thirdparty.baidu.web.client.processors;
 
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.client.HttpRequest;

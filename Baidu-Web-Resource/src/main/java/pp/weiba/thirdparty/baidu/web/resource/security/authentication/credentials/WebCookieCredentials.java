@@ -3,6 +3,7 @@ package pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentia
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.credential.ICredential;
+import pp.weiba.thirdparty.baidu.web.api.security.authentication.BaiduWebCookieUtils;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.WebOAuthLoginAuthentication;
 

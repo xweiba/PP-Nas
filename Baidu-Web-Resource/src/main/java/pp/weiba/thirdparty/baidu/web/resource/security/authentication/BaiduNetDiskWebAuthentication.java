@@ -11,6 +11,7 @@ import pp.weiba.thirdparty.baidu.web.api.security.authentication.AccessToken;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.AuthenticationApiClient;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.WebOAuthLoginAuthentication;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.BaiduAuthenticationManager;
 
 import java.net.HttpCookie;
 import java.util.HashMap;

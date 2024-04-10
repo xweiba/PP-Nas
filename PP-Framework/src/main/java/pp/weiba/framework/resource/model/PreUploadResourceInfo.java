@@ -1,4 +1,4 @@
-package pp.weiba.framework.resource;
+package pp.weiba.framework.resource.model;
 
 import lombok.extern.log4j.Log4j2;
 

@@ -1,5 +1,8 @@
 package pp.weiba.framework.resource;
 
+import pp.weiba.framework.resource.model.ResourceInfo;
+import pp.weiba.framework.resource.model.ResourceQueryParams;
+
 import java.util.List;
 
 /**

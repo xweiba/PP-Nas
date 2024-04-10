@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.resource.processors;
+package pp.weiba.thirdparty.baidu.web.client.processors;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -10,7 +10,7 @@ import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduNetDiskWebScript;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.utils.BaiduWebApiUtils;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.AccessToken;
 import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
-import pp.weiba.thirdparty.baidu.web.resource.security.authentication.BaiduAuthenticationManager;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.BaiduAuthenticationManager;
 
 import java.util.HashMap;
 import java.util.Map;
