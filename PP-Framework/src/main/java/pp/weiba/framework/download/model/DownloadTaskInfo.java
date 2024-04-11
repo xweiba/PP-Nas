@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class DownloadTaskInfo {
 
-    private String taskId;
+    private String downloadTaskId;
 
     private DownloadInfo downloadInfo;
 

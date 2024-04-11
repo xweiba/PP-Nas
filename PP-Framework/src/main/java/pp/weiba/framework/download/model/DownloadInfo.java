@@ -22,7 +22,7 @@ public class DownloadInfo {
     private String downloadUrl;
 
     // 文件大小
-    private Long size;
+    private Long fileSize;
 
     // 额外多下载地址， 支持分片的话，可以从多个地址下载实现并发下载加速
     private List<String> downloadUrls;

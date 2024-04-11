@@ -49,10 +49,9 @@ public class BaiduNetDiskDownloadParser implements IDownloadParser<String> {
         // authInfo.setCookieMap(response.getCookieMap());
         DownloadInfo downloadInfo = new DownloadInfo()
                 .setDownloadUrl(realDownloadUrl)
-                .setSize(item.getSize())
+                .setFileSize(item.getSize())
                 .setAuthInfo(authInfo);
         return downloadInfo;
     }
-
 
 }
