@@ -118,6 +118,9 @@ public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorP
         // 适配响应数据
         HttpResponse adapter = httpTypeAdapter.adapter(response);
 
+        // 补回 Cookie
+        adapter.setCookieMapNotOverlay(request.getCookieMap());
+
         log.debug(() -> String.format("HttpResponse：\n%s", JSONUtils.toJsonPrettyStr(adapter)));
 
         input.setOutput(adapter);

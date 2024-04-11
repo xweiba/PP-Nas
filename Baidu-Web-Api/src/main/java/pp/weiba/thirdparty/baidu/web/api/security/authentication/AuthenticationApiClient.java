@@ -108,7 +108,7 @@ public class AuthenticationApiClient extends AbstractApiHttpClient {
 
     public AccessToken buildAccessToken(HttpResponse httpResponse) {
         if (httpResponse.getStatusCode() == 302) {
-            String locationUrl = httpResponse.getHeaders().get("Location");
+            String locationUrl = httpResponse.getHeaderMap().get("Location");
             if (StrUtil.isNotBlank(locationUrl) && locationUrl.contains("access_token")) {
                 // [https://openapi.baidu.com/oauth/2.0/login_success#expires_in=2592000&access_token=123.967deccce2d8ddcf833a88f23f839882.YDtogn0r5gj81Shl17DK5pP5D-S7-QhShgPnZZD.UKaJFA&session_secret=&session_key=&scope=basic+netdisk]
                 log.debug("获取accessToken成功, locationUrl:{}", locationUrl);

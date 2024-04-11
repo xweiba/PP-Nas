@@ -3,8 +3,7 @@ package pp.weiba.thirdparty.baidu.web.api.netdisk;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.core.client.AbstractApiHttpClient;
-import pp.weiba.framework.core.client.IHttpClient;
+import pp.weiba.framework.core.client.*;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.AsyncTaskType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.request.TaskExecuteType;
@@ -24,6 +23,13 @@ import java.util.HashMap;
  */
 @Log4j2
 public class FileOperationApiClient extends AbstractApiHttpClient {
+
+    // dlink 大于20Mb的需要添加 User-Agent: pan.baidu.com 和 BDUSS Cookie 才能下载，小于20Mb的不能添加, 它不是真实下载地址，推荐追踪302获取到真实下载地址再推给下载器
+    public static Long LARGE_MAX_SIZE = 20971520L;
+
+    // 超过阀值
+    public static String LARGE_FILE_USER_AGENT = "pan.baidu.com";
+
 
     public FileOperationApiClient(IHttpClient httpClient) {
         super(httpClient);
@@ -67,6 +73,33 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
         }}, new TypeReference<FileDetailByFSIdResponse>() {
         });
     }
+
+    /**
+     * 获取不需要认证的Url
+     *
+     * @param dLinkUrl 接口返回的url
+     * @param fileSize 文件大小
+     * @return
+     * @author weiba
+     * @date 2024/4/11 10:49
+     */
+    public HttpResponse getRealDownloadUrl(String dLinkUrl, Long fileSize) {
+        if (StrUtil.isBlank(dLinkUrl) || fileSize == null || fileSize <= 0) {
+            throw new IllegalArgumentException("参数不能为空");
+        }
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(dLinkUrl);
+        if (fileSize >= LARGE_MAX_SIZE) {
+            httpRequest.addheader("User-Agent", LARGE_FILE_USER_AGENT);
+        }
+
+        HttpResponse response = executeResponse(httpRequest);
+        String realDownloadUrl = response.getHeaderMap().get("Location");
+        if (StrUtil.isBlank(realDownloadUrl)) {
+            throw new HttpClientApiException("无需鉴权下载地址获取失败");
+        }
+        return response;
+    }
+
 
 
     /**

@@ -1,17 +1,11 @@
 package pp.weiba.framework.core.client;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.core.convert.HttpCookieDeserializer;
 
-import java.net.HttpCookie;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,7 +18,7 @@ import java.util.Map;
 @Accessors(chain = true)
 @Getter
 @Setter
-public class HttpRequest {
+public class HttpRequest extends AuthInfo<HttpRequest> {
 
     private String url;
 
@@ -38,11 +32,6 @@ public class HttpRequest {
     private String requestBody;
 
     private String contentType;
-
-    @JSONField(name = "cookieMap", deserializeUsing = HttpCookieDeserializer.class)
-    private Map<String, HttpCookie> cookieMap;
-
-    private Map<String, String> headerMap = new HashMap<>();
 
     // 上传文件信息, 注意https上传文件不支持完整的零拷贝，它需要将数据读取到内存中进行加密。
     private UploadFile uploadFile;
@@ -63,6 +52,8 @@ public class HttpRequest {
 
     // 默认开启缓存
     private Boolean disableCache = false;
+
+    private Boolean htmlRequest = false;
 
     public static HttpRequest urlFormatBuilder(CharSequence urlTemplate) {
         return urlFormatBuilder(Method.GET, urlTemplate, null, null);
@@ -98,56 +89,10 @@ public class HttpRequest {
         return this;
     }
 
-    public HttpRequest addheader(String key, String value) {
-        this.headerMap = addMapValue(this.headerMap, key, value);
-        return this;
-    }
-
-    public HttpRequest addCookie(String key, String value) {
-        return addCookie(new HttpCookie(key, value));
-    }
-    private Boolean htmlRequest = false;
-
-    public HttpRequest addCookie(HttpCookie cookie) {
-        if (cookie != null && StrUtil.isNotBlank(cookie.getName()) && StrUtil.isNotBlank(cookie.getValue())) {
-            if (this.cookieMap == null) this.cookieMap = new HashMap<>();
-            this.cookieMap.put(cookie.getName(), cookie);
-        }
-        return this;
-    }
-
-    public HttpRequest setCookieMap(Map<String, HttpCookie> cookieMap) {
-        if (CollUtil.isNotEmpty(cookieMap)) {
-            if (this.cookieMap == null) this.cookieMap = new HashMap<>();
-            this.cookieMap.putAll(cookieMap);
-        }
-        return this;
-    }
 
     public HttpRequest requestParams(Map<String, Object> hashMap) {
         this.requestParams = hashMap;
         return this;
-    }
-
-    public HttpRequest handler(Map<String, String> headerMap) {
-        this.headerMap = initMap(this.headerMap);
-        if (headerMap != null) {
-            headerMap = ObjectUtil.clone(headerMap);
-            headerMap.putAll(this.headerMap);
-            this.headerMap = headerMap;
-        }
-        return this;
-    }
-
-    public <T> Map<String, T> addMapValue(Map<String, T> map, String key, T value) {
-        map = initMap(map);
-        map.put(key, value);
-        return map;
-    }
-
-    public <T> Map<String, T> initMap(Map<String, T> map) {
-        if (map == null) map = new HashMap<>();
-        return map;
     }
 
     public HttpRequest addBuildParams(String key, Object value) {

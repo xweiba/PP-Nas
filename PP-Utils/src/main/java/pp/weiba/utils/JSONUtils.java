@@ -66,7 +66,7 @@ public class JSONUtils {
 
     public static String toJsonPrettyStr(Object result) {
         // SerializerFeature.WriteEnumUsingToString 将Enum类型使用toString()方法，默认使用name()方法
-        return JSON.toJSONString(result, SerializerFeature.WriteEnumUsingToString, SerializerFeature.PrettyFormat, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
+        return JSON.toJSONString(result, SerializerFeature.WriteEnumUsingToString, SerializerFeature.PrettyFormat, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteDateUseDateFormat);
     }
 
     public static JSONObject toJSONObj(String text) {

@@ -27,7 +27,7 @@ public class ErrorStatusProcessor implements IProcessor<HttpResponse> {
             }
             if (statusCode != null) {
                 // 404 表示未找到资源
-                if (statusCode != 0 && statusCode != 404) {
+                if (statusCode != 0 && statusCode != 404 && statusCode != 302) {
                     // 接口异常
                     log.error("HttpResponse Body: {}", body);
                     throw new RuntimeException(ErrorStatus.getMessage(statusCode));
