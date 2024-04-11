@@ -2,7 +2,7 @@ package pp.weiba.thirdparty.baidu.web.resource.security.authentication;
 
 import cn.hutool.core.collection.CollUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.core.client.HttpResponse;
+import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.security.authentication.AbstractAuthentication;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.LoginStatusResponse;

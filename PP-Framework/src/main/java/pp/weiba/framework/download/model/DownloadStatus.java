@@ -11,10 +11,10 @@ import lombok.Getter;
 @Getter
 public enum DownloadStatus {
 
-    Active("Active"),
-    Pause("Pause"),
+    ACTIVE("Active"),
+    PAUSE("Pause"),
     STOP("Stop"),
-    Finish("Finish");
+    FINISH("Finish");
 
     private final String value;
 

@@ -1,6 +1,7 @@
 package pp.weiba.framework.download.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 下载任务配置信息
@@ -9,6 +10,7 @@ import lombok.Data;
  * @date 2024/4/11 9:48
  */
 @Data
+@Accessors(chain = true)
 public class DownloadTaskOptionInfo {
 
     // 下载文件名
@@ -33,6 +35,6 @@ public class DownloadTaskOptionInfo {
     private String timeout;
 
     /* 断点续传 */
-    private boolean isContinue;
+    private Boolean isContinue;
 
 }

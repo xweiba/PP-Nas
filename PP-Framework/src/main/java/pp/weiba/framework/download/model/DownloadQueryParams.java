@@ -15,7 +15,7 @@ import pp.weiba.framework.resource.model.SortType;
 @Accessors(chain = true)
 public class DownloadQueryParams {
 
-    private DownloadStatus status;
+    private DownloadStatus status = DownloadStatus.ACTIVE;
 
     private SortType sortType;
 

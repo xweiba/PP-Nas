@@ -2,9 +2,9 @@ package pp.weiba.thirdparty.baidu.web.api.netdisk;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.core.client.AbstractApiHttpClient;
-import pp.weiba.framework.core.client.IHttpClient;
 import pp.weiba.framework.core.convert.TypeReference;
+import pp.weiba.framework.net.client.AbstractApiHttpClient;
+import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.framework.resource.model.OrderType;
 import pp.weiba.framework.resource.model.SortType;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.BaiduNetDiskWebSearchFilePathResponse;

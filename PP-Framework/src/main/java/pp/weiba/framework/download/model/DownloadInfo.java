@@ -3,7 +3,7 @@ package pp.weiba.framework.download.model;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * 下载资源信息
@@ -15,9 +15,6 @@ import java.util.List;
 @Accessors(chain = true)
 public class DownloadInfo {
 
-    // 下载id
-    private String downloadId;
-
     // 下载地址
     private String downloadUrl;
 
@@ -25,7 +22,7 @@ public class DownloadInfo {
     private Long fileSize;
 
     // 额外多下载地址， 支持分片的话，可以从多个地址下载实现并发下载加速
-    private List<String> downloadUrls;
+    private Set<String> downloadUrls;
 
     /* 下载认证信息 */
     private DownloadAuthInfo authInfo;

@@ -3,11 +3,11 @@ package pp.weiba.thirdparty.baidu.web.resource.netdisk.download;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.core.client.HttpResponse;
 import pp.weiba.framework.download.model.DownloadAuthInfo;
 import pp.weiba.framework.download.model.DownloadInfo;
 import pp.weiba.framework.download.parser.IDownloadParser;
 import pp.weiba.framework.download.parser.UrlParseException;
+import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
 import pp.weiba.thirdparty.baidu.web.api.netdisk.response.FileDetailByFSIdResponse;
 

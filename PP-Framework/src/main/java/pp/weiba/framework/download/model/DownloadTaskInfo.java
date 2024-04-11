@@ -15,13 +15,19 @@ public class DownloadTaskInfo {
 
     private String downloadTaskId;
 
-    private DownloadInfo downloadInfo;
-
     // 任务状态
-    private DownloadStatus status = DownloadStatus.Active;
+    private DownloadStatus status = DownloadStatus.ACTIVE;
 
     // 已下载长度
-    private Long completedSize = 0L;
+    private Long completedSize;
+
+    // 任务上传速度
+    private Long uploadSpeed;
+
+    // 任务下载速度
+    private Long downloadSpeed;
+
+    private DownloadInfo downloadInfo;
 
     // 下载配置
     private DownloadTaskOptionInfo option;
