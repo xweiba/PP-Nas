@@ -6,10 +6,10 @@ import pp.weiba.framework.DigestType;
 import pp.weiba.framework.resource.IResourceRecycle;
 import pp.weiba.framework.resource.model.ResourceRecycleInfo;
 import pp.weiba.framework.resource.model.ResourceType;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.RecycleApiClient;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.RecycleDeleteResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.RecycleQueryResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.RecycleRestoreResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.RecycleApiClient;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.RecycleDeleteResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.RecycleQueryResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.RecycleRestoreResponse;
 
 import java.util.ArrayList;
 import java.util.List;

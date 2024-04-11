@@ -3,7 +3,7 @@ package pp.weiba.thirdparty.baidu.web.resource.security.authentication;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
 import pp.weiba.utils.LogUtils;
 
 @Log4j2

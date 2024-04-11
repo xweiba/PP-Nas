@@ -5,13 +5,9 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.security.authentication.AbstractAuthentication;
 import pp.weiba.framework.security.authentication.credential.ICredential;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.LoginStatusResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.TemplateVariableResponse;
-import pp.weiba.thirdparty.baidu.web.api.security.authentication.AccessToken;
-import pp.weiba.thirdparty.baidu.web.api.security.authentication.AuthenticationApiClient;
-import pp.weiba.thirdparty.baidu.web.api.security.authentication.NetDiskAuthentication;
-import pp.weiba.thirdparty.baidu.web.api.security.authentication.WebOAuthLoginAuthentication;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.BaiduAuthenticationManager;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.LoginStatusResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.TemplateVariableResponse;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.*;
 
 import java.net.HttpCookie;
 import java.util.HashMap;

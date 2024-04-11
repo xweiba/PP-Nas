@@ -7,12 +7,12 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.resource.AbstractShardUploadResource;
 import pp.weiba.framework.resource.model.ShardResource;
 import pp.weiba.framework.resource.model.UploadResourceInfo;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.UploadFileApiClient;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.request.FileChunk;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CheckFileExistResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CompleteUploadFileResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.PreCreateFileResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.UploadFileChunkResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.UploadFileApiClient;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.request.FileChunk;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.CheckFileExistResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.CompleteUploadFileResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.PreCreateFileResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.UploadFileChunkResponse;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -8,8 +8,8 @@ import pp.weiba.framework.download.model.DownloadInfo;
 import pp.weiba.framework.download.parser.IDownloadParser;
 import pp.weiba.framework.download.parser.UrlParseException;
 import pp.weiba.framework.net.client.model.HttpResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.FileDetailByFSIdResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.FileOperationApiClient;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.FileDetailByFSIdResponse;
 
 /**
  * 百度网盘下载解析器

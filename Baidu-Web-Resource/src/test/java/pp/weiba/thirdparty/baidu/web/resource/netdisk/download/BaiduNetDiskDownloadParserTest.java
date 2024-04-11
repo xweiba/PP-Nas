@@ -3,7 +3,7 @@ package pp.weiba.thirdparty.baidu.web.resource.netdisk.download;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import pp.weiba.framework.download.model.DownloadInfo;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.FileOperationApiClient;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.WebNetDiskAuthenticationTest;
 import pp.weiba.utils.LogUtils;
 

@@ -10,9 +10,9 @@ import pp.weiba.framework.resource.model.ResourceInfo;
 import pp.weiba.framework.resource.model.ResourceQueryParams;
 import pp.weiba.framework.resource.model.ResourceStatus;
 import pp.weiba.framework.resource.model.ResourceType;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.FileSearchApiClient;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.BaiduNetDiskWebSearchFilePathResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.DirChildNodeResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.FileSearchApiClient;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.BaiduNetDiskWebSearchFilePathResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.DirChildNodeResponse;
 import pp.weiba.utils.FileUtils;
 
 import java.util.ArrayList;

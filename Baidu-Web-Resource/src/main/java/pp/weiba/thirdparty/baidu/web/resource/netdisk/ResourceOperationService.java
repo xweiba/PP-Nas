@@ -11,12 +11,12 @@ import pp.weiba.framework.resource.model.ResourceInfo;
 import pp.weiba.framework.resource.model.ResourceStatus;
 import pp.weiba.framework.resource.model.ResourceType;
 import pp.weiba.framework.resource.model.UploadResourceInfo;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.FileOperationApiClient;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.request.*;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.AsyncTaskResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CreateDirResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.FileDetailByFSIdResponse;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.FileOperaAsyncTaskResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.FileOperationApiClient;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.request.*;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.AsyncTaskResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.CreateDirResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.FileDetailByFSIdResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.FileOperaAsyncTaskResponse;
 import pp.weiba.utils.FileUtils;
 import pp.weiba.utils.JSONUtils;
 

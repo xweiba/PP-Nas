@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import pp.weiba.framework.resource.IResourceSearch;
 import pp.weiba.framework.resource.model.ResourceInfo;
 import pp.weiba.framework.resource.model.ResourceQueryParams;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.FileSearchApiClient;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.FileSearchApiClient;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.WebNetDiskAuthenticationTest;
 import pp.weiba.utils.LogUtils;
 

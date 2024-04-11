@@ -3,8 +3,8 @@ package pp.weiba.thirdparty.baidu.web.resource.netdisk;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.resource.IQuotaManager;
 import pp.weiba.framework.resource.model.QuotaInfo;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.CapacityApiClient;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.CapacityResponse;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.CapacityApiClient;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.CapacityResponse;
 
 /**
  * 网盘基础服务

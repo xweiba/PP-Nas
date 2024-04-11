@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.resource.IShareOperation;
 import pp.weiba.framework.resource.model.*;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.ShareOperationApiClient;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.UrlConstants;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.ShareOperationApiClient;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.UrlConstants;
 import pp.weiba.utils.LogUtils;
 
 import java.util.ArrayList;

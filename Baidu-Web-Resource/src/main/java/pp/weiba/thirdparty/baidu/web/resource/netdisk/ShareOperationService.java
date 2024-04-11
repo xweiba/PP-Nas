@@ -6,11 +6,11 @@ import pp.weiba.framework.DigestType;
 import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.resource.IShareOperation;
 import pp.weiba.framework.resource.model.*;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.ShareOperationApiClient;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.request.BaiduNetDiskWebQueryShareFileParams;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.request.QueryShareOrderType;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.request.ShareExpireTime;
-import pp.weiba.thirdparty.baidu.web.api.netdisk.response.*;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.ShareOperationApiClient;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.request.BaiduNetDiskWebQueryShareFileParams;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.request.QueryShareOrderType;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.request.ShareExpireTime;
+import pp.weiba.thirdparty.baidu.web.client.netdisk.response.*;
 import pp.weiba.utils.FileUtils;
 
 import java.util.*;
