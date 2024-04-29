@@ -4,10 +4,14 @@ import cn.hutool.core.collection.CollUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.security.authentication.AbstractAuthentication;
+import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.LoginStatusResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.TemplateVariableResponse;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.*;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.AccessToken;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.AuthenticationApiClient;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.WebOAuthLoginAuthentication;
 
 import java.net.HttpCookie;
 import java.util.HashMap;
@@ -27,7 +31,7 @@ public class BaiduNetDiskWebAuthentication extends AbstractAuthentication<NetDis
     private final ICredential<NetDiskAuthentication> credential;
 
     public BaiduNetDiskWebAuthentication(String authenticationId, String authenticationType, AuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential) {
-        super(authenticationId, authenticationType);
+        super(authenticationId, authenticationType, credential);
         this.authenticationApiClient = authenticationApiClient;
         this.credential = credential;
     }
@@ -68,7 +72,7 @@ public class BaiduNetDiskWebAuthentication extends AbstractAuthentication<NetDis
             netDiskLogin(netDiskAuthentication);
         }
         // 存储到认证管理器， 后面请求时要使用
-        BaiduAuthenticationManager.setAuthentication(authenticationId, authenticationType, netDiskAuthentication);
+        AuthenticationManager.setAuthentication(authenticationId, authenticationType, netDiskAuthentication);
     }
 
 
@@ -93,7 +97,7 @@ public class BaiduNetDiskWebAuthentication extends AbstractAuthentication<NetDis
     @Override
     protected void doLogout() {
         authenticationApiClient.signOut(authenticationId);
-        BaiduAuthenticationManager.removeAuthentication(authenticationId, authenticationType);
+        AuthenticationManager.removeAuthentication(authenticationId, authenticationType);
     }
 
     protected void openApiLogin(NetDiskAuthentication netDiskAuthentication) {

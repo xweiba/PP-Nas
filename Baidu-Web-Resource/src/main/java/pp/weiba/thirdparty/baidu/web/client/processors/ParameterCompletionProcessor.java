@@ -6,7 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.IProcessor;
 import pp.weiba.framework.net.client.IHttpClientAuthentication;
 import pp.weiba.framework.net.client.model.HttpRequest;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.BaiduAuthenticationManager;
+import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
 
 import java.util.Map;
@@ -46,7 +46,7 @@ public class ParameterCompletionProcessor implements IProcessor<HttpRequest> {
     }
 
     private String getStoken() {
-        NetDiskAuthentication netDiskAuthentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
+        NetDiskAuthentication netDiskAuthentication = AuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
         if (netDiskAuthentication == null || !netDiskAuthentication.containsCookie("STOKEN")) {
             throw new RuntimeException("stoken 获取失败，请检查配置");
         }
@@ -54,7 +54,7 @@ public class ParameterCompletionProcessor implements IProcessor<HttpRequest> {
     }
 
     private String getBDStoken() {
-        NetDiskAuthentication netDiskAuthentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
+        NetDiskAuthentication netDiskAuthentication = AuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
         if (netDiskAuthentication == null || netDiskAuthentication.getTemplateVariable() == null || StrUtil.isBlank(netDiskAuthentication.getTemplateVariable().getBdstoken())) {
             throw new RuntimeException("认证失败，请先登录");
         }

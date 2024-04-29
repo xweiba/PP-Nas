@@ -1,6 +1,7 @@
 package pp.weiba.thirdparty.baidu.web.client;
 
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.framework.core.handler.impl.RateLimiterExecuteHandler;
 import pp.weiba.framework.net.client.AbstractHttpClientWrap;
 import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.framework.net.client.IHttpClientAuthentication;

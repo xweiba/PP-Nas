@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2024/3/7 16:15
  */
 @Log4j2
-public abstract class AbstractAuthenticationManager {
+public class AuthenticationManager {
 
     protected static final Map<String, Object> authenticationMap = new ConcurrentHashMap<>();
 

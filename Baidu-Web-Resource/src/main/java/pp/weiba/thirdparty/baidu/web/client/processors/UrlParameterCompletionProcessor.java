@@ -6,10 +6,10 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.IProcessor;
 import pp.weiba.framework.net.client.IHttpClientAuthentication;
 import pp.weiba.framework.net.client.model.HttpRequest;
+import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.utils.BaiduNetDiskWebScript;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.utils.BaiduWebApiUtils;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.AccessToken;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.BaiduAuthenticationManager;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
 
 import java.util.HashMap;
@@ -101,7 +101,7 @@ public class UrlParameterCompletionProcessor implements IProcessor<HttpRequest> 
     }
 
     private NetDiskAuthentication getNetDiskAuthentication() {
-        NetDiskAuthentication netDiskAuthentication = BaiduAuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
+        NetDiskAuthentication netDiskAuthentication = AuthenticationManager.getAuthentication(httpClientAuthentication.getAuthenticationId(), httpClientAuthentication.getAuthenticationType());
         if (netDiskAuthentication == null) {
             throw new RuntimeException("认证失败，请先登录");
         }

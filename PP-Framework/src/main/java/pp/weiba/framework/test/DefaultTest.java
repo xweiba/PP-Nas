@@ -14,8 +14,8 @@ import org.apache.logging.log4j.core.config.Configurator;
 public class DefaultTest {
 
     static {
-        Configurator.setAllLevels("", Level.INFO);
-        //        Configurator.setAllLevels("", Level.DEBUG);
+        //        Configurator.setAllLevels("", Level.INFO);
+        Configurator.setAllLevels("", Level.DEBUG);
     }
 
 }

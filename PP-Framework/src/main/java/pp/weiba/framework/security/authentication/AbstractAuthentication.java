@@ -1,6 +1,7 @@
 package pp.weiba.framework.security.authentication;
 
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.framework.security.authentication.credential.ICredential;
 
 /**
  * 认证信息抽象类
@@ -15,9 +16,12 @@ public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
 
     protected final String authenticationType;
 
-    public AbstractAuthentication(String authenticationId, String authenticationType) {
+    private final ICredential<T> credential;
+
+    public AbstractAuthentication(String authenticationId, String authenticationType, ICredential<T> credential) {
         this.authenticationId = authenticationId;
         this.authenticationType = authenticationType;
+        this.credential = credential;
     }
 
     /**
@@ -27,7 +31,9 @@ public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
      * @author weiba
      * @date 2024/3/8 11:19
      */
-    protected abstract T initAuthentication();
+    protected T initAuthentication() {
+        return credential.getCredential();
+    }
 
     /**
      * 认证信息检测，判断是否有效
@@ -47,7 +53,9 @@ public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
      * @author weiba
      * @date 2024/3/8 11:20
      */
-    protected abstract T completeAuthenticationInformation(T authentication);
+    protected T completeAuthenticationInformation(T authentication) {
+        return authentication;
+    }
 
     @Override
     public T login() {
@@ -58,7 +66,10 @@ public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
         return authentication;
     }
 
-    protected abstract void domainLogin(T authentication);
+    protected void domainLogin(T netDiskAuthentication) {
+        // 存储到认证管理器， 后面请求时要使用
+        AuthenticationManager.setAuthentication(authenticationId, authenticationType, netDiskAuthentication);
+    }
 
     @Override
     public void logout() {
