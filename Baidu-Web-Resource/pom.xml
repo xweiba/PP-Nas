@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>pp.weiba.thirdparty.baidu.web.resourceInfo</groupId>
+    <groupId>pp.weiba.thirdparty.baidu.web</groupId>
     <artifactId>baidu-web-resource</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -18,14 +18,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>pp.weiba.thirdparty.baidu.web.api</groupId>
-            <artifactId>baidu-web-api</artifactId>
+            <groupId>pp.weiba.framework</groupId>
+            <artifactId>pp-framework</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>pp.weiba.utils</groupId>
-            <artifactId>pp-utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.1.0-jre</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
