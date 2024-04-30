@@ -17,6 +17,8 @@ public class ErrorStatus {
     static {
         statusCodeMap = new HashMap<>();
         statusCodeMap.put("BadRequest", "请求错误，请检查参数是否正常");
+        statusCodeMap.put("DeviceSessionSignatureInvalid", "设备签名无效,请检查[X-Signature]请求头");
+        statusCodeMap.put("AccessTokenInvalid", "AccessToken已失效,请检查[Authorization]请求头");
     }
 
     public static String getMessage(String statusCode) {

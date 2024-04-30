@@ -25,8 +25,6 @@ public class WebAliYunNetDiskHttpClient extends AbstractHttpClientWrap {
 
     @Override
     protected void initRequestHandlers() {
-        // 全局参数补全处理
-
         // 全局参数头处理
         addRequestHandler(new RequestHandler(new AddDefaultHeaderProcessor()));
     }

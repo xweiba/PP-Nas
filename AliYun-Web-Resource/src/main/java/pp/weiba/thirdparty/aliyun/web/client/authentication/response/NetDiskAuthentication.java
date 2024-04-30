@@ -1,12 +1,11 @@
 package pp.weiba.thirdparty.aliyun.web.client.authentication.response;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import pp.weiba.framework.core.convert.HttpCookieDeserializer;
-
-import java.net.HttpCookie;
-import java.util.Map;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.AliYunUtils;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignatureInfo;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SBoxInfo;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.UserInfo;
 
 /**
  * 认证信息
@@ -20,9 +19,18 @@ public class NetDiskAuthentication {
 
     private String authorization;
 
-    // 应用的 cookie map
-    @JSONField(name = "cookieMap", deserializeUsing = HttpCookieDeserializer.class)
-    private Map<String, HttpCookie> domainCookieMap;
+    private String appId = AliYunUtils.APP_ID;
 
+    // UUID
+    private String xDeviceId;
+
+    // 签名 与xDeviceId一起更新
+    private String xSignature;
+
+    private UserInfo userInfo;
+
+    private SBoxInfo sBoxInfo;
+
+    private SignatureInfo signatureInfo;
 
 }

@@ -61,7 +61,7 @@ public class BaiduNetDiskWebAuthentication extends AbstractAuthentication<NetDis
     }
 
     @Override
-    protected void domainLogin(NetDiskAuthentication netDiskAuthentication) {
+    protected void appLogin(NetDiskAuthentication netDiskAuthentication) {
         // accessToken
         if (netDiskAuthentication.getAccessToken() == null) {
             openApiLogin(netDiskAuthentication);
@@ -71,8 +71,7 @@ public class BaiduNetDiskWebAuthentication extends AbstractAuthentication<NetDis
         if (netDiskAuthentication.getTemplateVariable() == null) {
             netDiskLogin(netDiskAuthentication);
         }
-        // 存储到认证管理器， 后面请求时要使用
-        AuthenticationManager.setAuthentication(authenticationId, authenticationType, netDiskAuthentication);
+        super.appLogin(netDiskAuthentication);
     }
 
 

@@ -60,13 +60,16 @@ public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
     @Override
     public T login() {
         T authentication = initAuthentication();
-        domainLogin(authentication);
+        appLogin(authentication);
         authentication = detectionAuthentication(authentication);
         authentication = completeAuthenticationInformation(authentication);
         return authentication;
     }
 
-    protected void domainLogin(T netDiskAuthentication) {
+    protected void appLogin(T netDiskAuthentication) {
+        if (netDiskAuthentication == null) {
+            throw new RuntimeException("认证信息为空");
+        }
         // 存储到认证管理器， 后面请求时要使用
         AuthenticationManager.setAuthentication(authenticationId, authenticationType, netDiskAuthentication);
     }

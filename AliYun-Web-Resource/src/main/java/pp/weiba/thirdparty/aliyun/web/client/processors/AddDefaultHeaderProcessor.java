@@ -34,8 +34,6 @@ public class AddDefaultHeaderProcessor implements IProcessor<HttpRequest> {
             put("Sec-Fetch-Site", "cross-site");
             put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0");
             put("X-Canary", "client=web,app=adrive,version=v4.9.0");
-            put("X-Device-Id", "KbKoHOgRcjICAXE5luhMAaPB");
-            put("X-Signature", "7d61df6714c441afbeeb8621d383abae02ca6111f2e3913a305b9fbd2b4dd5b44f470e2cd61794064f63d36390269e92e9b504e7473e968c6fb99185b30c73f000");
         }
     };
 

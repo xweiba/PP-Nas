@@ -74,7 +74,7 @@ https://api.aliyundrive.com/v2/databox/get_personal_info
 @NoArgsConstructor
 @Data
 @Accessors(chain = true)
-public class PersonalInfoResponse {
+public class PersonalInfo {
 
 
     @JSONField(name = "personal_rights_info")

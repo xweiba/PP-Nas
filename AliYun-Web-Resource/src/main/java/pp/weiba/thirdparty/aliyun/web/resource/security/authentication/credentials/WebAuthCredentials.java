@@ -25,4 +25,5 @@ public abstract class WebAuthCredentials implements ICredential<NetDiskAuthentic
     public NetDiskAuthentication getCredential() {
         return new NetDiskAuthentication().setAuthorization(this.authorization);
     }
+
 }

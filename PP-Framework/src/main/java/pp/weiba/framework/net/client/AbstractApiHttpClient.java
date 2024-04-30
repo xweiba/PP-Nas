@@ -41,6 +41,10 @@ public abstract class AbstractApiHttpClient {
         return execute(Method.POST, url, null, requestParams, typeReference);
     }
 
+    protected <T> T postExecute(String url, TypeReference<T> typeReference) {
+        return execute(Method.POST, url, null, null, typeReference);
+    }
+
     protected <T> T postExecute(String url, String requestBody, TypeReference<T> typeReference) {
         return execute(Method.POST, url, null, null, requestBody, typeReference);
     }
@@ -78,7 +82,7 @@ public abstract class AbstractApiHttpClient {
     }
 
     protected <T> T execute(Method method, String url, Map<String, Object> buildParams, Map<?, ?> urlParams, Map<String, Object> requestParams, String requestBody, TypeReference<T> typeReference) {
-        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(method, url, buildParams, urlParams).requestParams(requestParams).setRequestBody(requestBody);
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(method, url, buildParams, urlParams).requestParams(requestParams).setRequestBody(StrUtil.isBlank(requestBody) ? null : requestBody);
         return httpClient.execute(httpRequest, typeReference);
     }
 
@@ -99,6 +103,14 @@ public abstract class AbstractApiHttpClient {
         return executeResponse(Method.POST, url, null, requestParams);
     }
 
+    protected HttpResponse postStrExecuteResponse(String url, String requestParams) {
+        return executeSrtResponse(Method.POST, url, null, requestParams);
+    }
+
+    protected HttpResponse postStrExecuteResponse(String url, Object requestParams) {
+        return executeSrtResponse(Method.POST, url, null, JSONUtils.toJsonStr(requestParams));
+    }
+
     protected HttpResponse postExecuteUrlParamsResponse(String url, Map<?, ?> urlParams) {
         return executeResponse(Method.POST, url, urlParams);
     }
@@ -112,11 +124,15 @@ public abstract class AbstractApiHttpClient {
     }
 
     protected HttpResponse executeResponse(Method method, String url, Map<?, ?> urlParams, Map<String, Object> requestParams) {
-        return executeResponse(method, url, null, urlParams, requestParams, null);
+        return executeResponse(method, url, null, urlParams, requestParams, null, null);
     }
 
-    protected HttpResponse executeResponse(Method method, String url, Map<String, Object> buildParams, Map<?, ?> urlParams, Map<String, Object> requestParams, Map<String, String> headerMap) {
-        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(method, url, buildParams, urlParams).requestParams(requestParams).handler(headerMap);
+    protected HttpResponse executeSrtResponse(Method method, String url, Map<?, ?> urlParams, String requestBody) {
+        return executeResponse(method, url, null, urlParams, null, requestBody, null);
+    }
+
+    protected HttpResponse executeResponse(Method method, String url, Map<String, Object> buildParams, Map<?, ?> urlParams, Map<String, Object> requestParams, String requestBody, Map<String, String> headerMap) {
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(method, url, buildParams, urlParams).requestParams(requestParams).handler(headerMap).setRequestBody(StrUtil.isBlank(requestBody) ? null : requestBody);
         return httpClient.execute(httpRequest);
     }
 

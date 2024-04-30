@@ -10,11 +10,28 @@ public class UrlConstants {
 
     public static final String API_DOMAIN = "https://api.aliyundrive.com";
 
+    public static final String USER_API_DOMAIN = "https://user.aliyundrive.com";
+
     public static final String HEADER_REFERER = "https://www.alipan.com/";
+
+    /* 创建会话信息，将公钥设置至阿里云服务器 */
+    public static final String POST_CREATE_SESSION_URL = API_DOMAIN + "/users/v1/users/device/create_session";
+
+    /* token 刷新*/
+    public static final String POST_TOKEN_REFRESH_URL = API_DOMAIN + "/token/refresh";
 
     /* 获取个人信息 */
     public static final String POST_PERSONAL_INFO_URL = API_DOMAIN + "/v2/databox/get_personal_info";
 
+    /* 获取用户信息 */
+    public static final String POST_GET_USER_INFO_URL = USER_API_DOMAIN + "/v2/user/get";
+
+    /* 获取登录的环境信息 */
+    public static final String POST_GET_SBOX_INFO_URL = API_DOMAIN + "/v2/sbox/get";
+
     /* 新增文件夹 */
     public static final String POST_ADD_FOLDER_URL = API_DOMAIN + "/adrive/v2/file/createWithFolders";
+
+    /* 获取文件信息 */
+    public static final String POST_GET_FILE_INFO_URL = API_DOMAIN + "/v2/file/get";
 }

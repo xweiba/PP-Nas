@@ -6,7 +6,9 @@ import pp.weiba.framework.net.client.AbstractApiHttpClient;
 import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.AddFolderRequest;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.GetFileInfoRequest;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.AddFolderResponse;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.GetFileInfoResponse;
 
 /**
  * 文件管理API
@@ -34,5 +36,10 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
         });
     }
 
+
+    public GetFileInfoResponse getFileInfo(GetFileInfoRequest getFileInfoParam) {
+        return postSrtExecute(UrlConstants.POST_GET_FILE_INFO_URL, getFileInfoParam, new TypeReference<GetFileInfoResponse>() {
+        });
+    }
 
 }

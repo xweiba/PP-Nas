@@ -22,15 +22,21 @@ public class WebHttpClientAuthentication extends AbstractHttpClientAuthenticatio
 
     @Override
     public HttpRequest authentication(HttpRequest request) {
-        String authorization = getAuthorization();
-        request.addheader("Authorization", authorization);
+        NetDiskAuthentication authorization = getAuthorization();
+        if (authorization != null) {
+            request.addheader("Authorization", authorization.getAuthorization());
+            request.addheader("X-Device-Id", authorization.getXDeviceId());
+            if (StrUtil.isNotBlank(authorization.getXSignature())) {
+                request.addheader("X-Signature", authorization.getXSignature());
+            }
+        }
         return request;
     }
 
-    public String getAuthorization() {
+    public NetDiskAuthentication getAuthorization() {
         NetDiskAuthentication netDiskAuthentication = AuthenticationManager.getAuthentication(this.getAuthenticationId(), this.getAuthenticationType());
         if (netDiskAuthentication != null && StrUtil.isNotBlank(netDiskAuthentication.getAuthorization())) {
-            return netDiskAuthentication.getAuthorization();
+            return netDiskAuthentication;
         }
         return null;
     }

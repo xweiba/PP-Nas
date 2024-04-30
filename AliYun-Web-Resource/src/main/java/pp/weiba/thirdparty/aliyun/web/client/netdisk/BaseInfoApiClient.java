@@ -5,9 +5,7 @@ import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.net.client.AbstractApiHttpClient;
 import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
-import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.PersonalInfoResponse;
-
-import java.util.HashMap;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.PersonalInfo;
 
 /**
  * 基础信息
@@ -29,9 +27,10 @@ public class BaseInfoApiClient extends AbstractApiHttpClient {
      * @author weiba
      * @date 2024/4/30 9:52
      */
-    public PersonalInfoResponse getPersonalInfo() {
-        return postExecute(UrlConstants.POST_PERSONAL_INFO_URL, new HashMap<>(), new TypeReference<PersonalInfoResponse>() {
+    public PersonalInfo getPersonalInfo() {
+        return postExecute(UrlConstants.POST_PERSONAL_INFO_URL, new TypeReference<PersonalInfo>() {
         });
     }
+
 
 }
