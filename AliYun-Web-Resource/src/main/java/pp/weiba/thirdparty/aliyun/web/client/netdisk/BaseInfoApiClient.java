@@ -16,18 +16,18 @@ import java.util.HashMap;
  * @date 2024/3/7 9:50
  */
 @Log4j2
-public class CapacityApiClient extends AbstractApiHttpClient {
+public class BaseInfoApiClient extends AbstractApiHttpClient {
 
-    public CapacityApiClient(IHttpClient httpClient) {
+    public BaseInfoApiClient(IHttpClient httpClient) {
         super(httpClient);
     }
 
     /**
-     * 获取网盘容量信息
+     * 获取个人信息
      *
-     * @return 容量信息
+     * @return 个人信息
      * @author weiba
-     * @date 2024/3/7 14:57
+     * @date 2024/4/30 9:52
      */
     public PersonalInfoResponse getPersonalInfo() {
         return postExecute(UrlConstants.POST_PERSONAL_INFO_URL, new HashMap<>(), new TypeReference<PersonalInfoResponse>() {

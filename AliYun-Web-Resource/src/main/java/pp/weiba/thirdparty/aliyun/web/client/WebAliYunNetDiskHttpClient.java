@@ -5,6 +5,10 @@ import pp.weiba.framework.core.handler.impl.RateLimiterExecuteHandler;
 import pp.weiba.framework.net.client.AbstractHttpClientWrap;
 import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.framework.net.client.IHttpClientAuthentication;
+import pp.weiba.framework.net.client.model.RequestHandler;
+import pp.weiba.framework.net.client.model.ResponseHandler;
+import pp.weiba.thirdparty.aliyun.web.client.processors.AddDefaultHeaderProcessor;
+import pp.weiba.thirdparty.aliyun.web.client.processors.ErrorStatusProcessor;
 
 /**
  * 百度网盘抽象客户端
@@ -24,11 +28,13 @@ public class WebAliYunNetDiskHttpClient extends AbstractHttpClientWrap {
         // 全局参数补全处理
 
         // 全局参数头处理
+        addRequestHandler(new RequestHandler(new AddDefaultHeaderProcessor()));
     }
 
     @Override
     protected void initResponseHandlers() {
         // 接口响应错误码处理
+        addResponseHandler(new ResponseHandler(new ErrorStatusProcessor()));
     }
 
     @Override

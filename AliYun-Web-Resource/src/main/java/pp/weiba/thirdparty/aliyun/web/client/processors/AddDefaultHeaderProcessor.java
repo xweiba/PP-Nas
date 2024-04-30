@@ -31,11 +31,11 @@ public class AddDefaultHeaderProcessor implements IProcessor<HttpRequest> {
             put("Sec-ch-ua-platform", "\"Windows\"");
             put("Sec-Fetch-Dest", "empty");
             put("Sec-Fetch-Mode", "cors");
-            put("Sec-Fetch-Site", "same-origin");
+            put("Sec-Fetch-Site", "cross-site");
             put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0");
-            put("X-Canary:", "client=web,app=adrive,version=v4.9.0");
-            put("X-Device-Id:", "KbKoHOgRcjICAXE5luhMAaPB");
-            put("X-Signature", "811f5def27b0bed11905ec5bf03e9b0371fc4817908be6f08e5c55c2a439efa35270f46fe19c4fdb4f68d909b0fbe595dc54ee32b41047e0010d85776982e7fb01");
+            put("X-Canary", "client=web,app=adrive,version=v4.9.0");
+            put("X-Device-Id", "KbKoHOgRcjICAXE5luhMAaPB");
+            put("X-Signature", "7d61df6714c441afbeeb8621d383abae02ca6111f2e3913a305b9fbd2b4dd5b44f470e2cd61794064f63d36390269e92e9b504e7473e968c6fb99185b30c73f000");
         }
     };
 

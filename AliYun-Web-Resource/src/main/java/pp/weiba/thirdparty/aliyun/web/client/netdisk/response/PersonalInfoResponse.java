@@ -1,5 +1,6 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk.response;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -76,30 +77,41 @@ https://api.aliyundrive.com/v2/databox/get_personal_info
 public class PersonalInfoResponse {
 
 
+    @JSONField(name = "personal_rights_info")
     private PersonalRightsInfoDTO personalRightsInfo;
+    @JSONField(name = "personal_space_info")
     private PersonalSpaceInfoDTO personalSpaceInfo;
 
     @NoArgsConstructor
     @Data
     public static class PersonalRightsInfoDTO {
+        @JSONField(name = "spu_id")
         private String spuId;
+        @JSONField(name = "name")
         private String name;
+        @JSONField(name = "is_expires")
         private Boolean isExpires;
+        @JSONField(name = "privileges")
         private List<PrivilegesDTO> privileges;
 
         @NoArgsConstructor
         @Data
         public static class PrivilegesDTO {
+            @JSONField(name = "feature_id")
             private String featureId;
+            @JSONField(name = "feature_attr_id")
             private String featureAttrId;
-            private Integer quota;
+            @JSONField(name = "quota")
+            private Long quota;
         }
     }
 
     @NoArgsConstructor
     @Data
     public static class PersonalSpaceInfoDTO {
+        @JSONField(name = "used_size")
         private Long usedSize;
+        @JSONField(name = "total_size")
         private Long totalSize;
     }
 }

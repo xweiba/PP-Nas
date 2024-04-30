@@ -6,13 +6,13 @@ import pp.weiba.thirdparty.aliyun.web.client.security.authentication.WebNetDiskA
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class CapacityApiClientTest extends WebNetDiskAuthenticationTest {
+class BaseInfoApiClientTest extends WebNetDiskAuthenticationTest {
 
-    private final CapacityApiClient capacityApiClient = new CapacityApiClient(httpClient);
+    private final BaseInfoApiClient baseInfoApiClient = new BaseInfoApiClient(httpClient);
 
     @Test
     void getPersonalInfo() {
-        PersonalInfoResponse personalInfo = capacityApiClient.getPersonalInfo();
+        PersonalInfoResponse personalInfo = baseInfoApiClient.getPersonalInfo();
         assertNotNull(personalInfo);
     }
 }

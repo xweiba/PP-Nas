@@ -22,6 +22,7 @@ import pp.weiba.framework.net.client.IHttpTypeAdapter;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.net.client.model.UploadFileChunk;
+import pp.weiba.utils.JSONUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -135,7 +136,14 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
 
             buildCookies(request, requestBuilder);
             if (request.getHeaderMap() != null && !request.getHeaderMap().isEmpty()) {
-                request.getHeaderMap().forEach(headers::add);
+                for (Map.Entry<String, String> requestHeader : request.getHeaderMap().entrySet()) {
+                    try {
+                        headers.add(requestHeader.getKey(), requestHeader.getValue());
+                    } catch (Exception e) {
+                        log.error("请求头添加失败：{}", JSONUtils.toJsonStr(requestHeader));
+                        throw new RuntimeException("请求头添加失败");
+                    }
+                }
             }
 
             if (request.getContentType() != null) {

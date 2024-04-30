@@ -6,6 +6,7 @@ import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.net.client.model.Method;
+import pp.weiba.utils.JSONUtils;
 
 import java.util.Map;
 
@@ -40,6 +41,14 @@ public abstract class AbstractApiHttpClient {
         return execute(Method.POST, url, null, requestParams, typeReference);
     }
 
+    protected <T> T postExecute(String url, String requestBody, TypeReference<T> typeReference) {
+        return execute(Method.POST, url, null, null, requestBody, typeReference);
+    }
+
+    protected <T> T postSrtExecute(String url, Object requestBodyObj, TypeReference<T> typeReference) {
+        return execute(Method.POST, url, null, null, JSONUtils.toJsonStr(requestBodyObj), typeReference);
+    }
+
     protected <T> T postExecute(Map<String, Object> requestParams, TypeReference<T> typeReference, String url, Object... urlFormatVals) {
         return execute(Method.POST, StrUtil.format(url, urlFormatVals), null, requestParams, typeReference);
     }
@@ -61,7 +70,15 @@ public abstract class AbstractApiHttpClient {
     }
 
     protected <T> T execute(Method method, String url, Map<String, Object> buildParams, Map<?, ?> urlParams, Map<String, Object> requestParams, TypeReference<T> typeReference) {
-        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(method, url, buildParams, urlParams).requestParams(requestParams);
+        return execute(method, url, buildParams, urlParams, requestParams, null, typeReference);
+    }
+
+    protected <T> T execute(Method method, String url, Map<String, Object> buildParams, Map<?, ?> urlParams, String requestBody, TypeReference<T> typeReference) {
+        return execute(method, url, buildParams, urlParams, null, requestBody, typeReference);
+    }
+
+    protected <T> T execute(Method method, String url, Map<String, Object> buildParams, Map<?, ?> urlParams, Map<String, Object> requestParams, String requestBody, TypeReference<T> typeReference) {
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(method, url, buildParams, urlParams).requestParams(requestParams).setRequestBody(requestBody);
         return httpClient.execute(httpRequest, typeReference);
     }
 

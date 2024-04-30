@@ -18,28 +18,24 @@ public class ErrorStatusProcessor implements IProcessor<HttpResponse> {
     @Override
     public HttpResponse process(HttpResponse request) {
         String body = request.getBody();
-        if (StrUtil.isNotBlank(body) && !body.contains("<!DOCTYPE html>")) {
-            Integer statusCode = null;
-            if (body.contains("error_code")) {
-                statusCode = getStatusCode(body, "error_code");
-            } else if (body.contains("errno")) {
-                statusCode = getStatusCode(body, "errno");
+        if (StrUtil.isNotBlank(body) && !body.contains("<!DOCTYPE html>") && (request.getStatusCode() != 200 && request.getStatusCode() != 201)) {
+            String statusCode = null;
+            if (body.contains("code")) {
+                statusCode = getStatusCode(body, "code");
             }
-            if (statusCode != null) {
-                // 404 表示未找到资源
-                if (statusCode != 0 && statusCode != 404 && statusCode != 302) {
-                    // 接口异常
-                    log.error("HttpResponse Body: {}", body);
-                    throw new RuntimeException(ErrorStatus.getMessage(statusCode));
-                }
+            String message = ErrorStatus.getMessage(statusCode);
+            if (StrUtil.isNotBlank(statusCode) && StrUtil.isNotBlank(message)) {
+                // 接口异常
+                log.error("HttpResponse Body: {}", body);
+                throw new RuntimeException(message);
             }
         }
         return request;
     }
 
-    private int getStatusCode(String body, String key) {
-        String errno = body.substring(body.indexOf(key) + key.length() + 2);
-        errno = errno.substring(0, errno.indexOf(","));
-        return Integer.valueOf(errno);
+    private String getStatusCode(String body, String key) {
+        String errno = body.substring(body.indexOf(key) + key.length() + 3);
+        errno = errno.substring(0, errno.indexOf("\""));
+        return errno;
     }
 }
