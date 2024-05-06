@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import pp.weiba.framework.core.convert.HttpCookieDeserializer;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.LoginStatusResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.TemplateVariableResponse;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.AccessToken;
 
 import java.net.HttpCookie;
 import java.util.Map;

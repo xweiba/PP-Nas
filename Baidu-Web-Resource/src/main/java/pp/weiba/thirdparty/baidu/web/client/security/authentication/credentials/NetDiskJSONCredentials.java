@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentials;
+package pp.weiba.thirdparty.baidu.web.client.security.authentication.credentials;
 
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson.JSON;

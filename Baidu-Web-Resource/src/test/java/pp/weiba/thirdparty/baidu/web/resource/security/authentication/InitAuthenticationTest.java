@@ -12,11 +12,11 @@ import pp.weiba.framework.net.client.adapters.hutool.HutoolHttpClientAdapter;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.framework.test.DefaultTest;
 import pp.weiba.thirdparty.baidu.web.client.WebBaiduNetDiskHttpClient;
-import pp.weiba.thirdparty.baidu.web.client.authentication.WebHttpClientAuthentication;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.AuthenticationApiClient;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
-import pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentials.NetDiskJSONCredentials;
-import pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentials.OAuthJSONCredentials;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.WebHttpClientAuthentication;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.credentials.NetDiskJSONCredentials;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.credentials.OAuthJSONCredentials;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.AuthenticationApiClient;
 import pp.weiba.utils.JSONUtils;
 
 import java.nio.charset.Charset;

@@ -9,8 +9,8 @@ import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.utils.BaiduNetDiskWebScript;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.utils.BaiduWebApiUtils;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.AccessToken;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.AccessToken;
 
 import java.util.HashMap;
 import java.util.Map;

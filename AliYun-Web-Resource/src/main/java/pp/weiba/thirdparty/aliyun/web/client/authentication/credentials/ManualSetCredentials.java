@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.aliyun.web.resource.security.authentication.credentials;
+package pp.weiba.thirdparty.aliyun.web.client.authentication.credentials;
 
 import lombok.extern.log4j.Log4j2;
 

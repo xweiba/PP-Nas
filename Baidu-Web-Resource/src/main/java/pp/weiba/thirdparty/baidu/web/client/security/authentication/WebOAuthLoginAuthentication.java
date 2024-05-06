@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import pp.weiba.framework.core.convert.HttpCookieDeserializer;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.LoginResponse;
 
 import java.net.HttpCookie;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.client.security.authentication;
+package pp.weiba.thirdparty.baidu.web.client.security.authentication.response;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
@@ -28,7 +28,7 @@ import java.util.Date;
  */
 @Data
 @Accessors(chain = true)
-public class LonginParams {
+public class LonginParamsResponse {
 
     @JSONField(name = "bduss")
     private String bduss;

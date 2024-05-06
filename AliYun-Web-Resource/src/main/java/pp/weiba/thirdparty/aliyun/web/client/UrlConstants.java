@@ -14,6 +14,8 @@ public class UrlConstants {
 
     public static final String HEADER_REFERER = "https://www.alipan.com/";
 
+    public static final String HTML_LOGIN_URL = "https://passport.alipan.com/mini_login.htm?lang=zh_cn&appName=aliyun_drive&appEntrance=web_default&styleType=auto&bizParams=&notLoadSsoView=false&notKeepLogin=false&isMobile=false&ad__pass__q__rememberLogin=true&ad__pass__q__rememberLoginDefaultValue=true&ad__pass__q__forgotPassword=true&ad__pass__q__licenseMargin=true&ad__pass__q__loginType=normal&hidePhoneCode=true&rnd=0.";
+
     /* 创建会话信息，将公钥设置至阿里云服务器 */
     public static final String POST_CREATE_SESSION_URL = API_DOMAIN + "/users/v1/users/device/create_session";
 

@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.client.security.authentication;
+package pp.weiba.thirdparty.baidu.web.client.security.authentication.response;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class QrInfo {
+public class QrInfoResponse {
 
     private String imgurl;
 

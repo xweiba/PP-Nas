@@ -8,10 +8,10 @@ import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.LoginStatusResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.TemplateVariableResponse;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.AccessToken;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.AuthenticationApiClient;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.WebOAuthLoginAuthentication;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.AccessToken;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.AuthenticationApiClient;
 
 import java.net.HttpCookie;
 import java.util.HashMap;

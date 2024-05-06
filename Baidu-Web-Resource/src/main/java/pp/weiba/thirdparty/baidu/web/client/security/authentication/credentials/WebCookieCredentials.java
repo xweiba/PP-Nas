@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.resource.security.authentication.credentials;
+package pp.weiba.thirdparty.baidu.web.client.security.authentication.credentials;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;

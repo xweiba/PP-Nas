@@ -8,6 +8,11 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.utils.BaiduNetDiskWebScript;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.request.LoginQRParamsRequest;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.CheckLoginResponse;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.LoginResponse;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.LonginParamsResponse;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.QrInfoResponse;
 import pp.weiba.utils.JSONUtils;
 import pp.weiba.utils.QRUtils;
 
@@ -22,8 +27,8 @@ import java.util.stream.Collectors;
 class WebQRScanLonginApiClientTest {
 
 
-    QrInfo qrResponse;
-    LoginQRParams loginQRParams;
+    QrInfoResponse qrResponse;
+    LoginQRParamsRequest loginQRParamsRequest;
     CheckLoginResponse checkLoginResponse;
 
     private String decode = "https://wappass.baidu.com/wp/?qrlogin&t=1711424040&error=0&sign=e565566abb3969216b11e204e1453072&cmd=login&lp=pc&tpl=netdisk&adapter=3&logPage=pc_loginv5_1711424038%2ClogPage%3Aloginv5&qrloginfrom=pc&local=%E6%AD%A6%E6%B1%89";
@@ -38,13 +43,13 @@ class WebQRScanLonginApiClientTest {
         String callback = "tangram_guid_" + (tt + 1);
         String logPage = BaiduNetDiskWebScript.loginTraceId() + ",logPage:loginv5";
         long _ = tt + 2;
-        loginQRParams = new LoginQRParams()
+        loginQRParamsRequest = new LoginQRParamsRequest()
                 .setGid(gid)
                 .setTt(tt)
                 .setCallback(callback)
                 .setLogPage(logPage)
                 .set_(_);
-        String getQRImageHttpUrlResponseBody = HttpUtil.get(WebQRScanLonginApiClient.getQRImageHttpUrl(loginQRParams));
+        String getQRImageHttpUrlResponseBody = HttpUtil.get(WebQRScanLonginApiClient.getQRImageHttpUrl(loginQRParamsRequest));
         qrResponse = WebQRScanLonginApiClient.getQRImageUrl(getQRImageHttpUrlResponseBody);
         // 解析二维码
         decode = QRUtils.decode("https://" + qrResponse.getImgurl());
@@ -52,7 +57,8 @@ class WebQRScanLonginApiClientTest {
         log.info(decode);
         QRUtils.printQr(decode);
     }
-    LonginParams longinParams;
+
+    LonginParamsResponse longinParamsResponse;
     HttpResponse qrLogInResponse;
 
     @Test
@@ -61,8 +67,8 @@ class WebQRScanLonginApiClientTest {
         log.info("等待扫码....");
         while (true) {
             String channelId = qrResponse.getSign();
-            String gid = loginQRParams.getGid();
-            String callback = loginQRParams.getCallback();
+            String gid = loginQRParamsRequest.getGid();
+            String callback = loginQRParamsRequest.getCallback();
             HttpResponse loginCheck = HttpRequest.get(WebQRScanLonginApiClient.checkScanQRCallbackUrl(channelId, gid, callback)).timeout(600000).execute();
             String responseBodyStr = WebQRScanLonginApiClient.getResponseBodyFormat(loginCheck.body());
             if (responseBodyStr.contains("\"errno\":1")) {
@@ -83,13 +89,13 @@ class WebQRScanLonginApiClientTest {
     @Test
     void buildQRLoginParams() {
         loginCheck();
-        longinParams = WebQRScanLonginApiClient.buildQRLoginParams(checkLoginResponse.getChannelV().getV());
+        longinParamsResponse = WebQRScanLonginApiClient.buildQRLoginParams(checkLoginResponse.getChannelV().getV());
     }
 
     @Test
     void qrLogIn() {
         buildQRLoginParams();
-        String loginUrl = WebQRScanLonginApiClient.qrLogInUrl(longinParams);
+        String loginUrl = WebQRScanLonginApiClient.qrLogInUrl(longinParamsResponse);
         qrLogInResponse = HttpRequest.get(loginUrl).timeout(600000).execute();
         log.info(qrLogInResponse.body());
 

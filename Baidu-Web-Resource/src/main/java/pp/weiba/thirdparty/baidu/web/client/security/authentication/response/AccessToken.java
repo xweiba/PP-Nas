@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.client.security.authentication;
+package pp.weiba.thirdparty.baidu.web.client.security.authentication.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

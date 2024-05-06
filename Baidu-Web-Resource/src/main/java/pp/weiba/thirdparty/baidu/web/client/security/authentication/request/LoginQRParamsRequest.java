@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.client.security.authentication;
+package pp.weiba.thirdparty.baidu.web.client.security.authentication.request;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class LoginQRParams {
+public class LoginQRParamsRequest {
 
     private String lp = "pc";
 

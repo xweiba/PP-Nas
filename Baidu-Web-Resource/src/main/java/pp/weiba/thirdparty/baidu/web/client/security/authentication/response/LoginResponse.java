@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.client.security.authentication;
+package pp.weiba.thirdparty.baidu.web.client.security.authentication.response;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;

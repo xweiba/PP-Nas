@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.aliyun.web.client.authentication.response;
+package pp.weiba.thirdparty.aliyun.web.client.authentication;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -17,9 +17,9 @@ import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.UserInfo;
 @Accessors(chain = true)
 public class NetDiskAuthentication {
 
-    private String authorization;
-
     private String appId = AliYunUtils.APP_ID;
+
+    private String authorization;
 
     // UUID
     private String xDeviceId;

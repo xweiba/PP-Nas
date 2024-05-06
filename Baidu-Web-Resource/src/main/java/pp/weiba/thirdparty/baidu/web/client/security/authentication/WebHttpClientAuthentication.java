@@ -1,11 +1,10 @@
-package pp.weiba.thirdparty.baidu.web.client.authentication;
+package pp.weiba.thirdparty.baidu.web.client.security.authentication;
 
 import cn.hutool.core.collection.CollUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.net.client.AbstractHttpClientAuthentication;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
 
 import java.net.HttpCookie;
 import java.util.Map;

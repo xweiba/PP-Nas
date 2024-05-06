@@ -5,7 +5,6 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.net.client.AbstractHttpClientAuthentication;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.response.NetDiskAuthentication;
 
 /**
  * web版百度Http客户端鉴权处理器
