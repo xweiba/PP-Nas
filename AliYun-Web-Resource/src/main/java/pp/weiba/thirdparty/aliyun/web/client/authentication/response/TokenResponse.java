@@ -64,7 +64,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class RefreshTokenResponse {
+public class TokenResponse {
 
     @JSONField(name = "default_sbox_drive_id")
     private String defaultSboxDriveId;

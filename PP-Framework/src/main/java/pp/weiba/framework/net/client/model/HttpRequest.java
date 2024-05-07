@@ -53,6 +53,7 @@ public class HttpRequest extends AuthInfo<HttpRequest> {
     // 默认开启缓存
     private Boolean disableCache = false;
 
+    // 是否为html请求
     private Boolean htmlRequest = false;
 
     public static HttpRequest urlFormatBuilder(CharSequence urlTemplate) {

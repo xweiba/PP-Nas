@@ -57,6 +57,10 @@ public class QRUtils {
     }
 
     public static void printQr(String text) {
+        printQr(text, false);
+    }
+
+    public static void printQr(String text, boolean blackBackground) {
         String s = "生成二维码失败";
         int width = 5;  //随便，足够小即可，反正最后不管设置多小，控制台输出的二维码都不会变小了
         int height = 5;
@@ -66,7 +70,7 @@ public class QRUtils {
         qrParam.put(EncodeHintType.MARGIN, 1);
         try {
             BitMatrix bitMatrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, width, height, qrParam);
-            s = toAscii(bitMatrix);
+            s = toAscii(bitMatrix, blackBackground);
         } catch (WriterException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -74,15 +78,23 @@ public class QRUtils {
         System.out.println(s);
     }
 
-    public static String toAscii(BitMatrix bitMatrix) {
+    public static String toAscii(BitMatrix bitMatrix, boolean blackBackground) {
         StringBuilder sb = new StringBuilder();
         for (int rows = 0; rows < bitMatrix.getHeight(); rows++) {
             for (int cols = 0; cols < bitMatrix.getWidth(); cols++) {
                 boolean x = bitMatrix.get(rows, cols);
                 if (!x) {
-                    sb.append("\033[40m   \033[0m");
+                    if (blackBackground) {
+                        sb.append("\033[40m   \033[0m");
+                    } else {
+                        sb.append("\033[107m   \033[0m");
+                    }
                 } else {
-                    sb.append("\033[107m   \033[0m");
+                    if (blackBackground) {
+                        sb.append("\033[107m   \033[0m");
+                    } else {
+                        sb.append("\033[40m   \033[0m");
+                    }
                 }
             }
             sb.append("\n");

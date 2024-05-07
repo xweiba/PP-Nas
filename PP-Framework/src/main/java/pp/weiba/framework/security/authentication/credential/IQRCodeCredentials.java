@@ -6,7 +6,7 @@ package pp.weiba.framework.security.authentication.credential;
  * @author weiba
  * @date 2024/3/7 16:32
  */
-public interface IQRCodeCredentials extends ICredential {
+public interface IQRCodeCredentials<T> extends ICredential<T> {
 
     String getQRUrl();
 

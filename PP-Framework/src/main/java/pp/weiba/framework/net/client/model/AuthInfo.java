@@ -54,6 +54,10 @@ public abstract class AuthInfo<T> {
         return (T) this;
     }
 
+    public void delHeader(String key) {
+        this.headerMap.remove(key);
+    }
+
     public <T> Map<String, T> addMapValue(Map<String, T> map, String key, T value) {
         map = initMap(map);
         map.put(key, value);

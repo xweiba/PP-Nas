@@ -26,13 +26,13 @@ public class AddDefaultHeaderProcessor implements IProcessor<HttpRequest> {
             put("DNT", "1");
             put("Priority", "u=1, i");
             put("Referer", UrlConstants.HEADER_REFERER);
-            put("Sec-ch-ua", "\"Chromium\";v=\"122\", \"Not(A:Brand\";v=\"24\", \"Microsoft Edge\";v=\"122\"");
+            put("Sec-ch-ua", UrlConstants.SEC_CH_UA);
             put("Sec-ch-ua-mobile", "?0");
             put("Sec-ch-ua-platform", "\"Windows\"");
             put("Sec-Fetch-Dest", "empty");
             put("Sec-Fetch-Mode", "cors");
             put("Sec-Fetch-Site", "cross-site");
-            put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0");
+            put("User-Agent", UrlConstants.NAV_USER_AGENT);
             put("X-Canary", "client=web,app=adrive,version=v4.9.0");
         }
     };
@@ -40,6 +40,11 @@ public class AddDefaultHeaderProcessor implements IProcessor<HttpRequest> {
 
     @Override
     public HttpRequest process(HttpRequest request) {
-        return request.handler(HTTP_JSON_HEADER);
+        request.handler(HTTP_JSON_HEADER);
+        if (request.getHtmlRequest()) {
+            request.addheader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+            request.delHeader("Content-Type");
+        }
+        return request;
     }
 }

@@ -178,4 +178,21 @@ public class StringUtils {
         if (isBlank(bfessCookies) || isBlank(upperCaseName)) return false;
         return bfessCookies.contains("," + upperCaseName + ",");
     }
+
+    public static String substring(String str, String startStr, String endStr) {
+        if (isBlank(str) || isBlank(startStr) || isBlank(endStr)) {
+            return null;
+        }
+        int startIndex = str.indexOf(startStr);
+        if (startIndex == -1) {
+            return null;
+        }
+        str = str.substring(startIndex + startStr.length());
+
+        int endIndex = str.indexOf(endStr);
+        if (endIndex == -1) {
+            return null;
+        }
+        return str.substring(0, endIndex).trim();
+    }
 }

@@ -37,6 +37,10 @@ public abstract class AbstractApiHttpClient {
         return execute(Method.GET, url, urlParams, typeReference);
     }
 
+    protected <T> T executeParams(String url, Map<String, Object> requestParams, TypeReference<T> typeReference) {
+        return execute(Method.GET, url, null, requestParams, typeReference);
+    }
+
     protected <T> T postExecute(String url, Map<String, Object> requestParams, TypeReference<T> typeReference) {
         return execute(Method.POST, url, null, requestParams, typeReference);
     }
@@ -138,6 +142,14 @@ public abstract class AbstractApiHttpClient {
 
     protected HttpResponse executeResponse(HttpRequest httpRequest) {
         return httpClient.execute(httpRequest);
+    }
+
+    protected <T> T convert(HttpResponse httpResponse, TypeReference<T> typeReference) {
+        String body = httpResponse.getBody();
+        if (StrUtil.isNotBlank(body)) {
+            return JSONUtils.toBean(body, typeReference.getType());
+        }
+        return null;
     }
 
 }

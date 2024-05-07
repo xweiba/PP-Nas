@@ -10,7 +10,6 @@ import pp.weiba.service.download.client.model.*;
 import pp.weiba.utils.ArrayUtils;
 import pp.weiba.utils.JSONUtils;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
