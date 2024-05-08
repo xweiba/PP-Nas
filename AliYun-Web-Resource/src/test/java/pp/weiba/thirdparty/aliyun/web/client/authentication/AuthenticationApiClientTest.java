@@ -3,10 +3,13 @@ package pp.weiba.thirdparty.aliyun.web.client.authentication;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.IdUtil;
 import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.*;
 import pp.weiba.thirdparty.aliyun.web.client.security.authentication.InitAuthenticationTest;
+import pp.weiba.utils.FileUtils;
+import pp.weiba.utils.JSONUtils;
 import pp.weiba.utils.QRUtils;
 
 import java.util.Objects;
@@ -33,13 +36,17 @@ class AuthenticationApiClientTest extends InitAuthenticationTest {
 
     private final AuthenticationApiClient authenticationApiClient = new AuthenticationApiClient(httpClient);
 
+    public static final String TOKEN_SAVE_DIR_PATH = "/src/test/resources/token/";
+
     @Test
+    @Disabled
     void initLoginMain() {
         loginMainViewData = authenticationApiClient.initLoginMain();
         assertNotNull(loginMainViewData);
     }
 
     @Test
+    @Disabled
     void generateQRcode() {
         initLoginMain();
         generateQrCodeResponse = authenticationApiClient.generateQRcode(loginMainViewData);
@@ -51,6 +58,7 @@ class AuthenticationApiClientTest extends InitAuthenticationTest {
     }
 
     @Test
+    @Disabled
     void qrLoginCheck() {
         HttpRequest httpRequest = qrLoginCheckInit();
         while (true) {
@@ -79,6 +87,7 @@ class AuthenticationApiClientTest extends InitAuthenticationTest {
     }
 
     @Test
+    @Disabled
     void getCodeByInitToken() {
         qrLoginCheck();
         String bizExt = qrLonginCheckResponse.getContent().getData().getBizExt();
@@ -87,9 +96,47 @@ class AuthenticationApiClientTest extends InitAuthenticationTest {
 
 
     @Test
+    @Disabled
     void getTokenByCode() {
         getCodeByInitToken();
-        TokenResponse token = authenticationApiClient.getTokenByCode(codeByToken.getCode(), IdUtil.simpleUUID());
+        String deviceId = IdUtil.simpleUUID();
+        TokenResponse token = authenticationApiClient.getTokenByCode(codeByToken.getCode(), deviceId);
         assertNotNull(token);
+        token.setDeviceId(deviceId);
+        FileUtils.saveJsonToWorkDir(token, TOKEN_SAVE_DIR_PATH, token.getUserId());
+    }
+
+    @Test
+    @Disabled
+    void readToken() {
+        String fileName = "007589d773394dd187c395ee3c7747b0";
+        String tokenJsonStr = FileUtils.readJsonToWorkDir(TOKEN_SAVE_DIR_PATH, fileName);
+        assertNotNull(tokenJsonStr);
+        token = JSONUtils.toBean(tokenJsonStr, TokenResponse.class);
+        assertNotNull(token);
+    }
+
+
+    @Test
+    @Disabled
+    void refreshTokenByJson() {
+        readToken();
+        token = authenticationApiClient.refreshToken(token.getRefreshToken());
+        assertNotNull(token);
+    }
+
+    @Test
+    @Disabled
+    void refreshToken() {
+        token = authenticationApiClient.refreshToken("37e38246c11c44b28e9d2115955b9237");
+        assertNotNull(token);
+    }
+
+
+    @Test
+    @Disabled
+    void refreshTokenByApp() {
+        TokenResponse tokenResponse = authenticationApiClient.refreshTokenByApp("37e38246c11c44b28e9d2115955b9237");
+        assertNotNull(tokenResponse);
     }
 }

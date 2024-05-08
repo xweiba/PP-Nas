@@ -148,8 +148,18 @@ public class AuthenticationApiClient extends AbstractApiHttpClient {
         });
     }
 
-    public TokenResponse refreshToken() {
-        return postExecute(UrlConstants.POST_TOKEN_REFRESH_URL, new TypeReference<TokenResponse>() {
+    public TokenResponse refreshToken(String refreshToken) {
+        return postSrtExecute(UrlConstants.POST_TOKEN_REFRESH_URL, new HashMap<String, Object>() {{
+            put("refresh_token", refreshToken);
+        }}, new TypeReference<TokenResponse>() {
+        });
+    }
+
+    public TokenResponse refreshTokenByApp(String refreshToken) {
+        return postSrtExecute(UrlConstants.POST_APP_TOKEN_REFRESH_URL, new HashMap<String, Object>() {{
+            put("refresh_token", refreshToken);
+            put("grant_type", "refresh_token");
+        }}, new TypeReference<TokenResponse>() {
         });
     }
 

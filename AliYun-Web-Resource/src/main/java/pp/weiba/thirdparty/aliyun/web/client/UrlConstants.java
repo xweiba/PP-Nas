@@ -33,6 +33,9 @@ public class UrlConstants {
     /* token 刷新*/
     public static final String POST_TOKEN_REFRESH_URL = API_DOMAIN + "/token/refresh";
 
+
+    public static final String POST_APP_TOKEN_REFRESH_URL = AUTH_ALIPAN_DOMAIN + "v2/account/token";
+
     /* 创建会话信息，将公钥设置至阿里云服务器 */
     public static final String POST_CREATE_SESSION_URL = API_DOMAIN + "/users/v1/users/device/create_session";
 

@@ -65,8 +65,25 @@ public class JSONUtils {
     }
 
     public static String toJsonPrettyStr(Object result) {
+        if (isStrJSONValid(result)) {
+            result = JSON.parseObject((String) result);
+        }
         // SerializerFeature.WriteEnumUsingToString 将Enum类型使用toString()方法，默认使用name()方法
         return JSON.toJSONString(result, SerializerFeature.WriteEnumUsingToString, SerializerFeature.PrettyFormat, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteDateUseDateFormat);
+    }
+
+    public static boolean isStrJSONValid(Object test) {
+        if (!(test instanceof String) || StringUtils.isBlank(test.toString())) {
+            return false;
+        }
+
+        String checkStr = (String) test;
+
+        // 去除字符串前后的空白字符
+        checkStr = checkStr.trim();
+
+        // 检查字符串是否以左花括号或左方括号开头，以右花括号或右方括号结尾
+        return (checkStr.startsWith("{") && checkStr.endsWith("}")) || (checkStr.startsWith("[") && checkStr.endsWith("]"));
     }
 
     public static JSONObject toJSONObj(String text) {

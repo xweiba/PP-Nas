@@ -169,4 +169,29 @@ public class FileUtils {
         }
         return "";
     }
+
+    public static String saveJsonToWorkDir(Object obj, String relativeDirectory, String fileName) {
+        if (obj == null || StringUtils.isBlank(fileName) || StringUtils.isBlank(relativeDirectory)) {
+            return null;
+        }
+        String property = System.getProperty("user.dir");
+        String saveDirPath = property + relativeDirectory + (relativeDirectory.endsWith("/") ? "" : "/");
+        FileUtil.mkdir(saveDirPath);
+        String saveFilePath = saveDirPath + fileName + (fileName.endsWith(".json") ? "" : ".json");
+        FileUtil.writeString(JSONUtils.toJsonPrettyStr(obj), saveFilePath, StandardCharsets.UTF_8);
+        return saveFilePath;
+    }
+
+    public static String readJsonToWorkDir(String relativeDirectory, String fileName) {
+        if (StringUtils.isBlank(fileName) || StringUtils.isBlank(relativeDirectory)) {
+            return null;
+        }
+        String property = System.getProperty("user.dir");
+        String saveDirPath = property + relativeDirectory + (relativeDirectory.endsWith("/") ? "" : "/");
+        String saveFilePath = saveDirPath + fileName + (fileName.endsWith(".json") ? "" : ".json");
+        if (!FileUtil.exist(saveFilePath)) {
+            return null;
+        }
+        return FileUtil.readString(saveFilePath, StandardCharsets.UTF_8);
+    }
 }
