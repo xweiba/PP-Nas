@@ -18,6 +18,8 @@ public class UrlConstants {
 
     public static final String AUTH_ALIPAN_DOMAIN = "https://auth.alipan.com/";
 
+    public static final String SIGNIN_ALIPAN_DOMAIN = "https://member.aliyundrive.com";
+
     public static final String NAV_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0";
     public static final String SEC_CH_UA = "\"Chromium\";v=\"122\", \"Not(A:Brand\";v=\"24\", \"Microsoft Edge\";v=\"122\"";
 
@@ -47,6 +49,15 @@ public class UrlConstants {
 
     /* 获取登录的环境信息 */
     public static final String POST_GET_SBOX_INFO_URL = API_DOMAIN + "/v2/sbox/get";
+
+    /* 获取签到信息 */
+    public static final String POST_SIGN_IN_STATUS_INFO_URL = SIGNIN_ALIPAN_DOMAIN + "/v1/activity/sign_in_goods";
+
+    /* 获取签到信息 */
+    public static final String POST_SIGN_IN_INFO_URL = "https://member.aliyundrive.com/v2/activity/sign_in_info";
+
+    /* 签到*/
+    public static final String POST_SIGN_IN_REWARD_URL = SIGNIN_ALIPAN_DOMAIN + "/v1/activity/sign_in_reward";
 
     /* 新增文件夹 */
     public static final String POST_ADD_FOLDER_URL = API_DOMAIN + "/adrive/v2/file/createWithFolders";

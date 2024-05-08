@@ -1,7 +1,7 @@
 package pp.weiba.thirdparty.aliyun.web.client.authentication.credentials;
 
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.NetDiskAuthentication;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenResponse;
 import pp.weiba.utils.JSONUtils;
 
@@ -16,7 +16,8 @@ public class JsonStrSetCredentials extends WebAuthCredentials {
 
     private final String jsonStr;
 
-    public JsonStrSetCredentials(String jsonStr) {
+    public JsonStrSetCredentials(AuthenticationApiClient authenticationApiClient, String jsonStr) {
+        super(authenticationApiClient);
         if (!JSONUtils.isStrJSONValid(jsonStr)) {
             throw new RuntimeException("请传入json字符串");
         }
@@ -24,9 +25,7 @@ public class JsonStrSetCredentials extends WebAuthCredentials {
     }
 
     @Override
-    public void buildCredential() {
-        super.buildCredential();
-        tokenResponse = JSONUtils.toBean(jsonStr, TokenResponse.class);
-        this.credentialData = new NetDiskAuthentication().setToken(getTokenResponse());
+    TokenResponse buildToken() {
+        return JSONUtils.toBean(jsonStr, TokenResponse.class);
     }
 }

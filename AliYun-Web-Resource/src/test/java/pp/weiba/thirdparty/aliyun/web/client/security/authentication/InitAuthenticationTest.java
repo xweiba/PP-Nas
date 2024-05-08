@@ -12,7 +12,7 @@ import pp.weiba.thirdparty.aliyun.web.client.WebAliYunNetDiskHttpClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.WebHttpClientAuthentication;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.credentials.JsonStrSetCredentials;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.credentials.JsonFileSetCredentials;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenResponse;
 import pp.weiba.thirdparty.aliyun.web.resource.security.authentication.AliYunNetDiskWebAuthentication;
 import pp.weiba.utils.FileUtils;
@@ -30,6 +30,8 @@ public class InitAuthenticationTest extends DefaultTest {
 
     public static IHttpClient httpClient;
 
+    public static AuthenticationApiClient authenticationApiClient;
+
     public static boolean isHutoolHttpClient = false;
 
     static void initAhcClientBaiduWebAuthentication() {
@@ -42,9 +44,10 @@ public class InitAuthenticationTest extends DefaultTest {
     }
 
     protected static @NotNull AliYunNetDiskWebAuthentication buildAliYunNetDiskWebAuthentication() {
+        buildAuthenticationApiClient();
         // 用户认证信息获取接口
-        ICredential<NetDiskAuthentication> netDiskAuthenticationCredential = new JsonStrSetCredentials(getTokenJsonString());
-        return new AliYunNetDiskWebAuthentication(businessId, businessType, buildAuthenticationApiClient(), netDiskAuthenticationCredential);
+        ICredential<NetDiskAuthentication> netDiskAuthenticationCredential = new JsonFileSetCredentials(authenticationApiClient, TOKEN_SAVE_DIR_PATH, tokenJsonFileName());
+        return new AliYunNetDiskWebAuthentication(businessId, businessType, authenticationApiClient, netDiskAuthenticationCredential);
     }
 
     protected static String getTokenJsonString() {
@@ -74,9 +77,9 @@ public class InitAuthenticationTest extends DefaultTest {
     }
 
 
-    protected static AuthenticationApiClient buildAuthenticationApiClient() {
+    protected static void buildAuthenticationApiClient() {
         initAuthentication();
-        return new AuthenticationApiClient(httpClient);
+        authenticationApiClient = new AuthenticationApiClient(httpClient);
     }
 
     protected static void initAuthentication() {

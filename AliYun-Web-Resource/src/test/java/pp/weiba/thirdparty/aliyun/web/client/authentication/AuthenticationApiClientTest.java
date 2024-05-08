@@ -33,8 +33,6 @@ class AuthenticationApiClientTest extends InitAuthenticationTest {
 
     private static TokenResponse token;
 
-    private final AuthenticationApiClient authenticationApiClient = new AuthenticationApiClient(httpClient);
-
     @Test
     @Disabled
     void initLoginMain() {
