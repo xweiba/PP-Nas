@@ -29,4 +29,6 @@ public class SignatureInfo {
 
     private Integer nonce;
 
+    private String xSignature;
+
 }

@@ -12,8 +12,10 @@ import pp.weiba.thirdparty.aliyun.web.client.WebAliYunNetDiskHttpClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.WebHttpClientAuthentication;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.credentials.ManualSetCredentials;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.credentials.JsonStrSetCredentials;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenResponse;
 import pp.weiba.thirdparty.aliyun.web.resource.security.authentication.AliYunNetDiskWebAuthentication;
+import pp.weiba.utils.FileUtils;
 
 @Log4j2
 public class InitAuthenticationTest extends DefaultTest {
@@ -22,8 +24,7 @@ public class InitAuthenticationTest extends DefaultTest {
     protected static String businessId = "1";
     protected static String businessType = "user";
 
-    //
-    protected static String authorization = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMDc1ODlkNzczMzk0ZGQxODdjMzk1ZWUzYzc3NDdiMCIsImN1c3RvbUpzb24iOiJ7XCJjbGllbnRJZFwiOlwiMjVkelgzdmJZcWt0Vnh5WFwiLFwiZG9tYWluSWRcIjpcImJqMjlcIixcInNjb3BlXCI6W1wiRFJJVkUuQUxMXCIsXCJTSEFSRS5BTExcIixcIkZJTEUuQUxMXCIsXCJVU0VSLkFMTFwiLFwiVklFVy5BTExcIixcIlNUT1JBR0UuQUxMXCIsXCJTVE9SQUdFRklMRS5MSVNUXCIsXCJCQVRDSFwiLFwiT0FVVEguQUxMXCIsXCJJTUFHRS5BTExcIixcIklOVklURS5BTExcIixcIkFDQ09VTlQuQUxMXCIsXCJTWU5DTUFQUElORy5MSVNUXCIsXCJTWU5DTUFQUElORy5ERUxFVEVcIl0sXCJyb2xlXCI6XCJ1c2VyXCIsXCJyZWZcIjpcImh0dHBzOi8vd3d3LmFsaXBhbi5jb20vXCIsXCJkZXZpY2VfaWRcIjpcIjk5MmQ0MDY0MWY1MzRmZmNiNzYwMzIyNWVhYjBiODM1XCJ9IiwiZXhwIjoxNzE0NDc2NTQ0LCJpYXQiOjE3MTQ0NjkyODR9.NXG8jn_2Tt4mveEK8zHJ7I5CpAx6uemr6htelhhZTBgIMQLqUTO74vpTo9L42ilroZx8C86a5hx8Dg-G82yiA-cKr_RaW0vHt-LSd2lXbZZLo3JpHmUa2KjrcvkYDObGpx1WntpwatzDOR-IEiTuqH9HrakKvo8BEH0MT_X356M";
+    public static final String TOKEN_SAVE_DIR_PATH = "/src/test/resources/token/";
 
     public static AliYunNetDiskWebAuthentication baiduWebAuthentication;
 
@@ -42,8 +43,20 @@ public class InitAuthenticationTest extends DefaultTest {
 
     protected static @NotNull AliYunNetDiskWebAuthentication buildAliYunNetDiskWebAuthentication() {
         // 用户认证信息获取接口
-        ICredential<NetDiskAuthentication> netDiskAuthenticationCredential = new ManualSetCredentials(authorization);
+        ICredential<NetDiskAuthentication> netDiskAuthenticationCredential = new JsonStrSetCredentials(getTokenJsonString());
         return new AliYunNetDiskWebAuthentication(businessId, businessType, buildAuthenticationApiClient(), netDiskAuthenticationCredential);
+    }
+
+    protected static String getTokenJsonString() {
+        return FileUtils.readJsonToWorkDir(TOKEN_SAVE_DIR_PATH, tokenJsonFileName());
+    }
+
+    protected static void saveTokenToJsonString(TokenResponse token) {
+        FileUtils.saveJsonToWorkDir(token, TOKEN_SAVE_DIR_PATH, tokenJsonFileName());
+    }
+
+    protected static String tokenJsonFileName() {
+        return businessType + "_" + businessId;
     }
 
 

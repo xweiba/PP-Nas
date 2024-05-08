@@ -48,7 +48,7 @@ public class AliYunUtils {
         BigInteger publicKeyInt = Sign.publicKeyFromPrivate(privateKeyInt);
         String privateKey = privateKeyInt.toString(16);
         String publicKey = publicKeyInt.toString(16);
-        return new SignatureInfo(privateKey, publicKey, appId, userId, deviceId, 0);
+        return new SignatureInfo(privateKey, publicKey, appId, userId, deviceId, 0, null);
     }
 
 }

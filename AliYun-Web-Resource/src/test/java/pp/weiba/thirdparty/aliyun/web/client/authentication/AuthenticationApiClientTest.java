@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.*;
 import pp.weiba.thirdparty.aliyun.web.client.security.authentication.InitAuthenticationTest;
-import pp.weiba.utils.FileUtils;
 import pp.weiba.utils.JSONUtils;
 import pp.weiba.utils.QRUtils;
 
@@ -35,8 +34,6 @@ class AuthenticationApiClientTest extends InitAuthenticationTest {
     private static TokenResponse token;
 
     private final AuthenticationApiClient authenticationApiClient = new AuthenticationApiClient(httpClient);
-
-    public static final String TOKEN_SAVE_DIR_PATH = "/src/test/resources/token/";
 
     @Test
     @Disabled
@@ -103,14 +100,13 @@ class AuthenticationApiClientTest extends InitAuthenticationTest {
         TokenResponse token = authenticationApiClient.getTokenByCode(codeByToken.getCode(), deviceId);
         assertNotNull(token);
         token.setDeviceId(deviceId);
-        FileUtils.saveJsonToWorkDir(token, TOKEN_SAVE_DIR_PATH, token.getUserId());
+        saveTokenToJsonString(token);
     }
 
     @Test
     @Disabled
     void readToken() {
-        String fileName = "007589d773394dd187c395ee3c7747b0";
-        String tokenJsonStr = FileUtils.readJsonToWorkDir(TOKEN_SAVE_DIR_PATH, fileName);
+        String tokenJsonStr = getTokenJsonString();
         assertNotNull(tokenJsonStr);
         token = JSONUtils.toBean(tokenJsonStr, TokenResponse.class);
         assertNotNull(token);
@@ -123,13 +119,14 @@ class AuthenticationApiClientTest extends InitAuthenticationTest {
         readToken();
         token = authenticationApiClient.refreshToken(token.getRefreshToken());
         assertNotNull(token);
+        saveTokenToJsonString(token);
     }
 
     @Test
     @Disabled
     void refreshToken() {
-        token = authenticationApiClient.refreshToken("37e38246c11c44b28e9d2115955b9237");
-        assertNotNull(token);
+        TokenResponse tokenResponse = authenticationApiClient.refreshToken("37e38246c11c44b28e9d2115955b9237");
+        assertNotNull(tokenResponse);
     }
 
 

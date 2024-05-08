@@ -5,6 +5,8 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.net.client.AbstractHttpClientAuthentication;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenResponse;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignatureInfo;
 
 /**
  * web版百度Http客户端鉴权处理器
@@ -23,18 +25,25 @@ public class WebHttpClientAuthentication extends AbstractHttpClientAuthenticatio
     public HttpRequest authentication(HttpRequest request) {
         NetDiskAuthentication authorization = getAuthorization();
         if (authorization != null) {
-            request.addheader("Authorization", authorization.getAuthorization());
-            request.addheader("X-Device-Id", authorization.getXDeviceId());
-            if (StrUtil.isNotBlank(authorization.getXSignature())) {
-                request.addheader("X-Signature", authorization.getXSignature());
+            TokenResponse tokenResponse = authorization.getToken();
+            SignatureInfo signatureInfo = authorization.getSignatureInfo();
+            if (tokenResponse != null) {
+                request.addheader("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken());
+                request.addheader("X-Device-Id", tokenResponse.getDeviceId());
             }
+            if (signatureInfo != null) {
+                if (StrUtil.isNotBlank(signatureInfo.getXSignature())) {
+                    request.addheader("X-Signature", signatureInfo.getXSignature());
+                }
+            }
+
         }
         return request;
     }
 
     public NetDiskAuthentication getAuthorization() {
         NetDiskAuthentication netDiskAuthentication = AuthenticationManager.getAuthentication(this.getAuthenticationId(), this.getAuthenticationType());
-        if (netDiskAuthentication != null && StrUtil.isNotBlank(netDiskAuthentication.getAuthorization())) {
+        if (netDiskAuthentication != null && StrUtil.isNotBlank(netDiskAuthentication.getToken().getAccessToken())) {
             return netDiskAuthentication;
         }
         return null;
