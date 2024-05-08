@@ -148,6 +148,14 @@ public class AuthenticationApiClient extends AbstractApiHttpClient {
         });
     }
 
+    /**
+     * web接口， token 刷新，两小时过期
+     *
+     * @param refreshToken refreshToken
+     * @return 刷新后的token， refreshToken 不变
+     * @author weiba
+     * @date 2024/5/8 13:49
+     */
     public TokenResponse refreshToken(String refreshToken) {
         return postSrtExecute(UrlConstants.POST_TOKEN_REFRESH_URL, new HashMap<String, Object>() {{
             put("refresh_token", refreshToken);
@@ -155,6 +163,14 @@ public class AuthenticationApiClient extends AbstractApiHttpClient {
         });
     }
 
+    /**
+     * App 端接口
+     *
+     * @param refreshToken refreshToken
+     * @return 刷新后的token， refreshToken会改变
+     * @author weiba
+     * @date 2024/5/8 13:50
+     */
     public TokenResponse refreshTokenByApp(String refreshToken) {
         return postSrtExecute(UrlConstants.POST_APP_TOKEN_REFRESH_URL, new HashMap<String, Object>() {{
             put("refresh_token", refreshToken);
