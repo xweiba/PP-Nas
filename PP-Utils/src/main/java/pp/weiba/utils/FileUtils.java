@@ -170,7 +170,7 @@ public class FileUtils {
         return "";
     }
 
-    public static String saveJsonToWorkDir(Object obj, String relativeDirectory, String fileName) {
+    public static String writeJsonToWorkDir(Object obj, String relativeDirectory, String fileName) {
         if (obj == null || StringUtils.isBlank(fileName) || StringUtils.isBlank(relativeDirectory)) {
             return null;
         }

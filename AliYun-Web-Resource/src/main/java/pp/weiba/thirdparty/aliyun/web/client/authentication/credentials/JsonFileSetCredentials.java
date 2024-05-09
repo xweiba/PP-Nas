@@ -26,6 +26,6 @@ public class JsonFileSetCredentials extends JsonStrSetCredentials {
     public void buildCredential() {
         super.buildCredential();
         // 会刷新 写回文件
-        FileUtils.saveJsonToWorkDir(tokenResponse, relativeDirectory, fileName);
+        FileUtils.writeJsonToWorkDir(tokenResponse, relativeDirectory, fileName);
     }
 }
