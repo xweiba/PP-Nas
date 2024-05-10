@@ -8,6 +8,8 @@ package pp.weiba.thirdparty.aliyun.web.client;
  */
 public class UrlConstants {
 
+    public static final String DEVICE_NAME = "Edge浏览器_Web";
+
     public static final String API_DOMAIN = "https://api.aliyundrive.com";
 
     public static final String USER_API_DOMAIN = "https://user.aliyundrive.com";
@@ -43,6 +45,15 @@ public class UrlConstants {
 
     /* 刷新 X-Signature */
     public static final String POST_NEW_SESSION_URL = API_DOMAIN + "/users/v1/users/device/renew_session";
+
+    /* 获取设备列表，最多十台 */
+    public static final String POST_DEVICE_LIST_URL = API_DOMAIN + "/users/v2/users/device_list";
+
+    /* 获取设备登出时的token */
+    public static final String POST_GET_IV_URL = API_DOMAIN + "/v2/user/get_iv_url";
+
+    /* 指定设备退出登录 */
+    public static final String POST_DEVICE_OFFLINE_URL = API_DOMAIN + "/users/v1/users/device_offline";
 
     /* 获取个人信息 */
     public static final String POST_PERSONAL_INFO_URL = API_DOMAIN + "/v2/databox/get_personal_info";

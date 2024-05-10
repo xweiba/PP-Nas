@@ -2,7 +2,6 @@ package pp.weiba.thirdparty.aliyun.web.client.authentication;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.log4j.Log4j2;
@@ -13,6 +12,8 @@ import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.net.client.model.Method;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.request.DeviceOfflineRequest;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.request.IVRequest;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.CreateSessionRequest;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SBoxInfo;
@@ -147,6 +148,52 @@ public class AuthenticationApiClient extends AbstractApiHttpClient {
             put("loginType", "unnormal");
         }}, new TypeReference<TokenResponse>() {
         });
+    }
+
+    /**
+     * 获取设备列表，最多十台
+     *
+     * @return
+     * @author weiba
+     * @date 2024/5/10 11:33
+     */
+    public DeviceListResponse getDeviceList() {
+        return postSrtExecute(UrlConstants.POST_DEVICE_LIST_URL, new HashMap<>(), new TypeReference<DeviceListResponse>() {
+        });
+    }
+
+    /**
+     * 指定设备退出登录
+     *
+     * @return
+     * @author weiba
+     * @date 2024/5/10 11:33
+     */
+    public IVResponse deviceOfflineIV(IVRequest params) {
+        return postSrtExecute(UrlConstants.POST_GET_IV_URL, params, new TypeReference<IVResponse>() {
+        });
+    }
+
+    /**
+     * 指定设备退出登录
+     *
+     * @return
+     * @author weiba
+     * @date 2024/5/10 11:33
+     */
+    public boolean deviceOffline(String deviceId) {
+        // "url": "https://passport.aliyundrive.com/iv/remote/h5/request.htm?havana_iv_token=CN-SPLIT-AQigvcWXrUAQ2AQiDWhhdmFuYV9hcHBfaXYyAQE42qfEhPYxQAFKEAUgkf75E2qc7C5WIvaXQ9KEybjAg7oSjsvgIPwXeDwF-zJjIw"
+        IVResponse ivResponse = deviceOfflineIV(new IVRequest("device_offline", "message"));
+
+        String url = ivResponse.getUrl();
+        // 打开该url 会302，点击获取短信验证码，最后会302到下面
+        // https://passport.aliyundrive.com/iv/message_callback.htm?havana_iv_token=CN-SPLIT-AQigvcWXrUAQ2AQiDWhhdmFuYV9hcHBfaXYyAQE48pLfh_YxQAFKEC3Y0QQS6QkGCyFicR826zvbtcbpEw_S-1j3w0DhW8de07x3Eg&appName=
+        // havana_iv_token 才是的
+        throw new RuntimeException("还未开发完毕");
+
+        /*String token = url.substring(url.indexOf("havana_iv_token=") + "havana_iv_token=".length());
+        HttpResponse httpResponse = postStrExecuteResponse(UrlConstants.POST_DEVICE_OFFLINE_URL, new DeviceOfflineRequest(deviceId, token));
+        return httpResponse.getStatusCode() == 200;*/
     }
 
     /**

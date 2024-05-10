@@ -6,13 +6,11 @@ import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Sign;
 
-import javax.xml.bind.DatatypeConverter;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.Base64;
 
 /**
  * 阿里云工具类
@@ -34,15 +32,21 @@ public class AliYunUtils {
      * @date 2024/4/30 15:49
      */
     public static String buildXSignatureV1(SignatureInfo signatureKeyInfo) {
-        Integer nonce = signatureKeyInfo.getNonce();
         String privateKey = signatureKeyInfo.getPrivateKey();
         String publicKey = signatureKeyInfo.getPublicKey();
-        byte[] dataBytes = (signatureKeyInfo.getAppId() + ":" + signatureKeyInfo.getXDeviceId() + ":" + signatureKeyInfo.getUserId() + ":" + nonce).getBytes(StandardCharsets.UTF_8);
-        byte[] dataHash = Hash.sha256(dataBytes);
+        byte[] dataHash = getSignatureToSha256Byte(signatureKeyInfo);
         ECKeyPair keyPair = new ECKeyPair(new BigInteger(privateKey, 16), new BigInteger(publicKey, 16));
         Sign.SignatureData signatureInfo = Sign.signMessage(dataHash, keyPair, false);
         // 01 为recovered d = (f.x === y.r ? 0 : 2) | Number(f.y & s)， 还未解决，待解决
         return Hex.toHexString(signatureInfo.getR()) + Hex.toHexString(signatureInfo.getS()) + "01";
+    }
+
+    public static byte[] getSignatureToSha256Byte(SignatureInfo signatureKeyInfo) {
+        // 5dde4e1bdf9e4966b387ba58f4b3fdc3:M0O2Hp0DTDMCAToTJrnFgvAc:007589d773394dd187c395ee3c7747b0:1
+        String signatureString = signatureKeyInfo.getAppId() + ":" + signatureKeyInfo.getXDeviceId() + ":" + signatureKeyInfo.getUserId() + ":" + signatureKeyInfo.getNonce();
+        byte[] dataBytes = signatureString.getBytes(StandardCharsets.UTF_8);
+        byte[] dataHash = Hash.sha256(dataBytes);
+        return dataHash;
     }
 
     public static String buildXSignature(SignatureInfo signatureKeyInfo) {
@@ -143,6 +147,19 @@ public class AliYunUtils {
             }
             hexString.append(hex);
         }
+        return hexString.toString();
+    }
+
+    public static String intBytesToHex(int[] intByteArray ) {
+        StringBuilder hexString = new StringBuilder();
+
+        for (int b : intByteArray) {
+            if (b < 10) {
+                hexString.append("0");
+            }
+            hexString.append(Integer.toHexString(b));
+        }
+
         return hexString.toString();
     }
 

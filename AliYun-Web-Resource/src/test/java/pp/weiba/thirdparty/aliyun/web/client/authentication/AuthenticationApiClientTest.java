@@ -6,8 +6,10 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pp.weiba.framework.net.client.model.HttpRequest;
+import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.*;
 import pp.weiba.thirdparty.aliyun.web.client.security.authentication.InitAuthenticationTest;
+import pp.weiba.thirdparty.aliyun.web.client.security.authentication.WebNetDiskAuthenticationTest;
 import pp.weiba.utils.JSONUtils;
 import pp.weiba.utils.QRUtils;
 
@@ -16,11 +18,10 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Log4j2
-class AuthenticationApiClientTest extends InitAuthenticationTest {
+class AuthenticationApiClientTest extends WebNetDiskAuthenticationTest {
 
     static {
         isHutoolHttpClient = true;
-        initAuthentication();
     }
 
     private static LoginMainResponse loginMainViewData;
@@ -32,6 +33,8 @@ class AuthenticationApiClientTest extends InitAuthenticationTest {
     private static CodeByInitTokenResponse codeByToken;
 
     private static TokenResponse token;
+
+    private static DeviceListResponse devices;
 
     @Test
     @Disabled
@@ -133,5 +136,23 @@ class AuthenticationApiClientTest extends InitAuthenticationTest {
     void refreshTokenByApp() {
         TokenResponse tokenResponse = authenticationApiClient.refreshTokenByApp("37e38246c11c44b28e9d2115955b9237");
         assertNotNull(tokenResponse);
+    }
+
+    @Test
+    void getDeviceList() {
+        devices = authenticationApiClient.getDeviceList();
+        assertNotNull(devices);
+    }
+
+    @Test
+    @Disabled("deviceOffline 未开发完")
+    void deviceOffline() {
+        getDeviceList();
+        readToken();
+        for (DeviceListResponse.ResultResponse.DevicesResponse device : devices.getResult().getDevices()) {
+            if (UrlConstants.DEVICE_NAME.equals(device.getDeviceName()) && !device.getDeviceId().equals(token.getDeviceId())) {
+                authenticationApiClient.deviceOffline(devices.getResult().getDevices().get(0).getDeviceId());
+            }
+        }
     }
 }

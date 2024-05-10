@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
 
 /**
  * 原始
@@ -29,7 +30,7 @@ public class CreateSessionRequest {
     }
 
     @JSONField(name = "deviceName")
-    private String deviceName = "Edge浏览器_Web";
+    private String deviceName = UrlConstants.DEVICE_NAME;
     @JSONField(name = "modelName")
     private String modelName = "Windows网页版";
     @JSONField(name = "pubKey")
