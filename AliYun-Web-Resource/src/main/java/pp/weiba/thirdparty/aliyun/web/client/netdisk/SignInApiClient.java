@@ -32,7 +32,7 @@ public class SignInApiClient extends AbstractApiHttpClient {
      * @author weiba
      * @date 2024/5/8 16:36
      */
-    public SignInStatusResponse getSignInStatusInfo() {
+    public SignInStatusResponse todaySignIn() {
         return postExecute(UrlConstants.POST_SIGN_IN_INFO_URL, new TypeReference<SignInStatusResponse>() {
         });
     }
@@ -46,7 +46,7 @@ public class SignInApiClient extends AbstractApiHttpClient {
      * @author weiba
      * @date 2024/5/8 16:45
      */
-    public SignInInfoResponse getSignInInfo() {
+    public SignInInfoResponse getTodaySignInStatusInfo() {
         // 必须传个对象，否则会报错
         return postSrtExecute(UrlConstants.POST_SIGN_IN_STATUS_INFO_URL, new HashMap<>(), new TypeReference<SignInInfoResponse>() {
         });
@@ -78,6 +78,23 @@ public class SignInApiClient extends AbstractApiHttpClient {
         }}, new TypeReference<SignInRewardResponse>() {
         });
     }
+
+    /**
+     * 完成今日签到及领取奖励
+     *
+     * @return
+     * @author weiba
+     * @date 2024/5/10 15:58
+     */
+    public Boolean todaySignInAndReward() {
+        SignInStatusResponse signInStatusResponse = todaySignIn();
+        if (!signInStatusResponse.getResult().getIsReward()) {
+            SignInInfoResponse todaySignInStatusInfo = getTodaySignInStatusInfo();
+            signInReward(todaySignInStatusInfo.getResult().getSignInDay());
+        }
+        return Boolean.TRUE;
+    }
+
 
     public boolean signInRewardAll() {
         SignInInfoListResponse signInInfos = getSignInInfoList();

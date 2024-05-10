@@ -1,6 +1,5 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SignInInfoListResponse;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SignInInfoResponse;
@@ -12,21 +11,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SignInApiClientTest extends WebNetDiskAuthenticationTest {
 
-    public static final SignInApiClient signInApiClient = new SignInApiClient(httpClient);
-
     private SignInInfoResponse signInInfo;
 
     private SignInInfoListResponse signInInfos;
 
     @Test
     void getSignInStatusInfo() {
-        SignInStatusResponse signInStatusInfo = signInApiClient.getSignInStatusInfo();
+        SignInStatusResponse signInStatusInfo = signInApiClient.todaySignIn();
         assertNotNull(signInStatusInfo);
     }
 
     @Test
     void getSignInInfo() {
-        signInInfo = signInApiClient.getSignInInfo();
+        signInInfo = signInApiClient.getTodaySignInStatusInfo();
         assertNotNull(signInInfo);
     }
 

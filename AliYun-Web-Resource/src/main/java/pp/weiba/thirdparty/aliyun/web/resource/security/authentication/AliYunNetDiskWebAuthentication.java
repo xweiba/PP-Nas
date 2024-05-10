@@ -1,9 +1,7 @@
 package pp.weiba.thirdparty.aliyun.web.resource.security.authentication;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.framework.security.authentication.AbstractAuthentication;
 import pp.weiba.framework.security.authentication.AbstractScheduledRefreshAuthentication;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.framework.security.authentication.credential.ICredential;
@@ -14,6 +12,8 @@ import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignInApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignatureInfo;
 import pp.weiba.utils.ScheduledRunnable;
 import pp.weiba.utils.ScheduledUtils;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 百度网盘认证信息统一处理
@@ -27,11 +27,14 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
 
     private final AuthenticationApiClient authenticationApiClient;
 
+    public final SignInApiClient signInApiClient;
+
     private String scheduledRefreshSignatureId;
 
-    public AliYunNetDiskWebAuthentication(String authenticationId, String authenticationType, AuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential) {
+    public AliYunNetDiskWebAuthentication(String authenticationId, String authenticationType, AuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential, SignInApiClient signInApiClient) {
         super(authenticationId, authenticationType, credential);
         this.authenticationApiClient = authenticationApiClient;
+        this.signInApiClient = signInApiClient;
     }
 
     @Override
@@ -60,11 +63,28 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
         /* 待 refreshSignature 解决后在放出*/
         // createSession();
 
-        // 添加定时随机刷新
+        // 添加签名定时随机刷新
         scheduledRefreshSignature();
+
+        // 初始化签到
+        initSignIn();
 
         super.completeAuthenticationInformation();
     }
+
+    private void initSignIn() {
+        // 每次登录执行一次领取所有签到奖励
+        signInApiClient.signInRewardAll();
+        // 定时刷新， 每天自动签到
+        scheduledRefreshSignIn();
+    }
+
+    private void refreshSignatureRun() {
+        // 签到及领取奖励
+        signInApiClient.todaySignInAndReward();
+    }
+
+
 
     private void createSession() {
         String deviceId = authentication.getToken().getDeviceId();
@@ -80,6 +100,7 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
         authenticationApiClient.createSession(signatureInfo.getPublicKey());
     }
 
+
     public void scheduledRefreshSignature() {
         // 30 - 40 分钟刷新一次
         ScheduledRunnable signatureScheduledRunnable = ScheduledRunnable.builder().command(() -> createSession())
@@ -88,6 +109,15 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
                 .businessType("refresh_signature_" + authenticationType)
 //                .delay(3).build();
                 .delay(30).build();
+        scheduledRefreshSignatureId = ScheduledUtils.schedule(signatureScheduledRunnable);
+    }
+
+    private void scheduledRefreshSignIn() {
+        // 每24 - 34随机小时刷新一次
+        ScheduledRunnable signatureScheduledRunnable = ScheduledRunnable.builder().command(() -> refreshSignatureRun())
+                .businessId(authenticationId)
+                .businessType("today_signin_and_reward" + authenticationType)
+                .delay(24).unit(TimeUnit.HOURS).build();
         scheduledRefreshSignatureId = ScheduledUtils.schedule(signatureScheduledRunnable);
     }
 

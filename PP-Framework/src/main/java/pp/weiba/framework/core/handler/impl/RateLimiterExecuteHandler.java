@@ -32,5 +32,6 @@ public class RateLimiterExecuteHandler<T> extends AbstractHandler<T> {
 
     private void acquire() {
         rateLimiter.acquire();
+        log.debug("RateLimiterExecuteHandler 通过");
     }
 }

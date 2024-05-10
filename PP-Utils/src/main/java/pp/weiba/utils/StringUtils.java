@@ -108,6 +108,30 @@ public class StringUtils {
         return formatWith(strPattern, StrUtil.EMPTY_JSON, argArray);
     }
 
+
+    /**
+     * 一个值，替换所有相同的tag
+     *
+     * @param strPattern str
+     * @param placeHolder tag
+     * @param value 值
+     * @return
+     * @author weiba
+     * @date 2024/5/10 15:32
+     */
+    public static String formatWithByOneValue(String strPattern, String placeHolder, String value) {
+        if (StrUtil.isBlank(strPattern) || StrUtil.isBlank(placeHolder) || value == null || strPattern.indexOf(placeHolder) < 0) {
+            return strPattern;
+        }
+        while (true) {
+            if (strPattern.indexOf(placeHolder) < 0) {
+                break;
+            }
+            strPattern = formatWith(strPattern, placeHolder, value);
+        }
+        return strPattern;
+    }
+
     /**
      * 格式化字符串<br>
      * 此方法只是简单将指定占位符 按照顺序替换为参数<br>
@@ -124,7 +148,7 @@ public class StringUtils {
      * @since 5.7.14
      */
     public static String formatWith(String strPattern, String placeHolder, Object... argArray) {
-        if (StrUtil.isBlank(strPattern) || StrUtil.isBlank(placeHolder) || ArrayUtil.isEmpty(argArray)) {
+        if (StrUtil.isBlank(strPattern) || StrUtil.isBlank(placeHolder) || strPattern.indexOf(placeHolder) < 0 || ArrayUtil.isEmpty(argArray)) {
             return strPattern;
         }
         final int strPatternLength = strPattern.length();
@@ -195,4 +219,5 @@ public class StringUtils {
         }
         return str.substring(0, endIndex).trim();
     }
+
 }

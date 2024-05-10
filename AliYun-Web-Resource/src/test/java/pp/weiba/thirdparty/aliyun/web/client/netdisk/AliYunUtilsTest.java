@@ -13,7 +13,7 @@ class AliYunUtilsTest {
     int[] byteArray =  new int[] {159, 86, 99, 251, 84, 103, 62, 253, 154, 90, 22, 203, 78, 16, 59, 115, 32, 2, 209, 234, 90, 172, 179, 129, 132, 85, 0, 241, 28, 108, 69, 48};
 
     SignatureInfo signatureKeyInfo = new SignatureInfo().setAppId(AliYunUtils.APP_ID)
-            .setUserId("007589d773394dd187c395ee3c7747b0")
+            .setUserId("0075833233234dd187c395ee3c7747b0")
             .setNonce(1)
             .setXDeviceId("fiu3hktiwvecatotjrncrg7u")
             .setPrivateKey("c1ca99d14bc9dfdedf1d0e4819bf43a3513d9bec4c1d40fefcc6370cbfd4195b")

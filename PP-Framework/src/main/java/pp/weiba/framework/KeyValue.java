@@ -1,3 +1,4 @@
+
 package pp.weiba.framework;
 
 import lombok.AllArgsConstructor;

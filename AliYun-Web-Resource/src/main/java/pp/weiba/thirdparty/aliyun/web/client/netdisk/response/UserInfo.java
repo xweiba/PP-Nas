@@ -17,13 +17,13 @@ import lombok.experimental.Accessors;
     "description": "",
     "punishments": null,
     "creator": "",
-    "backup_drive_id": "13298650",
-    "resource_drive_id": "904891482",
-    "user_id": "007589d773394dd187c395ee3c7747b0",
+    "backup_drive_id": "18654654",
+    "resource_drive_id": "321312333",
+    "user_id": "0075833233234dd187c395ee3c7747b0",
     "domain_id": "bj29",
     "user_name": "153***760",
-    "nick_name": "xI尾巴",
-    "default_drive_id": "13298650",
+    "nick_name": "weiba",
+    "default_drive_id": "18654654",
     "sbox_drive_id": null,
     "created_at": 1616472677512,
     "updated_at": 1650170668447,
@@ -46,7 +46,7 @@ import lombok.experimental.Accessors;
     "phone_region": "",
     "vip_identity": "member",
     "creator_level": "Lv.0",
-    "display_name": "xI尾巴"
+    "display_name": "weiba"
 }
 
 

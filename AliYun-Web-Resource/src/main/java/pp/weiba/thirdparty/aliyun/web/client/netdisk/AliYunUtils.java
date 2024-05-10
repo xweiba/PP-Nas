@@ -42,7 +42,7 @@ public class AliYunUtils {
     }
 
     public static byte[] getSignatureToSha256Byte(SignatureInfo signatureKeyInfo) {
-        // 5dde4e1bdf9e4966b387ba58f4b3fdc3:M0O2Hp0DTDMCAToTJrnFgvAc:007589d773394dd187c395ee3c7747b0:1
+        // 5dde4e1bdf9e4966b387ba58f4b3fdc3:M0O2Hp0DTDMCAToTJrnFgvAc:0075833233234dd187c395ee3c7747b0:1
         String signatureString = signatureKeyInfo.getAppId() + ":" + signatureKeyInfo.getXDeviceId() + ":" + signatureKeyInfo.getUserId() + ":" + signatureKeyInfo.getNonce();
         byte[] dataBytes = signatureString.getBytes(StandardCharsets.UTF_8);
         byte[] dataHash = Hash.sha256(dataBytes);

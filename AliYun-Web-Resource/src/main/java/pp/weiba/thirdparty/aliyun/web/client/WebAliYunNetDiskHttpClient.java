@@ -9,6 +9,7 @@ import pp.weiba.framework.net.client.model.RequestHandler;
 import pp.weiba.framework.net.client.model.ResponseHandler;
 import pp.weiba.thirdparty.aliyun.web.client.processors.AddDefaultHeaderProcessor;
 import pp.weiba.thirdparty.aliyun.web.client.processors.ErrorStatusProcessor;
+import pp.weiba.thirdparty.aliyun.web.client.processors.ParameterCompletionProcessor;
 
 /**
  * 百度网盘抽象客户端
@@ -27,6 +28,7 @@ public class WebAliYunNetDiskHttpClient extends AbstractHttpClientWrap {
     protected void initRequestHandlers() {
         // 全局参数头处理
         addRequestHandler(new RequestHandler(new AddDefaultHeaderProcessor()));
+        addRequestHandler(new RequestHandler(new ParameterCompletionProcessor(authentication)));
     }
 
     @Override

@@ -10,43 +10,43 @@ import java.util.List;
 
 /**
  * {
- * "default_sbox_drive_id": "23298650",
+ * "default_sbox_drive_id": "232",
  * "role": "user",
- * "device_id": "753c5d8e6b13467ba07b8060c35eab62",
- * "user_name": "153***760",
+ * "device_id": "753c5d8e6b",
+ * "user_name": "1",
  * "need_link": false,
  * "expire_time": "2024-04-30T11:29:04Z",
  * "pin_setup": true,
  * "need_rp_verify": false,
- * "avatar": "https://img.aliyundrive.com/avatar/fbc2e8161f1043b8a8c98731505f92d0.jpeg",
+ * "avatar": "https://img.aliyundrive.com/avatar/.jpeg",
  * "user_data": {
- * "DingDingRobotUrl": "https://oapi.dingtalk.com/robot/send?access_token=0b4a936d0e98c08608cd99f693393c18fa905aa0868215485a28497501916fec",
+ * "DingDingRobotUrl": "https://oapi.dingtalk.com/robot/send?access_token=0bec",
  * "EncourageDesc": "内测期间有效反馈前10名用户将获得终身免费会员",
  * "FeedBackSwitch": true,
  * "FollowingDesc": "34848372",
  * "back_up_config": {
  * "手机备份": {
- * "folder_id": "60596b9aff3978d6d262469f944562b098850600",
- * "photo_folder_id": "60596b9ab868669aaec2452596038fc0a19fce6b",
+ * "folder_id": "60596b9aff3978d6d26",
+ * "photo_folder_id": "60596b9ab868669aaec2452596",
  * "sub_folder": {},
- * "video_folder_id": "60596b9a4df9237af51f4923af04fc20f4db6a92"
+ * "video_folder_id": "60596b9a4d23af04fc20f4db6a92"
  * }
  * },
  * "ding_ding_robot_url": "https://oapi.dingtalk.com/robot/send?access_token=0b4a936d0e98c08608cd99f693393c18fa905aa0868215485a28497501916fec",
  * "encourage_desc": "内测期间有效反馈前10名用户将获得终身免费会员",
  * "feed_back_switch": true,
- * "following_desc": "34848372"
+ * "following_desc": "34"
  * },
  * "token_type": "Bearer",
- * "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMDc1ODlkNzczMzk0ZGQxODdjMzk1ZWUzYzc3NDdiMCIsImN1c3RvbUpzb24iOiJ7XCJjbGllbnRJZFwiOlwiMjVkelgzdmJZcWt0Vnh5WFwiLFwiZG9tYWluSWRcIjpcImJqMjlcIixcInNjb3BlXCI6W1wiRFJJVkUuQUxMXCIsXCJTSEFSRS5BTExcIixcIkZJTEUuQUxMXCIsXCJVU0VSLkFMTFwiLFwiVklFVy5BTExcIixcIlNUT1JBR0UuQUxMXCIsXCJTVE9SQUdFRklMRS5MSVNUXCIsXCJCQVRDSFwiLFwiT0FVVEguQUxMXCIsXCJJTUFHRS5BTExcIixcIklOVklURS5BTExcIixcIkFDQ09VTlQuQUxMXCIsXCJTWU5DTUFQUElORy5MSVNUXCIsXCJTWU5DTUFQUElORy5ERUxFVEVcIl0sXCJyb2xlXCI6XCJ1c2VyXCIsXCJyZWZcIjpcImh0dHBzOi8vd3d3LmFsaXBhbi5jb20vXCIsXCJkZXZpY2VfaWRcIjpcIjk5MmQ0MDY0MWY1MzRmZmNiNzYwMzIyNWVhYjBiODM1XCJ9IiwiZXhwIjoxNzE0NDc2NTQ0LCJpYXQiOjE3MTQ0NjkyODR9.NXG8jn_2Tt4mveEK8zHJ7I5CpAx6uemr6htelhhZTBgIMQLqUTO74vpTo9L42ilroZx8C86a5hx8Dg-G82yiA-cKr_RaW0vHt-LSd2lXbZZLo3JpHmUa2KjrcvkYDObGpx1WntpwatzDOR-IEiTuqH9HrakKvo8BEH0MT_X356M",
- * "default_drive_id": "13298650",
+ * "access_token": "eyJIkpXVCJ9",
+ * "default_drive_id": "544",
  * "domain_id": "bj29",
  * "path_status": "enabled",
- * "refresh_token": "992d40641f534ffcb7603225eab0b835",
+ * "refresh_token": "",
  * "is_first_login": false,
- * "hlogin_url": "https://passport.aliyundrive.com/unity_login_dispatcher.htm?tokenType=aliyun_drive&token=CN-SPLIT-AQigvcWXrUAQ2AQiD3VuaXR5VHJ1c3RMb2dpbioMYWxpeXVuX2RyaXZlMgEBOJWr2PLyMUABShByCqbK5u8zbHKKmMPKCqjEKLoyyXi3z6X8V821HMR0u2sDlPM&bizScene=REFRESH_SELF&cid=MjEzNjgxNzgyYzNjNDFjYTk2MTc5MTViNzlkMjBkM2E",
- * "user_id": "007589d773394dd187c395ee3c7747b0",
- * "nick_name": "xI尾巴",
+ * "hlogin_url": "https://passport.aliyundrive.com/unity_login_dispatcher.htm?tokenType=aliyun_drive&token=CNzgyYzNjNDFjYTk2MTc5MTViNzlkMjBkM2E",
+ * "user_id": "",
+ * "nick_name": "",
  * "exist_link": [],
  * "state": "",
  * "expires_in": 7200,

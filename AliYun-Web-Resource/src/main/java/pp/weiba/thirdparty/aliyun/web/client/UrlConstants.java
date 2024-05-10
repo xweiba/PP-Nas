@@ -81,4 +81,31 @@ public class UrlConstants {
 
     /* 获取文件信息 */
     public static final String POST_GET_FILE_INFO_URL = API_DOMAIN + "/v2/file/get";
+
+    /* 资源批量处理 */
+    public static final String POST_RESOURCE_BATCH_URL = API_DOMAIN + "/adrive/v4/batch";
+
+    /* 资源批处理 文件删除&web回收站删除文件时调用此接口 */
+    public static final String RESOURCE_BATCH_FILE_DELETE_URL = "/file/delete";
+
+    /* 资源批处理 文件移动 */
+    public static final String RESOURCE_BATCH_FILE_MOVE_URL = "/file/move";
+
+    /* 资源批处理 回收站*/
+    public static final String RESOURCE_BATCH_FILE_TO_RECYCLE_URL = "/recyclebin/trash";
+
+    /* 资源批处理 回收站还原*/
+    public static final String RESOURCE_BATCH_RECYCLE_RESTORE_URL = "/recyclebin/restore";
+
+    /* 回收站列表查询 */
+    public static final String POST_GET_RECYCLE_LIST_URL =  API_DOMAIN + "/adrive/v2/recyclebin/list";
+
+    /* 重命名 */
+    public static final String POST_RENAME_URL = API_DOMAIN + "/v3/file/update";
+
+    /* 获取资源下载地址 */
+    public static final String POST_GET_FILE_DOWNLOAD_URL = API_DOMAIN + "/v2/file/get_download_url";
+
+    /* 资源搜索 */
+    public static final String POST_RESOURCE_SEARCH_URL = API_DOMAIN + "/adrive/v3/file/search";
 }
