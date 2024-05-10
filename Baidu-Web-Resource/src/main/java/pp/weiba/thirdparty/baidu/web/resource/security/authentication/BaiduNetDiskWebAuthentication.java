@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.security.authentication.AbstractAuthentication;
+import pp.weiba.framework.security.authentication.AbstractScheduledRefreshAuthentication;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.LoginStatusResponse;
@@ -24,7 +25,7 @@ import java.util.Map;
  * @date 2024/3/8 11:10
  */
 @Log4j2
-public class BaiduNetDiskWebAuthentication extends AbstractAuthentication<NetDiskAuthentication> {
+public class BaiduNetDiskWebAuthentication extends AbstractScheduledRefreshAuthentication<NetDiskAuthentication> {
 
     private final AuthenticationApiClient authenticationApiClient;
 
@@ -37,41 +38,40 @@ public class BaiduNetDiskWebAuthentication extends AbstractAuthentication<NetDis
     }
 
     @Override
-    protected NetDiskAuthentication initAuthentication() {
-        return credential.getCredential();
-    }
-
-    @Override
-    public NetDiskAuthentication detectionAuthentication(NetDiskAuthentication netDiskAuthentication) {
-        if (netDiskAuthentication == null || CollUtil.isEmpty(netDiskAuthentication.getDomainCookieMap())) {
+    public void detectionAuthentication() {
+        if (authentication == null || CollUtil.isEmpty(authentication.getDomainCookieMap())) {
             // 记录日志，抛出异常
             log.error("百度网盘认证信息为空");
             throw new RuntimeException("百度网盘认证信息为空");
         }
         LoginStatusResponse loginStatus = authenticationApiClient.getLoginStatus();
-        netDiskAuthentication.setLoginInfo(loginStatus.getLoginInfo());
-        return netDiskAuthentication;
+        authentication.setLoginInfo(loginStatus.getLoginInfo());
     }
 
     @Override
-    public NetDiskAuthentication completeAuthenticationInformation(NetDiskAuthentication netDiskAuthentication) {
+    protected void scheduledRefreshAuthenticationRun() {
+        super.scheduledRefreshAuthenticationRun();
+    }
+
+    @Override
+    public void completeAuthenticationInformation() {
         TemplateVariableResponse templateVariable = authenticationApiClient.getTemplateVariable();
-        netDiskAuthentication.setTemplateVariable(templateVariable.getResult());
-        return netDiskAuthentication;
+        authentication.setTemplateVariable(templateVariable.getResult());
+        super.completeAuthenticationInformation();
     }
 
     @Override
-    protected void appLogin(NetDiskAuthentication netDiskAuthentication) {
+    protected void appLogin() {
         // accessToken
-        if (netDiskAuthentication.getAccessToken() == null) {
-            openApiLogin(netDiskAuthentication);
+        if (authentication.getAccessToken() == null) {
+            openApiLogin(authentication);
         }
 
         // 网盘认证
-        if (netDiskAuthentication.getTemplateVariable() == null) {
-            netDiskLogin(netDiskAuthentication);
+        if (authentication.getTemplateVariable() == null) {
+            netDiskLogin(authentication);
         }
-        super.appLogin(netDiskAuthentication);
+        super.appLogin();
     }
 
 

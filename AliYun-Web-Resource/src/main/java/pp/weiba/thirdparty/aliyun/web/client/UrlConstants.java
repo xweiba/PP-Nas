@@ -41,6 +41,9 @@ public class UrlConstants {
     /* 创建会话信息，将公钥设置至阿里云服务器 */
     public static final String POST_CREATE_SESSION_URL = API_DOMAIN + "/users/v1/users/device/create_session";
 
+    /* 刷新 X-Signature */
+    public static final String POST_NEW_SESSION_URL = API_DOMAIN + "/users/v1/users/device/renew_session";
+
     /* 获取个人信息 */
     public static final String POST_PERSONAL_INFO_URL = API_DOMAIN + "/v2/databox/get_personal_info";
 
@@ -50,13 +53,16 @@ public class UrlConstants {
     /* 获取登录的环境信息 */
     public static final String POST_GET_SBOX_INFO_URL = API_DOMAIN + "/v2/sbox/get";
 
-    /* 获取签到信息 */
-    public static final String POST_SIGN_IN_STATUS_INFO_URL = SIGNIN_ALIPAN_DOMAIN + "/v1/activity/sign_in_goods";
+    /* 今日签到 */
+    public static final String POST_SIGN_IN_INFO_URL = SIGNIN_ALIPAN_DOMAIN + "/v1/activity/sign_in_goods";
 
-    /* 获取签到信息 */
-    public static final String POST_SIGN_IN_INFO_URL = "https://member.aliyundrive.com/v2/activity/sign_in_info";
+    /* 获取今日签到及奖励领取状态 */
+    public static final String POST_SIGN_IN_STATUS_INFO_URL = SIGNIN_ALIPAN_DOMAIN + "/v2/activity/sign_in_info";
 
-    /* 签到*/
+    /* 获取所有签到及其奖励领取状态 */
+    public static final String POST_SIGN_IN_LIST_STATUS_INFO_URL = SIGNIN_ALIPAN_DOMAIN + "/v2/activity/sign_in_list";
+
+    /* 签到 */
     public static final String POST_SIGN_IN_REWARD_URL = SIGNIN_ALIPAN_DOMAIN + "/v1/activity/sign_in_reward";
 
     /* 新增文件夹 */

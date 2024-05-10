@@ -2,6 +2,7 @@ package pp.weiba.thirdparty.aliyun.web.client.authentication.credentials;
 
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.NetDiskAuthentication;
 import pp.weiba.utils.FileUtils;
 
 /**
@@ -23,9 +24,10 @@ public class JsonFileSetCredentials extends JsonStrSetCredentials {
     }
 
     @Override
-    public void buildCredential() {
-        super.buildCredential();
+    public NetDiskAuthentication refresh() {
+        super.refresh();
         // 会刷新 写回文件
         FileUtils.writeJsonToWorkDir(tokenResponse, relativeDirectory, fileName);
+        return credentialData;
     }
 }

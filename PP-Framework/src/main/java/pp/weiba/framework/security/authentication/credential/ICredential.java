@@ -14,4 +14,6 @@ public interface ICredential<T> {
 
     T getCredential();
 
+    T refresh();
+
 }

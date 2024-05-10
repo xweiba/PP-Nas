@@ -16,7 +16,9 @@ public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
 
     protected final String authenticationType;
 
-    private final ICredential<T> credential;
+    protected final ICredential<T> credential;
+
+    protected T authentication;
 
     public AbstractAuthentication(String authenticationId, String authenticationType, ICredential<T> credential) {
         this.authenticationId = authenticationId;
@@ -31,8 +33,9 @@ public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
      * @author weiba
      * @date 2024/3/8 11:19
      */
-    protected T initAuthentication() {
-        return credential.getCredential();
+    protected void initAuthentication() {
+        authentication = credential.getCredential();
+        credential.refresh();
     }
 
     /**
@@ -42,36 +45,37 @@ public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
      * @author weiba
      * @date 2024/3/8 11:25
      */
-    protected abstract T detectionAuthentication(T authentication);
+    protected abstract void detectionAuthentication();
 
 
     /**
      * 补全认证信息
      *
-     * @param authentication 认证信息
      * @return 返回完整认证信息
      * @author weiba
      * @date 2024/3/8 11:20
      */
-    protected T completeAuthenticationInformation(T authentication) {
-        return authentication;
+    protected void completeAuthenticationInformation() {
     }
 
     @Override
     public T login() {
-        T authentication = initAuthentication();
-        appLogin(authentication);
-        authentication = detectionAuthentication(authentication);
-        authentication = completeAuthenticationInformation(authentication);
+        initAuthentication();
+        appLogin();
+        refreshAuthenticationToManager();
+        detectionAuthentication();
+        completeAuthenticationInformation();
         return authentication;
     }
 
-    protected void appLogin(T netDiskAuthentication) {
-        if (netDiskAuthentication == null) {
+    protected void appLogin() {
+        if (authentication == null) {
             throw new RuntimeException("认证信息为空");
         }
-        // 存储到认证管理器， 后面请求时要使用
-        AuthenticationManager.setAuthentication(authenticationId, authenticationType, netDiskAuthentication);
+    }
+
+    protected void refreshAuthenticationToManager() {
+        AuthenticationManager.setAuthentication(authenticationId, authenticationType, authentication);
     }
 
     @Override

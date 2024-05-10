@@ -24,20 +24,32 @@ public class ScheduledUtils {
 
     private static final Map<String, ScheduledFuture> scheduledFutureMap = new HashMap<>();
 
-    public static String random(ScheduledRandomRunnable scheduledRandom) {
+    /**
+     * 添加定时任务, 支持随机执行
+     *
+     * @param scheduledRandom 定时任务
+     * @return 定时任务id
+     */
+    public static String schedule(ScheduledRunnable scheduledRandom) {
+        cancel(scheduledRandom.getScheduledId());
         // 第一次立马执行, 后面的随机执行
-        if (scheduledRandom.isFirstNotDelay()) scheduledRandom.getCommand().run();
+        log.info("{} 任务初始化！", scheduledRandom.getScheduledId());
+        if (scheduledRandom.isFirstNotDelay()) {
+            scheduledRandom.getCommand().run();
+            log.info("{} 任务已执行！", scheduledRandom.getScheduledId());
+        }
         ScheduledFuture schedule = scheduledExecutor.schedule(new Runnable() {
                     @Override
                     public void run() {
-                        scheduledRandom.getCommand().run();
                         // 判断任务是否已经取消
                         ScheduledFuture scheduledFuture = scheduledFutureMap.get(scheduledRandom.getScheduledId());
                         if (scheduledFuture == null || scheduledFuture.isCancelled()) {
+                            log.info("{} 任务已取消！", scheduledRandom.getScheduledId());
                             scheduledFutureMap.remove(scheduledRandom.getScheduledId());
-                            log.info("任务已取消！");
                             return;
                         }
+                        scheduledRandom.getCommand().run();
+                        log.info("{} 任务已执行！", scheduledRandom.getScheduledId());
                         // 执行完毕重新加入到定时任务
                         scheduledFutureMap.put(scheduledRandom.getScheduledId(), scheduledExecutor.schedule(this, scheduledRandom.getNextDelay(), scheduledRandom.getUnit()));
                     }

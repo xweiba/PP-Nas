@@ -2,6 +2,7 @@ package pp.weiba.thirdparty.aliyun.web.client.authentication;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.log4j.Log4j2;
@@ -181,6 +182,12 @@ public class AuthenticationApiClient extends AbstractApiHttpClient {
 
     public boolean createSession(String pubkey) {
         HttpResponse httpResponse = postStrExecuteResponse(UrlConstants.POST_CREATE_SESSION_URL, new CreateSessionRequest(pubkey));
+        return httpResponse.getStatusCode() == 200;
+    }
+
+    public boolean refreshSession() {
+        // 执行前需要刷新 X-Signature
+        HttpResponse httpResponse = postStrExecuteResponse(UrlConstants.POST_NEW_SESSION_URL, new HashMap<>());
         return httpResponse.getStatusCode() == 200;
     }
 

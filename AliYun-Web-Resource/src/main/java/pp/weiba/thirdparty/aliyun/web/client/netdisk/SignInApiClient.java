@@ -5,6 +5,7 @@ import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.net.client.AbstractApiHttpClient;
 import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SignInInfoListResponse;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SignInInfoResponse;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SignInRewardResponse;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SignInStatusResponse;
@@ -25,19 +26,21 @@ public class SignInApiClient extends AbstractApiHttpClient {
     }
 
     /**
-     * 获取签到状态
+     * 今日签到
      *
      * @return 签到状态
      * @author weiba
      * @date 2024/5/8 16:36
      */
     public SignInStatusResponse getSignInStatusInfo() {
-        return postExecute(UrlConstants.POST_SIGN_IN_STATUS_INFO_URL, new TypeReference<SignInStatusResponse>() {
+        return postExecute(UrlConstants.POST_SIGN_IN_INFO_URL, new TypeReference<SignInStatusResponse>() {
         });
     }
 
+
+
     /**
-     * 获取签到信息，获取其中的连续签到天数
+     * 获取今日签到状态信息
      *
      * @return 签到信息
      * @author weiba
@@ -45,15 +48,27 @@ public class SignInApiClient extends AbstractApiHttpClient {
      */
     public SignInInfoResponse getSignInInfo() {
         // 必须传个对象，否则会报错
-        return postSrtExecute(UrlConstants.POST_SIGN_IN_INFO_URL, new HashMap<>(), new TypeReference<SignInInfoResponse>() {
+        return postSrtExecute(UrlConstants.POST_SIGN_IN_STATUS_INFO_URL, new HashMap<>(), new TypeReference<SignInInfoResponse>() {
         });
     }
 
     /**
-     * 签到
+     * 获取签到状态列表
+     *
+     * @return 签到奖励列表
+     * @author weiba
+     * @date 2024/5/8 16:38
+     */
+    public SignInInfoListResponse getSignInInfoList() {
+        return postSrtExecute(UrlConstants.POST_SIGN_IN_LIST_STATUS_INFO_URL, new HashMap<>(), new TypeReference<SignInInfoListResponse>() {
+        });
+    }
+
+    /**
+     * 领取奖励
      *
      * @param signInDay 连续签到天数
-     * @return 签到信息
+     * @return 领取奖励信息
      * @author weiba
      * @date 2024/5/8 16:47
      */
@@ -62,6 +77,20 @@ public class SignInApiClient extends AbstractApiHttpClient {
             put("signInDay", signInDay);
         }}, new TypeReference<SignInRewardResponse>() {
         });
+    }
+
+    public boolean signInRewardAll() {
+        SignInInfoListResponse signInInfos = getSignInInfoList();
+        for (SignInInfoListResponse.ResultResponse.SignInInfosResponse inInfo : signInInfos.getResult().getSignInInfos()) {
+            if (inInfo.getStatus().equals("normal")) {
+                for (SignInInfoListResponse.ResultResponse.SignInInfosResponse.RewardsResponse reward : inInfo.getRewards()) {
+                    if (reward.getType().equals("dailySignIn") && reward.getStatus().equals("finished")) {
+                        SignInRewardResponse signInReward = signInReward(Integer.valueOf(inInfo.getDay()));
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 }

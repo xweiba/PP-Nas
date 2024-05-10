@@ -29,9 +29,11 @@ public class WebHttpClientAuthentication extends AbstractHttpClientAuthenticatio
             SignatureInfo signatureInfo = authorization.getSignatureInfo();
             if (tokenResponse != null) {
                 request.addheader("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken());
-                request.addheader("X-Device-Id", tokenResponse.getDeviceId());
             }
             if (signatureInfo != null) {
+                if (StrUtil.isNotBlank(signatureInfo.getXDeviceId())) {
+                    request.addheader("X-Device-Id", signatureInfo.getXDeviceId());
+                }
                 if (StrUtil.isNotBlank(signatureInfo.getXSignature())) {
                     request.addheader("X-Signature", signatureInfo.getXSignature());
                 }

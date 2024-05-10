@@ -37,6 +37,14 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
     }
 
 
+    /**
+     * 获取文件信息
+     *
+     * @param getFileInfoParam 获取文件信息参数
+     * @return 文件信息
+     * @author weiba
+     * @date 2024/4/30 10:57
+     */
     public GetFileInfoResponse getFileInfo(GetFileInfoRequest getFileInfoParam) {
         return postSrtExecute(UrlConstants.POST_GET_FILE_INFO_URL, getFileInfoParam, new TypeReference<GetFileInfoResponse>() {
         });
