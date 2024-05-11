@@ -30,14 +30,19 @@ public class BatchResponse {
      * responses
      */
     @JSONField(name = "responses")
-    private List<ResponsesResponse> responses;
+    private List<infoResponses> responses;
 
     /**
      * ResponsesResponse
      */
     @NoArgsConstructor
     @Data
-    public static class ResponsesResponse {
+    public static class infoResponses {
+        /**
+         * body
+         */
+        @JSONField(name = "body")
+        private BodyResponse body;
         /**
          * id
          */
@@ -48,5 +53,58 @@ public class BatchResponse {
          */
         @JSONField(name = "status")
         private Integer status;
+
+        /**
+         * BodyResponse
+         */
+        @NoArgsConstructor
+        @Data
+        public static class BodyResponse {
+            /**
+             * failedProcess
+             */
+            @JSONField(name = "failed_process")
+            private Integer failedProcess;
+            /**
+             * totalProcess
+             */
+            @JSONField(name = "total_process")
+            private Integer totalProcess;
+            /**
+             * downloadUrl
+             */
+            @JSONField(name = "download_url")
+            private String downloadUrl;
+            /**
+             * skippedProcess
+             */
+            @JSONField(name = "skipped_process")
+            private Integer skippedProcess;
+            /**
+             * state
+             */
+            @JSONField(name = "state")
+            private String state;
+            /**
+             * message
+             */
+            @JSONField(name = "message")
+            private String message;
+            /**
+             * asyncTaskId
+             */
+            @JSONField(name = "async_task_id")
+            private String asyncTaskId;
+            /**
+             * consumedProcess
+             */
+            @JSONField(name = "consumed_process")
+            private Integer consumedProcess;
+            /**
+             * status
+             */
+            @JSONField(name = "status")
+            private String status;
+        }
     }
 }

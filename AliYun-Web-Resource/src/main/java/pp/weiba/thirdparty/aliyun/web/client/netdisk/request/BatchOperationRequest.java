@@ -52,5 +52,7 @@ public class BatchOperationRequest {
     private String toDriveId;
 
     private String toParentFileId;
+
+    private Object bodyRequest;
     
 }

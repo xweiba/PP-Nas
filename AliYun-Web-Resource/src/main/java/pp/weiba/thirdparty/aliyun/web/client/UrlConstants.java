@@ -97,6 +97,9 @@ public class UrlConstants {
     /* 资源批处理 回收站还原*/
     public static final String RESOURCE_BATCH_RECYCLE_RESTORE_URL = "/recyclebin/restore";
 
+    /* 批处理 异步任务查询 */
+    public static final String RESOURCE_BATCH_GET_ASYNC_TASK_URL = "/async_task/get";
+
     /* 回收站列表查询 */
     public static final String POST_GET_RECYCLE_LIST_URL =  API_DOMAIN + "/adrive/v2/recyclebin/list";
 
@@ -108,4 +111,7 @@ public class UrlConstants {
 
     /* 资源搜索 */
     public static final String POST_RESOURCE_SEARCH_URL = API_DOMAIN + "/adrive/v3/file/search";
+
+    /* 将文件在两个盘中同步 */
+    public static final String POST_RESOURCE_COPY_TO_RESOURCE_URL = API_DOMAIN + "/adrive/v2/file/crossDriveCopy";
 }

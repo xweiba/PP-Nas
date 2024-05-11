@@ -88,4 +88,10 @@ class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
         search = fileOperationApiClient.search("1", null, search.getNextMarker());
         assertNotNull(search);
     }
+
+    @Test
+    void copyToResource() {
+        CopyToResourceResponse copyToResourceResponse = fileOperationApiClient.copyToResource("root", true, "60cb011c8231ff35db884e53ab7dfc3266120648");
+
+    }
 }

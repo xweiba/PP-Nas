@@ -1,5 +1,8 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.net.client.AbstractApiHttpClient;
@@ -9,7 +12,9 @@ import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 文件管理API
@@ -165,6 +170,58 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
     }
 
 
+    /**
+     * 将文件在两个盘中同步
+     *
+     * @param fileId 来源盘的资源id
+     * @param toParentFileId 目标盘的文件夹id
+     * @param toResourceDrive 备份盘 -> 资源盘 toResourceDrive = true
+     * @return
+     * @author weiba
+     * @date 2024/5/10 17:47
+     */
+    public CopyToResourceResponse copyToResource(String toParentFileId, boolean toResourceDrive, String... fileIds) {
+        if (StrUtil.isEmpty(toParentFileId) || ArrayUtil.isEmpty(fileIds)) {
+            return null;
+        }
+        String fromDriveId = !toResourceDrive ? ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG : ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG;
+        String toDriveId = toResourceDrive ? ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG : ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG;
+
+        List<CopyToResourceRequest.FilesResponse> fileInfos = new ArrayList<>();
+        for (String fileId : fileIds) {
+            GetFileInfoResponse fileInfo = getFileInfo(new GetFileInfoRequest(fromDriveId, fileId));
+            CopyToResourceRequest.FilesResponse filesResponse = BeanUtil.copyProperties(fileInfo, CopyToResourceRequest.FilesResponse.class);
+            filesResponse.setRawFile(fileInfo).setTookAt(filesResponse.getCreatedAt().getTime()).setExtension(fileInfo.getFileExtension());
+            fileInfos.add(filesResponse);
+        }
+
+
+        CopyToResourceRequest copyToResourceRequest = new CopyToResourceRequest(fromDriveId, toDriveId, toParentFileId, fileInfos);
+
+        CopyToResourceResponse copyToResourceResponse = postSrtExecute(UrlConstants.POST_GET_RECYCLE_LIST_URL, copyToResourceRequest, new TypeReference<CopyToResourceResponse>() {
+        });
+
+        for (CopyToResourceResponse.ItemsResponse item : copyToResourceResponse.getItems()) {
+            if ("204".equals(item.getStatus())) {
+                while (true) {
+                    BatchResponse asyncTaskIdResult = getAsyncTaskIdResult(item.getAsyncTaskId());
+                    String taskStatus = asyncTaskIdResult.getResponses().get(0).getBody().getStatus();
+                    if ("Succeed".equals(taskStatus)) {
+                        break;
+                    }
+                }
+            }
+        }
+        return copyToResourceResponse;
+    }
+
+    private BatchResponse getAsyncTaskIdResult(String asyncTaskId) {
+        BatchOperationRequest batchOperationRequest = new BatchOperationRequest(UrlConstants.RESOURCE_BATCH_GET_ASYNC_TASK_URL, asyncTaskId)
+                .setBodyRequest(new HashMap<String, Object>() {{
+                    put("async_task_id", asyncTaskId);
+                }});
+        return batch(new BatchRequest(batchOperationRequest));
+    }
 
 
 }

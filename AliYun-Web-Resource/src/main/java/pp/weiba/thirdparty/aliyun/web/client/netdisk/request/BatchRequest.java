@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
+import pp.weiba.framework.core.convert.TypeReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +29,17 @@ public class BatchRequest {
 
     public BatchRequest(BatchOperationRequest ...operations) {
         for (BatchOperationRequest operation : operations) {
-            RequestsResponse.BodyResponse bodyResponse = new RequestsResponse.BodyResponse()
-                    .setDriveId(operation.getDriveId()).setFileId(operation.getFileId())
-                    .setToDriveId(operation.getToDriveId()).setToParentFileId(operation.getToParentFileId());
-            RequestsResponse requestsResponse = new RequestsResponse()
+            Object bodyRequest = operation.getBodyRequest();
+            if (operation.getBodyRequest() == null) {
+                bodyRequest = new RequestsRequest.BodyRequest()
+                        .setDriveId(operation.getDriveId()).setFileId(operation.getFileId())
+                        .setToDriveId(operation.getToDriveId()).setToParentFileId(operation.getToParentFileId());
+            }
+            RequestsRequest requestsResponse = new RequestsRequest()
                     .setUrl(operation.getUrl())
                     .setMethod(operation.getMethod())
                     .setId(operation.getId())
-                    .setBody(bodyResponse);
+                    .setBody(bodyRequest);
             requestsResponse.getHeaders().setContentType(operation.getContentType());
             requests.add(requestsResponse);
         }
@@ -46,7 +49,8 @@ public class BatchRequest {
      * requests
      */
     @JSONField(name = "requests")
-    private List<RequestsResponse> requests = new ArrayList<>();
+    private List<RequestsRequest> requests = new ArrayList<>();
+
     /**
      * resource
      */
@@ -58,12 +62,12 @@ public class BatchRequest {
      */
     @NoArgsConstructor
     @Data
-    public static class RequestsResponse {
+    public static class RequestsRequest {
         /**
          * body
          */
         @JSONField(name = "body")
-        private BodyResponse body;
+        private Object body;
         /**
          * headers
          */
@@ -91,7 +95,7 @@ public class BatchRequest {
         @NoArgsConstructor
         @Data
         @Accessors(chain = true)
-        public static class BodyResponse {
+        public static class BodyRequest {
             /**
              * driveId
              */

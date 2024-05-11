@@ -18,6 +18,11 @@ import lombok.experimental.Accessors;
 @Data
 public class GetFileInfoRequest {
 
+    public GetFileInfoRequest(String driveId, String fileId) {
+        this.driveId = driveId;
+        this.fileId = fileId;
+    }
+
     @JSONField(name = "drive_id")
     private String driveId;
     @JSONField(name = "file_id")
