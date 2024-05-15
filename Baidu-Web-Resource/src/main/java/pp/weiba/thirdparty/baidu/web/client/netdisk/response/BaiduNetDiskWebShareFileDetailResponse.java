@@ -114,7 +114,8 @@ public class BaiduNetDiskWebShareFileDetailResponse {
     private Integer elinkSelf;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ElinkInfoDTO {
         @JSONField(name = "isElink")
         private Integer isElink;
@@ -123,14 +124,16 @@ public class BaiduNetDiskWebShareFileDetailResponse {
     }
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class DataDTO {
         @JSONField(name = "expName")
         private String expName;
     }
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class FileListDTO {
         @JSONField(name = "app_id")
         private String appId;

@@ -924,6 +924,22 @@ public class GetFileInfoResponse {
 
     @NoArgsConstructor
     @Data
+    public static class userMetaDTO {
+
+        /**
+         * channel
+         */
+        @JSONField(name = "channel")
+        private String channel;
+        /**
+         * client
+         */
+        @JSONField(name = "client")
+        private String client;
+    }
+
+    @NoArgsConstructor
+    @Data
     public static class VideoMediaMetadataDTO {
         @JSONField(name = "time")
         private String time;

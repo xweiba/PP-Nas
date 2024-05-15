@@ -26,7 +26,8 @@ public class DirChildNodeResponse extends ApiResponse {
     private Integer guid;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ListBO {
         private Integer tkbindId;
         private Integer ownerType;

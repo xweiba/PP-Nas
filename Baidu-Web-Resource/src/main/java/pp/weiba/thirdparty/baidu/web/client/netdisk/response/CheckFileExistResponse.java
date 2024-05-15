@@ -21,7 +21,8 @@ public class CheckFileExistResponse extends ApiResponse {
     private Info info;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class Info {
         private String md5;
         private Integer category;

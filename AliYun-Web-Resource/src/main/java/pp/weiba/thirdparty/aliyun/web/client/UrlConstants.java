@@ -114,4 +114,10 @@ public class UrlConstants {
 
     /* 将文件在两个盘中同步 */
     public static final String POST_RESOURCE_COPY_TO_RESOURCE_URL = API_DOMAIN + "/adrive/v2/file/crossDriveCopy";
+
+    /* 创建分享 */
+    public static final String POST_RESOURCE_CREATE_SHARE_URL = API_DOMAIN + "/adrive/v2/share_link/create";
+
+    /* 查询我的分享 */
+    public static final String POST_RESOURCE_GET_SHARE_URL = API_DOMAIN + "/adrive/v3/share_link/list";
 }

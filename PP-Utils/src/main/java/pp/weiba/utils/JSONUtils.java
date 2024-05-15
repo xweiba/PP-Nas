@@ -95,6 +95,9 @@ public class JSONUtils {
     }
 
     public static String toJsonStr(Object obj, String msg) {
+        if (isStrJSONValid(obj)) {
+            return (String)obj;
+        }
         String result = JSON.toJSONString(obj);
         printLog(result, msg);
         return result;

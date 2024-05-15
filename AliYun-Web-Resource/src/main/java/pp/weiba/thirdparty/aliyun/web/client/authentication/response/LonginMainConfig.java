@@ -1,6 +1,7 @@
 package pp.weiba.thirdparty.aliyun.web.client.authentication.response;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -176,7 +177,8 @@ public class LonginMainConfig {
      * ApiResponse
      */
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ApiResponse {
         /**
          * smsLoginApi
@@ -274,7 +276,8 @@ public class LonginMainConfig {
      * ViewCfgResponse
      */
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ViewCfgResponse {
         /**
          * password
@@ -632,7 +635,8 @@ public class LonginMainConfig {
      * LoginTypesResponse
      */
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class LoginTypesResponse {
         /**
          * title

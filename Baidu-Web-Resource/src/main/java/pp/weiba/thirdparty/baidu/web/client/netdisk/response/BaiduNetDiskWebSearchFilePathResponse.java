@@ -77,7 +77,8 @@ public class BaiduNetDiskWebSearchFilePathResponse {
     private Integer hasMore;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ListBO {
         @JSONField(name = "category")
         private Integer category;

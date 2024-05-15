@@ -61,7 +61,8 @@ public class CopyToResourceRequest {
      * FilesResponse
      */
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class FilesResponse {
 
         /**
@@ -184,7 +185,7 @@ public class CopyToResourceRequest {
          * userMeta
          */
         @JSONField(name = "userMeta")
-        private UserMetaResponse userMeta;
+        private String userMeta;
         /**
          * syncMeta
          */

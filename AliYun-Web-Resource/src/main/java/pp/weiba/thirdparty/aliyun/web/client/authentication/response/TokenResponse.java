@@ -116,7 +116,8 @@ public class TokenResponse {
     private String status;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class UserDataDTO {
         @JSONField(name = "DingDingRobotUrl")
         private String dingDingRobotUrl;

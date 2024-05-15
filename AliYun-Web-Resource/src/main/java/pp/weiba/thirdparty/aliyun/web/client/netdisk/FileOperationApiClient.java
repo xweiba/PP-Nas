@@ -3,6 +3,8 @@ package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.net.client.AbstractApiHttpClient;
@@ -11,6 +13,7 @@ import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.*;
+import pp.weiba.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -198,11 +201,11 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
 
         CopyToResourceRequest copyToResourceRequest = new CopyToResourceRequest(fromDriveId, toDriveId, toParentFileId, fileInfos);
 
-        CopyToResourceResponse copyToResourceResponse = postSrtExecute(UrlConstants.POST_GET_RECYCLE_LIST_URL, copyToResourceRequest, new TypeReference<CopyToResourceResponse>() {
+        CopyToResourceResponse copyToResourceResponse = postSrtExecute(UrlConstants.POST_RESOURCE_COPY_TO_RESOURCE_URL, copyToResourceRequest, new TypeReference<CopyToResourceResponse>() {
         });
 
         for (CopyToResourceResponse.ItemsResponse item : copyToResourceResponse.getItems()) {
-            if ("204".equals(item.getStatus())) {
+            if (StringUtils.isNotBlank(item.getAsyncTaskId())) {
                 while (true) {
                     BatchResponse asyncTaskIdResult = getAsyncTaskIdResult(item.getAsyncTaskId());
                     String taskStatus = asyncTaskIdResult.getResponses().get(0).getBody().getStatus();
@@ -223,5 +226,30 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
         return batch(new BatchRequest(batchOperationRequest));
     }
 
+    /**
+     * 创建分享
+     *
+     * @param request 分享对象
+     * @return 分享信息
+     * @author weiba
+     * @date 2024/5/15 16:50
+     */
+    public CreateShareResponse createShare(CreateShareRequest request) {
+        return postSrtExecute(UrlConstants.POST_RESOURCE_CREATE_SHARE_URL, JSON.toJSONString(request, SerializerFeature.UseISO8601DateFormat), new TypeReference<CreateShareResponse>() {
+        });
+    }
+
+    /**
+     * 获取我分享的列表
+     *
+     * @param request 分享对象
+     * @return 分享信息
+     * @author weiba
+     * @date 2024/5/15 16:50
+     */
+    public GetMyShareListResponse getMyShareList(GetMyShareListRequest request) {
+        return postSrtExecute(UrlConstants.POST_RESOURCE_GET_SHARE_URL, JSON.toJSONString(request, SerializerFeature.UseISO8601DateFormat), new TypeReference<GetMyShareListResponse>() {
+        });
+    }
 
 }

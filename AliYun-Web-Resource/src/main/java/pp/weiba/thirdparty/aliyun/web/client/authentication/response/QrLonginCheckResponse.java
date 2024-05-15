@@ -33,7 +33,8 @@ public class QrLonginCheckResponse {
      * ContentResponse
      */
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ContentResponse {
         /**
          * data

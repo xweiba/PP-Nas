@@ -24,7 +24,8 @@ public class WebBaiduNetDiskQueryMyShareFilesResponse {
     private String show_msg;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ListResponse {
         private int appId;
         private int bitmap;

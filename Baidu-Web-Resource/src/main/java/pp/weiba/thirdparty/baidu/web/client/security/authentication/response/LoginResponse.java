@@ -26,7 +26,8 @@ public class LoginResponse {
     private String message;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ErrInfoDTO {
         @JSONField(name = "msg")
         private String msg;
@@ -35,7 +36,8 @@ public class LoginResponse {
     }
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class DataDTO {
         @JSONField(name = "u")
         private String u;

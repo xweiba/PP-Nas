@@ -33,7 +33,8 @@ public class GenerateQrCodeResponse {
      * ContentResponse
      */
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ContentResponse {
         /**
          * data

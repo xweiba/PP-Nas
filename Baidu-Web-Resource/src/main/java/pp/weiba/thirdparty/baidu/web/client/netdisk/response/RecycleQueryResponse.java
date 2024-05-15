@@ -26,7 +26,8 @@ public class RecycleQueryResponse {
     private Integer timestamp;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ListBO {
         @JSONField(name = "category")
         private Integer category;

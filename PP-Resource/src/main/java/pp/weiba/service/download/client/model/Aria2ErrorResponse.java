@@ -22,7 +22,8 @@ public class Aria2ErrorResponse {
     private ErrorResponse error;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ErrorResponse {
         private int code;
         private String message;

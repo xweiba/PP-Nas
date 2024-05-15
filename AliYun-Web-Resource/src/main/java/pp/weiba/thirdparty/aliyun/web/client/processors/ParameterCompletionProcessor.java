@@ -38,7 +38,8 @@ public class ParameterCompletionProcessor implements IProcessor<HttpRequest> {
             UserInfo userInfo = netDiskAuthentication.getUserInfo();
             String backupDriveId = userInfo.getBackupDriveId();
             String resourceDriveId = userInfo.getResourceDriveId();
-            if (userInfo != null && (StrUtil.isNotBlank(backupDriveId) || StrUtil.isNotBlank(resourceDriveId))) {
+            String userId = userInfo.getUserId();
+            if (userInfo != null && (StrUtil.isNotBlank(backupDriveId) || StrUtil.isNotBlank(resourceDriveId)) || StrUtil.isNotBlank(userId)) {
                 if (CollUtil.isNotEmpty(params)) {
                     for (Map.Entry<String, Object> item : params.entrySet()) {
                         Object value = item.getValue();
@@ -48,6 +49,9 @@ public class ParameterCompletionProcessor implements IProcessor<HttpRequest> {
                             }
                             if (StrUtil.isNotBlank(resourceDriveId) && value.equals(ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG)) {
                                 item.setValue(resourceDriveId);
+                            }
+                            if (StrUtil.isNotBlank(userId) && value.equals(ClientContants.REQUEST_PARAM_RESOURCE_USER_ID_TAG)) {
+                                item.setValue(userId);
                             }
                         }
                     }
@@ -62,6 +66,12 @@ public class ParameterCompletionProcessor implements IProcessor<HttpRequest> {
                     }
                     if (StrUtil.isNotBlank(resourceDriveId) && requestBody.contains(ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG)) {
                         String format = StringUtils.formatWithByOneValue(requestBody, ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG, resourceDriveId);
+                        if (StrUtil.isNotBlank(format)) {
+                            requestBody = format;
+                        }
+                    }
+                    if (StrUtil.isNotBlank(userId) && requestBody.contains(ClientContants.REQUEST_PARAM_RESOURCE_USER_ID_TAG)) {
+                        String format = StringUtils.formatWithByOneValue(requestBody, ClientContants.REQUEST_PARAM_RESOURCE_USER_ID_TAG, userId);
                         if (StrUtil.isNotBlank(format)) {
                             requestBody = format;
                         }

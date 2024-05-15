@@ -68,7 +68,8 @@ public class SearchResponse extends ApiResponse {
     private int has_more;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ListResponse {
         private int category;
         private int delete_type;

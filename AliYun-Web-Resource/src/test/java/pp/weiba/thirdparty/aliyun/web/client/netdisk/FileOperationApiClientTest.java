@@ -1,13 +1,15 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.AddFolderRequest;
-import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.GetFileInfoRequest;
-import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.GetRecycleRsequest;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.*;
 import pp.weiba.thirdparty.aliyun.web.client.security.authentication.WebNetDiskAuthenticationTest;
+
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -91,7 +93,21 @@ class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
 
     @Test
     void copyToResource() {
-        CopyToResourceResponse copyToResourceResponse = fileOperationApiClient.copyToResource("root", true, "60cb011c8231ff35db884e53ab7dfc3266120648");
+        CopyToResourceResponse result = fileOperationApiClient.copyToResource("root", true, "638829ed5df082af754043cba40637f674d213b7");
+        assertNotNull(result);
+    }
 
+    @Test
+    void createShare() {
+        CreateShareRequest createShareRequest = new CreateShareRequest().setExpiration(DateUtil.offsetDay(new Date(), 25)).setSharePwd("123456");
+        createShareRequest.getFileIdList().add("66446acc76ccb0581e1b4dbd96ba029befa28526");
+        CreateShareResponse result = fileOperationApiClient.createShare(createShareRequest);
+        assertNotNull(result);
+    }
+
+    @Test
+    void getMyShareList() {
+        GetMyShareListResponse result = fileOperationApiClient.getMyShareList(new GetMyShareListRequest());
+        assertNotNull(result);
     }
 }

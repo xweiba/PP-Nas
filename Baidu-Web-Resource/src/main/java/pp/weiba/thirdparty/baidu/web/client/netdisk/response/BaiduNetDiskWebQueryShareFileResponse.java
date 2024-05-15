@@ -54,7 +54,8 @@ public class BaiduNetDiskWebQueryShareFileResponse {
     private List<ListDTO> list;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ListDTO {
         @JSONField(name = "category")
         private Integer category;

@@ -15,4 +15,7 @@ public class ClientContants {
 
     /* 资源库 id*/
     public static final String REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG = "{resource_drive_id}";
+
+    /* 当前登录用户 id*/
+    public static final String REQUEST_PARAM_RESOURCE_USER_ID_TAG = "{login_user_id}";
 }

@@ -45,7 +45,8 @@ public class DeviceListResponse {
      * ResultResponse
      */
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ResultResponse {
         /**
          * maxDeviceCount

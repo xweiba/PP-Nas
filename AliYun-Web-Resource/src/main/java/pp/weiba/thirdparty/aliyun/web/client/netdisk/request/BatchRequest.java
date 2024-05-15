@@ -61,7 +61,8 @@ public class BatchRequest {
      * RequestsResponse
      */
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class RequestsRequest {
         /**
          * body

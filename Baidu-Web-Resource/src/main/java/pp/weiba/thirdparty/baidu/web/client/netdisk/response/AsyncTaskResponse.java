@@ -27,7 +27,8 @@ public class AsyncTaskResponse<T> {
     private Integer total;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class Delete {
         private Integer baseRevision;
         private String isdir;
@@ -38,7 +39,8 @@ public class AsyncTaskResponse<T> {
     }
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class FromTo {
         private String from;
         private String to;

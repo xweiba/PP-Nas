@@ -27,7 +27,8 @@ public class BaiduNetDiskWebShareFileTransferResponse {
     private Integer taskId;
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class ExtraBO {
         private List<ListBO> list;
 
@@ -42,7 +43,8 @@ public class BaiduNetDiskWebShareFileTransferResponse {
     }
 
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class InfoBO {
         private Integer errno;
         private String fsId;

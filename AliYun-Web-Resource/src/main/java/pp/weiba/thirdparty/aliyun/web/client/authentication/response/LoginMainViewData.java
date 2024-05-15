@@ -1,6 +1,7 @@
 package pp.weiba.thirdparty.aliyun.web.client.authentication.response;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -131,7 +132,8 @@ public class LoginMainViewData {
      * CountryAreaConfigResponse
      */
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class CountryAreaConfigResponse {
         /**
          * countryList
@@ -177,7 +179,8 @@ public class LoginMainViewData {
      * LoginFormDataResponse
      */
     @NoArgsConstructor
-    @Data
+        @AllArgsConstructor
+        @Data
     public static class LoginFormDataResponse {
         /**
          * appName
