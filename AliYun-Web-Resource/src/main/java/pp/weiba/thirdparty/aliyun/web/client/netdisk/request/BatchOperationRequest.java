@@ -15,8 +15,16 @@ import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
 @Data
 public class BatchOperationRequest {
 
+    public BatchOperationRequest(String url) {
+        this.url = url;
+    }
+
     public BatchOperationRequest(String url, String fileId) {
         this(url, fileId, true);
+    }
+
+    public BatchOperationRequest(String url, boolean isBackupDrive) {
+        this(url, null, isBackupDrive);
     }
 
 

@@ -9,15 +9,16 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.net.client.AbstractApiHttpClient;
 import pp.weiba.framework.net.client.IHttpClient;
+import pp.weiba.framework.net.client.model.HttpRequest;
+import pp.weiba.framework.net.client.model.Method;
 import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.*;
+import pp.weiba.utils.JSONUtils;
 import pp.weiba.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * 文件管理API
@@ -132,7 +133,13 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
      * @date 2024/5/10 13:43
      */
     public BatchResponse batch(BatchRequest batchRequest) {
-        return postSrtExecute(UrlConstants.POST_RESOURCE_BATCH_URL, batchRequest, new TypeReference<BatchResponse>() {
+        return batch(batchRequest, null);
+    }
+
+    public BatchResponse batch(BatchRequest batchRequest, Map<String, String> headerMap) {
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.POST, UrlConstants.POST_RESOURCE_BATCH_URL)
+                .setRequestBody(JSONUtils.toJsonStr(batchRequest)).handler(headerMap);
+        return execute(httpRequest, new TypeReference<BatchResponse>() {
         });
     }
 
@@ -251,5 +258,100 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
         return postSrtExecute(UrlConstants.POST_RESOURCE_GET_SHARE_URL, JSON.toJSONString(request, SerializerFeature.UseISO8601DateFormat), new TypeReference<GetMyShareListResponse>() {
         });
     }
+
+
+    /**
+     * 取消分享
+     *
+     * @param shareId 分享id
+     * @return
+     * @author weiba
+     * @date 2024/5/17 9:29
+     */
+    public BatchResponse cancelShare(String shareId) {
+        return batch(new BatchRequest(new BatchOperationRequest(UrlConstants.RESOURCE_BATCH_CANCEL_SHARE_URL, shareId).setBodyRequest(new HashMap<String,Object>(){{
+            put("share_id", shareId);
+        }})));
+    }
+
+    /*
+    * 获取分享token
+    * */
+    public GetShareTokenResponse getShareToken(String shareId, String sharePwd) {
+        return postSrtExecute(UrlConstants.POST_GET_SHARE_TOKEN_URL, new HashMap<String,Object>(){{
+            put("share_id", shareId);
+            put("share_pwd", sharePwd);
+        }}, new TypeReference<GetShareTokenResponse>() {
+        });
+    }
+
+    /*
+    * 获取分享资源的文件列表
+    * */
+    public GetShareFilesResponse getShareFiles(GetShareFilesRequest queryParams, String shareToken) {
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.POST, UrlConstants.POST_GET_SHARE_FILE_LIST_URL)
+                .setRequestBody(JSONUtils.toJsonStr(queryParams)).addheader("X-Share-Token", shareToken);
+        return execute(httpRequest, new TypeReference<GetShareFilesResponse>() {});
+    }
+
+
+    /*
+    * 获取分享文件详情
+    * */
+    public GetShareFileDetailResponse getShareFileDetail(GetShareFileDetailRequest queryParams, String shareToken) {
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.POST, UrlConstants.POST_GET_SHARE_FILE_DETAIL_URL)
+                .setRequestBody(JSONUtils.toJsonStr(queryParams)).addheader("X-Share-Token", shareToken);
+        return execute(httpRequest, new TypeReference<GetShareFileDetailResponse>() {});
+    }
+
+
+    public BatchResponse saveShareFile(String shareToken, SaveShareFileBody ...saveShareFileBodies) {
+        BatchOperationRequest[] fileList = new BatchOperationRequest[saveShareFileBodies.length];
+        for (int i = 0; i < saveShareFileBodies.length; i++) {
+            SaveShareFileBody saveShareFileBody = saveShareFileBodies[i];
+            fileList[i] = new BatchOperationRequest(UrlConstants.RESOURCE_BATCH_SAVE_SHARE_FILE_URL)
+                    .setBodyRequest(saveShareFileBody)
+                    .setId("0")
+            ;
+        }
+
+        return batch(new BatchRequest(fileList), new HashMap<String, String>() {{
+            put("X-Share-Token", shareToken);
+        }});
+    }
+
+    /*
+    * 获取子目录信息
+    * */
+    /**
+     * 获取文件夹的子目录信息
+     *
+     * @param request 查询参数
+     * @return 子文件夹信息，没有子文件信息
+     * @author weiba
+     * @date 2024/5/17 10:23
+     */
+    public GetFileChildDirResponse getFileChildDir(GetFileChildDirRequest request) {
+        return postSrtExecute(UrlConstants.POST_GET_FILE_CHILD_DIR_URL, request, new TypeReference<GetFileChildDirResponse>() {
+        });
+    }
+
+    /*
+    * 获取子目录信息
+    * */
+    /**
+     * 获取文件夹的子目录信息
+     *
+     * @param request 查询参数
+     * @return 子文件夹信息，没有子文件信息
+     * @author weiba
+     * @date 2024/5/17 10:23
+     */
+    public GetFileSimpleResponse getFileSimple(GetFileSimpleRequest request) {
+        return postSrtExecute(UrlConstants.POST_GET_FILE_SIMPLE_URL, request, new TypeReference<GetFileSimpleResponse>() {
+        });
+    }
+
+
 
 }

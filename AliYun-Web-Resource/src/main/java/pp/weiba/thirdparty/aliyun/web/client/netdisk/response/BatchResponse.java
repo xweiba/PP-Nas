@@ -105,6 +105,22 @@ public class BatchResponse {
              */
             @JSONField(name = "status")
             private String status;
+
+            /**
+             * domainId
+             */
+            @JSONField(name = "domain_id")
+            private String domainId;
+            /**
+             * driveId
+             */
+            @JSONField(name = "drive_id")
+            private String driveId;
+            /**
+             * fileId
+             */
+            @JSONField(name = "file_id")
+            private String fileId;
         }
     }
 }

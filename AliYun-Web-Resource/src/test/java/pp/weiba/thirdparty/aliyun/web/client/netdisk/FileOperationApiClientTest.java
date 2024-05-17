@@ -1,7 +1,6 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -18,6 +17,9 @@ class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
     private final FileOperationApiClient fileOperationApiClient = new FileOperationApiClient(httpClient);
 
     public static GetRecycleResponse recycles;
+
+    /* 当前是否为备份盘模式 */
+    public static final Boolean IS_BACKUP_DRIVER_MODEL = true;
 
     @Test
     void createDir() {
@@ -110,4 +112,70 @@ class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
         GetMyShareListResponse result = fileOperationApiClient.getMyShareList(new GetMyShareListRequest());
         assertNotNull(result);
     }
+
+    @Test
+    void cancelShare() {
+        BatchResponse result = fileOperationApiClient.cancelShare("p46LoqhZhuB");
+        assertNotNull(result);
+    }
+
+    public static final String shareId = "qA9VAdafGXe";
+    public static final String sharePwd = "3gy0";
+
+    private static GetShareTokenResponse shareTokenResponse;
+    private static GetShareFilesResponse shareFiles;
+
+    private static GetShareFileDetailResponse shareFileDetail;
+
+    @Test
+    void getShareToken() {
+        shareTokenResponse = fileOperationApiClient.getShareToken(shareId, sharePwd);
+        assertNotNull(shareTokenResponse);
+    }
+
+    @Test
+    void getShareFiles() {
+        getShareToken();
+        shareFiles = fileOperationApiClient.getShareFiles(new GetShareFilesRequest(shareId), shareTokenResponse.getShareToken());
+        assertNotNull(shareFiles);
+    }
+
+    @Test
+    void getShareFileDetail() {
+        getShareFiles();
+        GetShareFilesResponse.ItemsResponse shareFile = shareFiles.getItems().get(0);
+
+        shareFileDetail = fileOperationApiClient.getShareFileDetail(new GetShareFileDetailRequest(shareFile.getDriveId(), shareFile.getShareId(), shareFile.getFileId()), shareTokenResponse.getShareToken());
+        assertNotNull(shareFileDetail);
+    }
+
+    private static GetFileChildDirResponse fileChildDirs;
+
+    private static GetFileSimpleResponse simpleFile;
+    @Test
+    void getFileChildDir() {
+        fileChildDirs = fileOperationApiClient.getFileChildDir(new GetFileChildDirRequest(IS_BACKUP_DRIVER_MODEL));
+        assertNotNull(fileChildDirs);
+    }
+
+    @Test
+    void getFileSimple() {
+        getFileChildDir();
+        GetFileChildDirResponse.ItemsResponse fileItem = fileChildDirs.getItems().get(0);
+        simpleFile = fileOperationApiClient.getFileSimple(new GetFileSimpleRequest(IS_BACKUP_DRIVER_MODEL, fileItem.getFileId()));
+        assertNotNull(simpleFile);
+    }
+
+
+
+    @Test
+    void saveShareFile() {
+        getFileSimple();
+        getShareFileDetail();
+
+        SaveShareFileBody saveShareFileBody = new SaveShareFileBody(IS_BACKUP_DRIVER_MODEL, simpleFile.getFileId(), shareFileDetail.getShareId(), shareFileDetail.getFileId());
+        BatchResponse result = fileOperationApiClient.saveShareFile(shareTokenResponse.getShareToken(), saveShareFileBody);
+        assertNotNull(result);
+    }
+
 }

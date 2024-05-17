@@ -40,8 +40,8 @@ public abstract class AuthInfo<T> {
     }
 
     public T handler(Map<String, String> headerMap) {
-        this.headerMap = initMap(this.headerMap);
         if (headerMap != null) {
+            this.headerMap = initMap(this.headerMap);
             headerMap = ObjectUtil.clone(headerMap);
             headerMap.putAll(this.headerMap);
             this.headerMap = headerMap;

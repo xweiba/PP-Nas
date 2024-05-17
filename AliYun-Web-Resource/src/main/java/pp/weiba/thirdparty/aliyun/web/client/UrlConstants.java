@@ -100,6 +100,9 @@ public class UrlConstants {
     /* 批处理 异步任务查询 */
     public static final String RESOURCE_BATCH_GET_ASYNC_TASK_URL = "/async_task/get";
 
+    /* 取消分享 */
+    public static final String RESOURCE_BATCH_CANCEL_SHARE_URL = "/share_link/cancel";
+
     /* 回收站列表查询 */
     public static final String POST_GET_RECYCLE_LIST_URL =  API_DOMAIN + "/adrive/v2/recyclebin/list";
 
@@ -120,4 +123,22 @@ public class UrlConstants {
 
     /* 查询我的分享 */
     public static final String POST_RESOURCE_GET_SHARE_URL = API_DOMAIN + "/adrive/v3/share_link/list";
+
+    /* 获取分享的认证token*/
+    public static final String POST_GET_SHARE_TOKEN_URL = API_DOMAIN + "/v2/share_link/get_share_token";
+
+    /* 获取分享资源的文件列表 */
+    public static final String POST_GET_SHARE_FILE_LIST_URL = API_DOMAIN + "/adrive/v2/file/list_by_share";
+
+    /* 获取分享资源的文件详情 */
+    public static final String POST_GET_SHARE_FILE_DETAIL_URL = API_DOMAIN + "/adrive/v2/file/get_by_share";
+
+    /* 获取子目录信息 */
+    public static final String POST_GET_FILE_CHILD_DIR_URL = API_DOMAIN + "/adrive/v2/file/listFolder";
+
+    /* 获取资源简要信息 */
+    public static final String POST_GET_FILE_SIMPLE_URL = API_DOMAIN + "/adrive/v2/file/simpleGet";
+
+    /* 保存分享文件 */
+    public static final String RESOURCE_BATCH_SAVE_SHARE_FILE_URL = "/file/copy";
 }
