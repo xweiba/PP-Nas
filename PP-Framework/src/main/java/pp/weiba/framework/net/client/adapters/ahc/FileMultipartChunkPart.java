@@ -32,7 +32,7 @@ public class FileMultipartChunkPart extends FileMultipartPart {
         }
         file = part.getFile();
         this.maxLength = part.getChunk().getLength() + part.getChunk().getStart();
-        // 反射强制修改, test
+        // 反射强制修改
         ReflectUtil.setFieldValue(this, "position", part.getChunk().getStart());
         ReflectUtil.setFieldValue(this, "length", part.getChunk().getLength());
     }
@@ -45,13 +45,13 @@ public class FileMultipartChunkPart extends FileMultipartPart {
 
 
         long transferred = getPositionToChannel(target, channel, position, length);
-        //        long transferred = getPositionToInputStream(target, position, length);
+        //long transferred = getPositionToInputStream(target, position, length);
 
         return transferred;
     }
 
-    @SneakyThrows
-    private InputStream getInputStream() {
+    /*@SneakyThrows
+    private InputStream initInputStream() {
         if (inputStream == null) {
             long position = (long) ReflectUtil.getFieldValue(this, "position");
             long length = (long) ReflectUtil.getFieldValue(this, "length");
@@ -61,7 +61,7 @@ public class FileMultipartChunkPart extends FileMultipartPart {
     }
 
     private long getPositionToInputStream(ByteBuf target, long position, long length) throws IOException {
-        InputStream inputStream = getInputStream();
+        initInputStream();
         int transferred = target.writeBytes(inputStream, target.writableBytes());
         if (transferred > 0) {
             position += transferred;
@@ -69,12 +69,12 @@ public class FileMultipartChunkPart extends FileMultipartPart {
 
         if (position == this.getContentLength() || transferred < 0) {
             this.state = MultipartState.POST_CONTENT;
-            inputStream.close();
+            this.close();
         }
         log.info("position:{}, length:{}, transferred:{}", position, length, transferred);
         ReflectUtil.setFieldValue(this, "position", position);
         return transferred;
-    }
+    }*/
 
     private long getPositionToChannel(ByteBuf target, FileChannel channel, long position, long length) throws IOException {
         long transferred = Math.min(target.writableBytes(), maxLength - position);

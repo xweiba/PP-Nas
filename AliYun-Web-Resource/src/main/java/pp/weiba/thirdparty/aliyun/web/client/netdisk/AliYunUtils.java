@@ -2,8 +2,6 @@ package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -241,18 +239,18 @@ public class AliYunUtils {
         return Base64.encode(b);
     }
 
-    public static List<CreateWithFoldersRequest.PartInfoListResponse> getPartInfoList(long size) {
-        List<CreateWithFoldersRequest.PartInfoListResponse> partInfoList = null;
+    public static List<CreateWithFoldersRequest.PartInfoListRequest> getPartInfoList(long size) {
+        List<CreateWithFoldersRequest.PartInfoListRequest> partInfoList = null;
         if (size > 0) {
             // 单个文件分片最大限制5GB，最小限制 100KB
             partInfoList = new ArrayList<>();
 
             if (size < AliYunClientConstants.FILE_SPLIT_SIZE) {
-                partInfoList.add(new CreateWithFoldersRequest.PartInfoListResponse().setPartNumber(1));
+                partInfoList.add(new CreateWithFoldersRequest.PartInfoListRequest().setPartNumber(1));
             } else {
                 double splitCount = Math.ceil(size / (AliYunClientConstants.FILE_SPLIT_SIZE * 1.0));
                 for (int j = 0; j < splitCount; j++) {
-                    partInfoList.add(new CreateWithFoldersRequest.PartInfoListResponse().setPartNumber(j + 1));
+                    partInfoList.add(new CreateWithFoldersRequest.PartInfoListRequest().setPartNumber(j + 1));
                 }
             }
         }

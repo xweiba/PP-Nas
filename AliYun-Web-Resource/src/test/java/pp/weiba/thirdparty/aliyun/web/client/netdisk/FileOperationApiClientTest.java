@@ -21,9 +21,9 @@ class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
     /* 当前是否为备份盘模式 */
     public static final Boolean IS_BACKUP_DRIVER_MODEL = true;
 
-    public static final String UPLOAD_FILE_PATH = "D:\\download\\11\\rom\\magisk_patched-27001_9Zekx.img";
+    public static final String UPLOAD_FILE_PATH = "D:\\download\\11\\rom\\rom_2.zip";
 
-    public static final String UPLOAD_FILE_NAME = "magisk_patched-27001_9Zekx.img";
+    public static final String UPLOAD_FILE_NAME = "rom_2.zip";
 
 
     @Test

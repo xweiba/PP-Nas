@@ -22,9 +22,8 @@ import pp.weiba.utils.model.FileChunk;
 import pp.weiba.utils.FileUtils;
 import pp.weiba.utils.HttpCookieUtils;
 import pp.weiba.utils.StringUtils;
-import pp.weiba.utils.model.ZopyCopyInputStream;
+import pp.weiba.utils.model.FileChannelCopyInputStream;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.HttpCookie;
 import java.net.Proxy;
@@ -155,23 +154,22 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
             File file = uploadFile.getFile();
             FileChunk chunk = uploadFile.getChunk();
             if (chunk == null) {
-                chunk = new FileChunk(0, file.length(), 1);
+                chunk = new FileChunk(0, file.length(), 0);
             }
             try {
-                // 这里不能关闭流，不然后面无法读取
-                ZopyCopyInputStream byteArrayInputStream = FileUtils.getZopyCopyInputStream(file, chunk.getStart(), chunk.getLength());
-                // 注意，InputStream 是单向流，只能被读取一次，
+                FileChannelCopyInputStream byteArrayInputStream = FileUtils.getZopyCopyInputStream(file, chunk.getStart(), chunk.getLength());
                 InputStreamResource inputStreamResource = new InputStreamResource(byteArrayInputStream, file.getName());
 
                 if (uploadFile.getUploadType() == UploadType.FORM) {
                     httpRequest.form("file", inputStreamResource);
                 } else if (uploadFile.getUploadType() == UploadType.BYTE) {
                     httpRequest.body(inputStreamResource);
+                    // 不加这个会签名错误
                     ReflectUtil.setFieldValue(httpRequest, "isMultiPart", true);
                 }
             } catch (Exception e) {
-                log.error("文件分片失败！Exception：{}", ExceptionUtil.getMessage(e));
-                throw new RuntimeException("文件分片失败！", e);
+                log.error("文件分片设置失败：{}", ExceptionUtil.getMessage(e));
+                throw new HttpException("文件分片设置失败", e);
             }
         }
     }

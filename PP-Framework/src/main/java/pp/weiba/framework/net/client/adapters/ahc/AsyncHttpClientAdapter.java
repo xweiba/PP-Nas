@@ -23,7 +23,7 @@ import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.net.client.model.UploadFile;
 import pp.weiba.framework.net.client.model.UploadType;
-import pp.weiba.utils.model.ZopyCopyInputStream;
+import pp.weiba.utils.model.FileChannelCopyInputStream;
 import pp.weiba.utils.model.FileChunk;
 import pp.weiba.utils.FileUtils;
 import pp.weiba.utils.JSONUtils;
@@ -91,7 +91,7 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
             requestBuilder.addBodyPart(new FilePart(file.getName(), file));
         } else {
             try {
-                ZopyCopyInputStream byteArrayInputStream = FileUtils.getZopyCopyInputStream(file, chunk.getStart(), chunk.getLength());
+                FileChannelCopyInputStream byteArrayInputStream = FileUtils.getZopyCopyInputStream(file, chunk.getStart(), chunk.getLength());
                 requestBuilder.addBodyPart(new InputStreamPart("file", byteArrayInputStream, file.getName(), chunk.getLength()));
             } catch (Exception e) {
                 log.error("文件上传自定义零拷贝异常：{}", ExceptionUtil.getMessage(e));

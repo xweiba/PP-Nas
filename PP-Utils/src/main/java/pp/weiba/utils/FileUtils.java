@@ -5,7 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.crypto.SecureUtil;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.utils.model.ZopyCopyInputStream;
+import pp.weiba.utils.model.FileChannelCopyInputStream;
 import pp.weiba.utils.model.FileChunk;
 
 import java.io.*;
@@ -224,12 +224,12 @@ public class FileUtils {
         return chunkList;
     }
 
-    public static ZopyCopyInputStream getZopyCopyInputStream(File file, long start, long length) {
+    public static FileChannelCopyInputStream getZopyCopyInputStream(File file, long start, long length) {
         // 这里不能关闭流，不然后面无法读取
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
             long startTime = System.currentTimeMillis();
             FileChannel channel = randomAccessFile.getChannel();
-            ZopyCopyInputStream result = new ZopyCopyInputStream(channel, start, length);
+            FileChannelCopyInputStream result = new FileChannelCopyInputStream(channel, start, length);
             log.info("文件分片读取耗时：{}", System.currentTimeMillis() - startTime);
            return result;
         } catch (IOException e) {

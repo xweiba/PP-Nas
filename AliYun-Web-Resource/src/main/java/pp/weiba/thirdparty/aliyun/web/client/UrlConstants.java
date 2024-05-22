@@ -140,5 +140,11 @@ public class UrlConstants {
     public static final String RESOURCE_BATCH_SAVE_SHARE_FILE_URL = "/file/copy";
 
     /* 文件上传预创建 */
-    public static final String POST_RESOURCE_CREATE_WITH_FOLDERS_URL = API_DOMAIN + "/adrive/v2/file/createWithFolders";
+    public static final String POST_PRE_CREATE_UPLOAD_FILE_URL = API_DOMAIN + "/adrive/v2/file/createWithFolders";
+
+    /* 查询上传分片的url */
+    public static final String POST_GET_UPLOAD_FILE_CHUNK_INFO_URL = API_DOMAIN + "/v2/file/get_upload_url";
+
+    /* 文件上传完成 */
+    public static final String POST_RESOURCE_UPLOAD_COMPLETE_URL = API_DOMAIN + "/v2/file/complete";
 }

@@ -1,6 +1,7 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
@@ -368,7 +369,7 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
      * @date 2024/5/21 11:19
      */
     public CreateWithFoldersResponse createWithFolders(CreateWithFoldersRequest params) {
-        return postSrtExecute(UrlConstants.POST_RESOURCE_CREATE_WITH_FOLDERS_URL, params, new TypeReference<CreateWithFoldersResponse>() {
+        return postSrtExecute(UrlConstants.POST_PRE_CREATE_UPLOAD_FILE_URL, params, new TypeReference<CreateWithFoldersResponse>() {
         });
     }
 
@@ -430,13 +431,40 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
         // 构建分片参数
         List<FileChunk> fileChunks = FileUtils.buildFileChunks(new File(filePath), AliYunClientConstants.FILE_SPLIT_SIZE);
         LinkedHashMap<Integer, FileChunk> collect = fileChunks.stream().collect(Collectors.toMap(key -> key.getPartSeq(), value -> value, (k1, k2) -> k1, LinkedHashMap::new));
+
+        uploadByParts(filePath, partInfoList, collect);
+
+        List<CreateWithFoldersRequest.PartInfoListRequest> partInfoListAll = params.getPartInfoListAll();
+        if (partInfoListAll.size() > 20) {
+            int startIndex = 20;
+            while (startIndex < partInfoListAll.size()) {
+                // 获取下一批上传url
+                int endIndex = startIndex + 20;
+                List<CreateWithFoldersRequest.PartInfoListRequest> partRequests;
+                if (endIndex > partInfoListAll.size()) {
+                    partRequests = partInfoListAll.subList(startIndex, partInfoListAll.size());
+                } else {
+                    partRequests = partInfoListAll.subList(startIndex, endIndex);
+                }
+                GetUploadFileChunkResponse uploadFileChunk = getUploadFileChunk(response.getDriveId(), response.getFileId(), response.getUploadId(), partRequests);
+                uploadByParts(filePath, uploadFileChunk.getPartInfoList(), collect);
+                startIndex = endIndex;
+            }
+        }
+
+
+        // 完成上传
+        UploadComplateResponse uploadComplateResponse = uploadComplete(response.getDriveId(), response.getFileId(), response.getUploadId());
+        return Convert.convert(CreateWithFoldersResponse.class, uploadComplateResponse);
+    }
+
+    private void uploadByParts(String filePath, List<CreateWithFoldersResponse.PartInfoListResponse> partInfoList, LinkedHashMap<Integer, FileChunk> collect) {
         for (int i = 0; i < partInfoList.size(); i++) {
             CreateWithFoldersResponse.PartInfoListResponse partInfoListResponse = partInfoList.get(i);
             String uploadUrl = partInfoListResponse.getUploadUrl();
             FileChunk fileChunk = collect.get(partInfoListResponse.getPartNumber() - 1);
             uploadFileChunk(uploadUrl, new File(filePath), fileChunk);
         }
-        return null;
     }
 
     public Boolean uploadFileChunk(String uploadUrl, File file, FileChunk chunk) {
@@ -446,7 +474,6 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
             partseq = chunk.getPartSeq();
             uploadFile.setChunk(new FileChunk(chunk.getStart(), chunk.getLength(), partseq, null)).setUploadType(UploadType.BYTE);
         }
-//        ALi_HttpClientUtil.uploadFile(uploadUrl, file, uploadFile);
 
         HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.PUT, uploadUrl).setUploadFile(uploadFile)
                 .addBuildParams(ClientConstants.REQUEST_PARAM_NEW_SESSION_TAG, true)
@@ -459,5 +486,25 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
                 ;
         HttpResponse httpResponse = executeResponse(httpRequest);
         return true;
+    }
+
+    public GetUploadFileChunkResponse getUploadFileChunk(String driveId, String fileId, String uploadId, List<CreateWithFoldersRequest.PartInfoListRequest> partInfoList) {
+        return postSrtExecute(UrlConstants.POST_GET_UPLOAD_FILE_CHUNK_INFO_URL, new HashMap<String, Object>() {{
+            put("drive_id", driveId);
+            put("file_id", fileId);
+            put("upload_id", uploadId);
+            put("part_info_list", partInfoList);
+        }}, new TypeReference<GetUploadFileChunkResponse>() {
+        });
+    }
+
+
+    public UploadComplateResponse uploadComplete(String driveId, String fileId, String uploadId) {
+        return postSrtExecute(UrlConstants.POST_RESOURCE_UPLOAD_COMPLETE_URL, new HashMap<String, Object>() {{
+            put("drive_id", driveId);
+            put("file_id", fileId);
+            put("upload_id", uploadId);
+        }}, new TypeReference<UploadComplateResponse>() {
+        });
     }
 }

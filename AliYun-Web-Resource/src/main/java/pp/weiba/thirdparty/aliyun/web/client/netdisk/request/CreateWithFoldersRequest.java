@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.AliYunUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,7 +34,7 @@ public class CreateWithFoldersRequest {
     private String filePath;
 
     @JSONField(serialize=false)
-    private List<PartInfoListResponse> partInfoListAll;
+    private List<PartInfoListRequest> partInfoListAll;
 
     /**
      * driveId
@@ -47,7 +46,7 @@ public class CreateWithFoldersRequest {
      * 单个文件分片最大限制5GB，最小限制 100KB
      */
     @JSONField(name = "part_info_list")
-    private List<PartInfoListResponse> partInfoList;
+    private List<PartInfoListRequest> partInfoList;
     /**
      * parentFileId
      */
@@ -118,7 +117,7 @@ public class CreateWithFoldersRequest {
      */
     @NoArgsConstructor
     @Data
-    public static class PartInfoListResponse {
+    public static class PartInfoListRequest {
         /**
          * partNumber
          */
@@ -126,16 +125,16 @@ public class CreateWithFoldersRequest {
         private Integer partNumber;
     }
 
-    public List<PartInfoListResponse> getPartInfoListAll() {
+    public List<PartInfoListRequest> getPartInfoListAll() {
         if (partInfoListAll == null) {
             partInfoListAll = AliYunUtils.getPartInfoList(size);
         }
         return partInfoListAll;
     }
 
-    public List<PartInfoListResponse> getPartInfoList() {
+    public List<PartInfoListRequest> getPartInfoList() {
         if (partInfoList == null) {
-            List<PartInfoListResponse> partInfoListAll = getPartInfoListAll();
+            List<PartInfoListRequest> partInfoListAll = getPartInfoListAll();
             if (partInfoListAll.size() <= 20) {
                 partInfoList = partInfoListAll;
             } else {

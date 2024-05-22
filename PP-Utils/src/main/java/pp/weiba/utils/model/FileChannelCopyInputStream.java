@@ -5,24 +5,23 @@ import lombok.extern.log4j.Log4j2;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
 /**
-* 零拷贝
+* 零拷贝, 它并不是真正的零拷贝，只是利用了零拷贝技术，减少了内存拷贝次数，从而减少了内存占用。
 *
 * @author weiba
 * @date 2024/5/22 12:14
 */
 @Log4j2
-public class ZopyCopyInputStream extends InputStream {
+public class FileChannelCopyInputStream extends InputStream {
 
     private final ByteBuffer buf;
 
     private final FileChannel channel;
 
     @SneakyThrows
-    public ZopyCopyInputStream(FileChannel channel, long start, long length) {
+    public FileChannelCopyInputStream(FileChannel channel, long start, long length) {
         this.channel = channel;
         this.buf = channel.map(FileChannel.MapMode.READ_ONLY, start, length);
     }
