@@ -228,7 +228,8 @@ public class FileUtils {
         // 这里不能关闭流，不然后面无法读取
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
             long startTime = System.currentTimeMillis();
-            ZopyCopyInputStream result = new ZopyCopyInputStream(randomAccessFile.getChannel().map(FileChannel.MapMode.READ_ONLY, start, length));
+            FileChannel channel = randomAccessFile.getChannel();
+            ZopyCopyInputStream result = new ZopyCopyInputStream(channel, start, length);
             log.info("文件分片读取耗时：{}", System.currentTimeMillis() - startTime);
            return result;
         } catch (IOException e) {

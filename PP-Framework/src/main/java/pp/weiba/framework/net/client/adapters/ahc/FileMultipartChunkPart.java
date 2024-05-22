@@ -7,7 +7,6 @@ import lombok.extern.log4j.Log4j2;
 import org.asynchttpclient.request.body.multipart.part.FileMultipartPart;
 import org.asynchttpclient.request.body.multipart.part.MultipartState;
 import pp.weiba.utils.FileUtils;
-import pp.weiba.utils.model.ZopyCopyInputStream;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -22,7 +21,7 @@ import java.nio.channels.FileChannel;
 public class FileMultipartChunkPart extends FileMultipartPart {
 
     private final File file;
-    private InputStream in;
+    private InputStream inputStream;
 
     private final long maxLength;
 
@@ -53,18 +52,12 @@ public class FileMultipartChunkPart extends FileMultipartPart {
 
     @SneakyThrows
     private InputStream getInputStream() {
-        if (in == null) {
+        if (inputStream == null) {
             long position = (long) ReflectUtil.getFieldValue(this, "position");
             long length = (long) ReflectUtil.getFieldValue(this, "length");
-            /*
-            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
-            byte[] buffer = new byte[(int) length];
-            randomAccessFile.seek(position);
-            randomAccessFile.readFully(buffer);
-            in = new ByteArrayInputStream(buffer);*/
-            in = FileUtils.getZopyCopyInputStream(file, position, length);
+            inputStream = FileUtils.getZopyCopyInputStream(file, position, length);
         }
-        return in;
+        return inputStream;
     }
 
     private long getPositionToInputStream(ByteBuf target, long position, long length) throws IOException {
@@ -100,5 +93,14 @@ public class FileMultipartChunkPart extends FileMultipartPart {
         log.info("position:{}, maxLength: {}, length:{}, transferred:{}", position, maxLength, length, transferred);
         ReflectUtil.setFieldValue(this, "position", position);
         return transferred;
+    }
+
+    @SneakyThrows
+    @Override
+    public void close() {
+        super.close();
+        if (inputStream != null) {
+            inputStream.close();
+        }
     }
 }
