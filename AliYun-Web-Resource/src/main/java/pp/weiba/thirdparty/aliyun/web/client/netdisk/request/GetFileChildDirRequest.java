@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 
 /**
 * 
@@ -20,11 +20,11 @@ import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
 public class GetFileChildDirRequest {
 
     public GetFileChildDirRequest(boolean isBackupDrive) {
-        this.driveId = isBackupDrive ? ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
+        this.driveId = isBackupDrive ? AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
     }
 
     public GetFileChildDirRequest(boolean isBackupDrive, String parentFileId) {
-        this.driveId = isBackupDrive ? ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
+        this.driveId = isBackupDrive ? AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
         this.parentFileId = parentFileId;
     }
 

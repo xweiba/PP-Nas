@@ -11,6 +11,8 @@ import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.utils.HandlerUtils;
 import pp.weiba.utils.JSONUtils;
 
+import java.util.Map;
+
 /**
  * HttpClient 客户端
  *
@@ -49,8 +51,10 @@ public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorP
 
         initRequest(request);
 
+        Map<String, Object> params = request.getBuildParams();
+
         // 请求参数处理器
-        if (requestChain != null) {
+        if (requestChain != null && (params == null || params.get(ClientConstants.REQUEST_PARAM_NEW_SESSION_TAG) == null || !(Boolean)params.get(ClientConstants.REQUEST_PARAM_NEW_SESSION_TAG))) {
             request = requestChain.handle(request);
         }
 

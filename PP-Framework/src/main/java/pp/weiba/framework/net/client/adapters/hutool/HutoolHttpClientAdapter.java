@@ -8,24 +8,24 @@ import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.net.url.UrlPath;
 import cn.hutool.core.net.url.UrlQuery;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.Method;
+import cn.hutool.http.*;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.StrJsonTypeReferenceProcessor;
 import pp.weiba.framework.net.client.AbstractHttpClient;
 import pp.weiba.framework.net.client.IHttpTypeAdapter;
 import pp.weiba.framework.net.client.model.UploadFile;
-import pp.weiba.framework.net.client.model.UploadFileChunk;
+import pp.weiba.framework.net.client.model.UploadType;
+import pp.weiba.utils.model.FileChunk;
+import pp.weiba.utils.FileUtils;
 import pp.weiba.utils.HttpCookieUtils;
 import pp.weiba.utils.StringUtils;
+import pp.weiba.utils.model.ZopyCopyInputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.net.HttpCookie;
 import java.net.Proxy;
 import java.net.URL;
@@ -86,7 +86,7 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
         return request.execute();
     }
 
-    static private class HttpTypeAdapter implements IHttpTypeAdapter<HttpRequest, HttpResponse> {
+    static public class HttpTypeAdapter implements IHttpTypeAdapter<HttpRequest, HttpResponse> {
 
         @Override
         public HttpRequest adapter(pp.weiba.framework.net.client.model.HttpRequest request) {
@@ -151,25 +151,27 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
             return responseAdapter;
         }
 
-        private void buildUploadFile(HttpRequest httpRequest, UploadFile uploadFile) {
+        public static void buildUploadFile(HttpRequest httpRequest, UploadFile uploadFile) {
             File file = uploadFile.getFile();
-            UploadFileChunk chunk = uploadFile.getChunk();
+            FileChunk chunk = uploadFile.getChunk();
             if (chunk == null) {
-                httpRequest.form("file", file);
-            } else {
+                chunk = new FileChunk(0, file.length(), 1);
+            }
+            try {
                 // 这里不能关闭流，不然后面无法读取
-                try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
-                    byte[] buffer = new byte[(int) chunk.getLength()];
-                    randomAccessFile.seek(chunk.getStart());
-                    randomAccessFile.readFully(buffer);
-                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
-                    // 注意，InputStream 是单向流，只能被读取一次，
-                    InputStreamResource inputStreamResource = new InputStreamResource(byteArrayInputStream, file.getName());
+                ZopyCopyInputStream byteArrayInputStream = FileUtils.getZopyCopyInputStream(file, chunk.getStart(), chunk.getLength());
+                // 注意，InputStream 是单向流，只能被读取一次，
+                InputStreamResource inputStreamResource = new InputStreamResource(byteArrayInputStream, file.getName());
+
+                if (uploadFile.getUploadType() == UploadType.FORM) {
                     httpRequest.form("file", inputStreamResource);
-                } catch (IOException e) {
-                    log.error("文件分片失败！Exception：{}", ExceptionUtil.getMessage(e));
-                    throw new RuntimeException("文件分片失败！", e);
+                } else if (uploadFile.getUploadType() == UploadType.BYTE) {
+                    httpRequest.body(inputStreamResource);
+                    ReflectUtil.setFieldValue(httpRequest, "isMultiPart", true);
                 }
+            } catch (Exception e) {
+                log.error("文件分片失败！Exception：{}", ExceptionUtil.getMessage(e));
+                throw new RuntimeException("文件分片失败！", e);
             }
         }
     }

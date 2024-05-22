@@ -8,6 +8,7 @@ import org.asynchttpclient.request.body.multipart.part.*;
 import org.asynchttpclient.util.Assertions;
 import org.asynchttpclient.util.HttpUtils;
 import org.asynchttpclient.util.MiscUtils;
+import pp.weiba.framework.net.client.model.UploadType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -29,22 +30,26 @@ public class CustomizeMultipartUtils extends MultipartUtils {
         return new MultipartBody(multipartParts, contentType, boundary);
     }
 
-    public static MultipartFormData buildMultipartFormData(HttpHeaders requestHeaders) {
+    public static MultipartFormData buildMultipartFormData(HttpHeaders requestHeaders, UploadType uploadType) {
         String contentTypeHeader = requestHeaders.get(HttpHeaderNames.CONTENT_TYPE);
-        byte[] boundary;
-        String contentType;
-        if (MiscUtils.isNonEmpty(contentTypeHeader)) {
-            int boundaryLocation = contentTypeHeader.indexOf("boundary=");
-            if (boundaryLocation != -1) {
-                contentType = contentTypeHeader;
-                boundary = contentTypeHeader.substring(boundaryLocation + "boundary=".length()).trim().getBytes(StandardCharsets.US_ASCII);
+        byte[] boundary = new byte[0];
+        String contentType = "";
+        if (uploadType == UploadType.FORM) {
+            if (MiscUtils.isNonEmpty(contentTypeHeader)) {
+                int boundaryLocation = contentTypeHeader.indexOf("boundary=");
+                if (boundaryLocation != -1) {
+                    contentType = contentTypeHeader;
+                    boundary = contentTypeHeader.substring(boundaryLocation + "boundary=".length()).trim().getBytes(StandardCharsets.US_ASCII);
+                } else {
+                    boundary = HttpUtils.computeMultipartBoundary();
+                    contentType = HttpUtils.patchContentTypeWithBoundaryAttribute(contentTypeHeader, boundary);
+                }
             } else {
                 boundary = HttpUtils.computeMultipartBoundary();
-                contentType = HttpUtils.patchContentTypeWithBoundaryAttribute(contentTypeHeader, boundary);
+                contentType = HttpUtils.patchContentTypeWithBoundaryAttribute(HttpHeaderValues.MULTIPART_FORM_DATA, boundary);
             }
         } else {
-            boundary = HttpUtils.computeMultipartBoundary();
-            contentType = HttpUtils.patchContentTypeWithBoundaryAttribute(HttpHeaderValues.MULTIPART_FORM_DATA, boundary);
+            contentType = requestHeaders.get(HttpHeaderNames.CONTENT_TYPE);
         }
         return new MultipartFormData(boundary, contentType);
     }

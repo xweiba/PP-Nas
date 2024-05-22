@@ -3,22 +3,28 @@ package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.net.client.AbstractApiHttpClient;
+import pp.weiba.framework.net.client.ClientConstants;
 import pp.weiba.framework.net.client.IHttpClient;
-import pp.weiba.framework.net.client.model.HttpRequest;
-import pp.weiba.framework.net.client.model.Method;
-import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
+import pp.weiba.framework.net.client.model.*;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.*;
+import pp.weiba.utils.model.FileChunk;
+import pp.weiba.utils.FileUtils;
 import pp.weiba.utils.JSONUtils;
 import pp.weiba.utils.StringUtils;
 
+import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 文件管理API
@@ -105,7 +111,7 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
     }
 
     public GetFileDownloadUrlResponse getFileDownloadUrl(String fileId, boolean isBackupDrive) {
-        String driveId = isBackupDrive ? ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
+        String driveId = isBackupDrive ? AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
         return postSrtExecute(UrlConstants.POST_GET_FILE_DOWNLOAD_URL, new HashMap<String, String>() {{
             put("file_id", fileId);
             put("drive_id", driveId);
@@ -194,8 +200,8 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
         if (StrUtil.isEmpty(toParentFileId) || ArrayUtil.isEmpty(fileIds)) {
             return null;
         }
-        String fromDriveId = !toResourceDrive ? ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG : ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG;
-        String toDriveId = toResourceDrive ? ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG : ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG;
+        String fromDriveId = !toResourceDrive ? AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG : AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG;
+        String toDriveId = toResourceDrive ? AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG : AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG;
 
         List<CopyToResourceRequest.FilesResponse> fileInfos = new ArrayList<>();
         for (String fileId : fileIds) {
@@ -353,5 +359,105 @@ public class FileOperationApiClient extends AbstractApiHttpClient {
     }
 
 
+    /**
+     * 文件上传预创建
+     *
+     * @param params
+     * @return 返回待上传信息
+     * @author weiba
+     * @date 2024/5/21 11:19
+     */
+    public CreateWithFoldersResponse createWithFolders(CreateWithFoldersRequest params) {
+        return postSrtExecute(UrlConstants.POST_RESOURCE_CREATE_WITH_FOLDERS_URL, params, new TypeReference<CreateWithFoldersResponse>() {
+        });
+    }
 
+
+    public CreateWithFoldersResponse checkFileExist(boolean isBackupDrive, String parentFileId, String name, String filePath) {
+        CreateWithFoldersRequest createWithFoldersRequest = buildCheckFileExistParams(isBackupDrive, parentFileId, name, filePath);
+        return createWithFolders(createWithFoldersRequest);
+    }
+
+    @NotNull
+    private static CreateWithFoldersRequest buildCheckFileExistParams(boolean isBackupDrive, String parentFileId, String name, String filePath) {
+        File file = new File(filePath);
+        if (!file.exists() || !file.isFile()) {
+            throw new RuntimeException("不支持文件夹或文件不存在");
+        }
+        CreateWithFoldersRequest createWithFoldersRequest = new CreateWithFoldersRequest(isBackupDrive, parentFileId, name, filePath, file.length());
+        String preHash = AliYunUtils.preHash(filePath);
+        createWithFoldersRequest.setPreHash(preHash);
+        return createWithFoldersRequest;
+    }
+
+
+    public CreateWithFoldersResponse fileTransferInSecond(boolean isBackupDrive, String parentFileId, String name, String filePath) {
+        CreateWithFoldersRequest createWithFoldersRequest = buildFileTransferInSecondParams(isBackupDrive, parentFileId, name, filePath);
+        return createWithFolders(createWithFoldersRequest);
+    }
+
+    @NotNull
+    private static CreateWithFoldersRequest buildFileTransferInSecondParams(boolean isBackupDrive, String parentFileId, String name, String filePath) {
+        File file = new File(filePath);
+        if (!file.exists() || !file.isFile()) {
+            throw new RuntimeException("不支持文件夹或文件不存在");
+        }
+        CreateWithFoldersRequest createWithFoldersRequest = new CreateWithFoldersRequest(isBackupDrive, parentFileId, name, filePath, file.length());
+        // 必须传ContentHash，不然秒传会失败，得走正常上传
+        createWithFoldersRequest.setContentHash(DigestUtil.sha1Hex(new File(filePath)));
+        createWithFoldersRequest.setContentHashName("sha1");
+        createWithFoldersRequest.setProofCode(AliYunClientConstants.REQUEST_UPLOAD_FILE_PROOF_CODE_TAG+ filePath);
+        createWithFoldersRequest.setProofVersion("v1");
+        return createWithFoldersRequest;
+    }
+
+    public CreateWithFoldersResponse uploadFile(boolean isBackupDrive, String parentFileId, String name, String filePath) {
+
+        CreateWithFoldersRequest params = buildCheckFileExistParams(isBackupDrive, parentFileId, name, filePath);
+        // 检测是否可以秒传
+        CreateWithFoldersResponse response = createWithFolders(params);
+
+        if (StrUtil.isNotBlank(response.getCode()) && response.getCode().equals("PreHashMatched")) {
+            response = fileTransferInSecond(isBackupDrive, parentFileId, name, filePath);
+            if (response.getPartInfoList() == null) {
+                return response;
+            }
+        }
+
+        // 必须按顺序上传
+        List<CreateWithFoldersResponse.PartInfoListResponse> partInfoList = response.getPartInfoList();
+
+        // 构建分片参数
+        List<FileChunk> fileChunks = FileUtils.buildFileChunks(new File(filePath), AliYunClientConstants.FILE_SPLIT_SIZE);
+        LinkedHashMap<Integer, FileChunk> collect = fileChunks.stream().collect(Collectors.toMap(key -> key.getPartSeq(), value -> value, (k1, k2) -> k1, LinkedHashMap::new));
+        for (int i = 0; i < partInfoList.size(); i++) {
+            CreateWithFoldersResponse.PartInfoListResponse partInfoListResponse = partInfoList.get(i);
+            String uploadUrl = partInfoListResponse.getUploadUrl();
+            FileChunk fileChunk = collect.get(partInfoListResponse.getPartNumber() - 1);
+            uploadFileChunk(uploadUrl, new File(filePath), fileChunk);
+        }
+        return null;
+    }
+
+    public Boolean uploadFileChunk(String uploadUrl, File file, FileChunk chunk) {
+        UploadFile uploadFile = new UploadFile().setFile(file);
+        int partseq = 0;
+        if (chunk != null) {
+            partseq = chunk.getPartSeq();
+            uploadFile.setChunk(new FileChunk(chunk.getStart(), chunk.getLength(), partseq, null)).setUploadType(UploadType.BYTE);
+        }
+//        ALi_HttpClientUtil.uploadFile(uploadUrl, file, uploadFile);
+
+        HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.PUT, uploadUrl).setUploadFile(uploadFile)
+                .addBuildParams(ClientConstants.REQUEST_PARAM_NEW_SESSION_TAG, true)
+                .addheader("Accept", "*")
+                .addheader("Origin", "https://www.aliyundrive.com")
+                .addheader("Referer", "https://www.aliyundrive.com")
+                .addheader("Content-Type", "")
+                .addheader("Connection", "keep-alive")
+                .addheader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0")
+                ;
+        HttpResponse httpResponse = executeResponse(httpRequest);
+        return true;
+    }
 }

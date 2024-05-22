@@ -1,7 +1,7 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk.request;
 import lombok.*;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 
 /**
 * 批处理请求业务参数
@@ -32,7 +32,7 @@ public class BatchOperationRequest {
         this.url = url;
         this.id = fileId;
         this.fileId = fileId;
-        this.driveId = isBackupDrive ? ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
+        this.driveId = isBackupDrive ? AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
     }
 
     public BatchOperationRequest(String url, String fileId, String toParentFileId) {
@@ -42,7 +42,7 @@ public class BatchOperationRequest {
     public BatchOperationRequest(String url, String fileId, String toParentFileId, boolean isBackupDrive) {
         this(url, fileId, isBackupDrive);
         this.toParentFileId = toParentFileId;
-        this.toDriveId = isBackupDrive ? ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
+        this.toDriveId = isBackupDrive ? AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
     }
 
     private String url;

@@ -20,6 +20,8 @@ public class ErrorStatus {
         statusCodeMap.put("DeviceSessionSignatureInvalid", "设备签名无效,请检查[X-Signature]请求头");
         statusCodeMap.put("AccessTokenInvalid", "AccessToken已失效,请检查[Authorization]请求头");
         statusCodeMap.put("SharelinkCreateExceedDailyLimit", "普通用户每天只能使用分享功能5次；会员用户和Lv.1及以上的达人用户，每天可使用分享次数1000次。超过上限后，将提示「今日分享次数已达上限」。 ");
+        statusCodeMap.put("QuotaExhausted.Drive", "文件大小超出网盘容量");
+        statusCodeMap.put("SignatureDoesNotMatch", "签名不匹配");
     }
 
     public static String getMessage(String statusCode) {

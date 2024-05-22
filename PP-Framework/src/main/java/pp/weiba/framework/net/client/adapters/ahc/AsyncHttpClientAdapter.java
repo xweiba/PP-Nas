@@ -21,13 +21,14 @@ import pp.weiba.framework.net.client.AbstractHttpClient;
 import pp.weiba.framework.net.client.IHttpTypeAdapter;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.net.client.model.HttpResponse;
-import pp.weiba.framework.net.client.model.UploadFileChunk;
+import pp.weiba.framework.net.client.model.UploadFile;
+import pp.weiba.framework.net.client.model.UploadType;
+import pp.weiba.utils.model.ZopyCopyInputStream;
+import pp.weiba.utils.model.FileChunk;
+import pp.weiba.utils.FileUtils;
 import pp.weiba.utils.JSONUtils;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,34 +86,30 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
         }
     }
 
-    private static void multipartFormData(UploadFileChunk chunk, RequestBuilder requestBuilder, File file) {
+    private static void multipartFormData(FileChunk chunk, RequestBuilder requestBuilder, File file) {
         if (chunk == null) {
             requestBuilder.addBodyPart(new FilePart(file.getName(), file));
         } else {
             try {
-                RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
-                byte[] buffer = new byte[(int) chunk.getLength()];
-                randomAccessFile.seek(chunk.getStart());
-                randomAccessFile.readFully(buffer);
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
+                ZopyCopyInputStream byteArrayInputStream = FileUtils.getZopyCopyInputStream(file, chunk.getStart(), chunk.getLength());
                 requestBuilder.addBodyPart(new InputStreamPart("file", byteArrayInputStream, file.getName(), chunk.getLength()));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error("文件上传自定义零拷贝异常：{}", ExceptionUtil.getMessage(e));
                 throw new RuntimeException("文件上传自定义零拷贝异常！", e);
             }
         }
     }
 
-    private static void customizeMultipartFormData(File file, UploadFileChunk chunk, RequestBuilder requestBuilder, HttpHeaders headers) {
+    private static void customizeMultipartFormData(File file, FileChunk chunk, RequestBuilder requestBuilder, HttpHeaders headers, UploadType uploadType) {
         List<Part> parts = new ArrayList<>();
         if (chunk == null) {
-            chunk = new UploadFileChunk(0, file.getAbsoluteFile().length(), 0);
+            chunk = new FileChunk(0, file.getAbsoluteFile().length(), 0);
         }
         FilePart filePart = new FileChunkPart(file.getName(), file, chunk);
         parts.add(filePart);
         requestBuilder.resetFormParams();
         requestBuilder.resetNonMultipartData();
-        MultipartFormData multipartFormData = CustomizeMultipartUtils.buildMultipartFormData(headers);
+        MultipartFormData multipartFormData = CustomizeMultipartUtils.buildMultipartFormData(headers, uploadType);
         headers.add("Content-Type", multipartFormData.getContentType());
         headers.add("Connection", "keep-alive");
         requestBuilder.setBody(new FileMultipartChunkBodyGenerator(parts, multipartFormData));
@@ -159,10 +156,10 @@ public class AsyncHttpClientAdapter extends AbstractHttpClient<RequestBuilder, R
             }
 
             if (request.getUploadFile() != null && request.getUploadFile().getFile() != null) {
-                File file = request.getUploadFile().getFile();
-                UploadFileChunk chunk = request.getUploadFile().getChunk();
-                customizeMultipartFormData(file, chunk, requestBuilder, headers);
-                //                multipartFormData(chunk, requestBuilder, file);
+                UploadFile uploadFile = request.getUploadFile();
+                File file = uploadFile.getFile();
+                FileChunk chunk = uploadFile.getChunk();
+                customizeMultipartFormData(file, chunk, requestBuilder, headers, uploadFile.getUploadType());
             }
             return requestBuilder;
         }

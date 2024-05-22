@@ -1,12 +1,16 @@
 package pp.weiba.utils;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.crypto.SecureUtil;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.utils.model.ZopyCopyInputStream;
+import pp.weiba.utils.model.FileChunk;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -50,8 +54,8 @@ public class FileUtils {
         return SecureUtil.md5(new ByteArrayInputStream(lastByte));
     }
 
-    public static byte[] getSliceFile(File file, int off, int size) {
-        byte[] lastByte = new byte[size];
+    public static byte[] getSliceFile(File file, long off, long size) {
+        byte[] lastByte = new byte[(int) size];
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")){
             randomAccessFile.seek(off);
             randomAccessFile.readFully(lastByte);
@@ -193,5 +197,43 @@ public class FileUtils {
             return null;
         }
         return FileUtil.readString(saveFilePath, StandardCharsets.UTF_8);
+    }
+
+
+    /**
+     * 将文件分片
+     *
+     * @param file 文件信息
+     * @return 文件分片信息，不需要分片的返回null
+     * @author weiba
+     * @date 2024/3/25 10:52
+     */
+    public static List<FileChunk> buildFileChunks(File file, long chunkSize) {
+        List<FileChunk> chunkList = null;
+        long fileLength = file.length();
+        if (fileLength > chunkSize) {
+            chunkList = new ArrayList<>();
+            long chunkCount = (fileLength + chunkSize - 1) / chunkSize;
+            for (long i = 0; i < chunkCount; i++) {
+                long start = i * chunkSize;
+                long length = Math.min(fileLength - start, chunkSize);
+                chunkList.add(new FileChunk(start, length, (int) i, null));
+            }
+        }
+
+        return chunkList;
+    }
+
+    public static ZopyCopyInputStream getZopyCopyInputStream(File file, long start, long length) {
+        // 这里不能关闭流，不然后面无法读取
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+            long startTime = System.currentTimeMillis();
+            ZopyCopyInputStream result = new ZopyCopyInputStream(randomAccessFile.getChannel().map(FileChannel.MapMode.READ_ONLY, start, length));
+            log.info("文件分片读取耗时：{}", System.currentTimeMillis() - startTime);
+           return result;
+        } catch (IOException e) {
+            log.error("文件分片失败！Exception：{}", ExceptionUtil.getMessage(e));
+            throw new RuntimeException("文件分片失败！", e);
+        }
     }
 }

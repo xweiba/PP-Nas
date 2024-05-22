@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +37,7 @@ public class CreateShareRequest {
      * driveId 资源盘id
      */
     @JSONField(name = "drive_id")
-    private String driveId = ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
+    private String driveId = AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
     /**
      * fileIdList
      */

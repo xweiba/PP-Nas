@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 
 /**
 * 获取我的分享列表
@@ -23,7 +23,7 @@ public class GetMyShareListRequest {
      * creator
      */
     @JSONField(name = "creator")
-    private String creator = ClientContants.REQUEST_PARAM_RESOURCE_USER_ID_TAG;
+    private String creator = AliYunClientConstants.REQUEST_PARAM_RESOURCE_USER_ID_TAG;
     /**
      * includeCanceled
      */

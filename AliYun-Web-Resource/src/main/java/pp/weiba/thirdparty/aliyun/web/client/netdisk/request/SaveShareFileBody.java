@@ -3,7 +3,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 
 /**
 * 
@@ -17,7 +17,7 @@ import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
 public class SaveShareFileBody {
 
     public SaveShareFileBody(boolean isBackupDrive, String toParentFileId, String shareId, String shareFileId) {
-        this.toDriveId = isBackupDrive ? ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
+        this.toDriveId = isBackupDrive ? AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
         this.toParentFileId = toParentFileId;
         this.shareId = shareId;
         this.fileId = shareFileId;

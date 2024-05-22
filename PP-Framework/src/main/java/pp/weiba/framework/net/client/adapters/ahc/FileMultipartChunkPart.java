@@ -6,6 +6,8 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.asynchttpclient.request.body.multipart.part.FileMultipartPart;
 import org.asynchttpclient.request.body.multipart.part.MultipartState;
+import pp.weiba.utils.FileUtils;
+import pp.weiba.utils.model.ZopyCopyInputStream;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -54,11 +56,13 @@ public class FileMultipartChunkPart extends FileMultipartPart {
         if (in == null) {
             long position = (long) ReflectUtil.getFieldValue(this, "position");
             long length = (long) ReflectUtil.getFieldValue(this, "length");
+            /*
             RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
             byte[] buffer = new byte[(int) length];
             randomAccessFile.seek(position);
             randomAccessFile.readFully(buffer);
-            in = new ByteArrayInputStream(buffer);
+            in = new ByteArrayInputStream(buffer);*/
+            in = FileUtils.getZopyCopyInputStream(file, position, length);
         }
         return in;
     }

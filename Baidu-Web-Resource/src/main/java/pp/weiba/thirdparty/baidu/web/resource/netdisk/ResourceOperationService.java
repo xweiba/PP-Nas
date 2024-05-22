@@ -17,6 +17,7 @@ import pp.weiba.thirdparty.baidu.web.client.netdisk.response.AsyncTaskResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.CreateDirResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.FileDetailByFSIdResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.FileOperaAsyncTaskResponse;
+import pp.weiba.utils.model.FileChunk;
 import pp.weiba.utils.FileUtils;
 import pp.weiba.utils.JSONUtils;
 

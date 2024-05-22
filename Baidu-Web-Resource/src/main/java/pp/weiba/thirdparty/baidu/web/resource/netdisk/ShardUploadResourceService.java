@@ -8,11 +8,12 @@ import pp.weiba.framework.resource.AbstractShardUploadResource;
 import pp.weiba.framework.resource.model.ShardResource;
 import pp.weiba.framework.resource.model.UploadResourceInfo;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.UploadFileApiClient;
-import pp.weiba.thirdparty.baidu.web.client.netdisk.request.FileChunk;
+import pp.weiba.utils.model.FileChunk;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.CheckFileExistResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.CompleteUploadFileResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.PreCreateFileResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.UploadFileChunkResponse;
+import pp.weiba.utils.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class ShardUploadResourceService extends AbstractShardUploadResource<Uplo
     @Override
     public List<ShardResource<FileChunk>> shardResourceBuild(UploadResourceInfo<UploadEntity> uploadResourceInfo) {
         UploadEntity entity = uploadResourceInfo.getEntity();
-        List<FileChunk> fileChunks = uploadFileApiClient.buildFileChunks(entity.getFile());
+        List<FileChunk> fileChunks = FileUtils.buildFileChunks(entity.getFile(), UploadFileApiClient.UPLOAD_FILE_CHUNK_SIZE);
         List<ShardResource<FileChunk>> shardResources = null;
         if (CollUtil.isNotEmpty(fileChunks)) {
             shardResources = new ArrayList<>();

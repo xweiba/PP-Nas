@@ -1,5 +1,6 @@
 package pp.weiba.thirdparty.aliyun.web.resource.security.authentication;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.AbstractScheduledRefreshAuthentication;
@@ -73,10 +74,14 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
     }
 
     private void initSignIn() {
-        // 每次登录执行一次领取所有签到奖励
-        signInApiClient.signInRewardAll();
-        // 定时刷新， 每天自动签到
-        scheduledRefreshSignIn();
+        try {
+            // 每次登录执行一次领取所有签到奖励
+            signInApiClient.signInRewardAll();
+            // 定时刷新， 每天自动签到
+            scheduledRefreshSignIn();
+        } catch (Exception e) {
+            log.error("签到异常: {}", ExceptionUtil.getMessage(e));
+        }
     }
 
     private void refreshSignatureRun() {

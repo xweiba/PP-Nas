@@ -21,6 +21,11 @@ class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
     /* 当前是否为备份盘模式 */
     public static final Boolean IS_BACKUP_DRIVER_MODEL = true;
 
+    public static final String UPLOAD_FILE_PATH = "D:\\download\\11\\rom\\magisk_patched-27001_9Zekx.img";
+
+    public static final String UPLOAD_FILE_NAME = "magisk_patched-27001_9Zekx.img";
+
+
     @Test
     void createDir() {
         AddFolderRequest addFolderRequest = new AddFolderRequest().setDriveId("18654654").setParentFileId("638829ed5df082af754043cba40637f674d213b7").setName("test222").setCheckNameMode("refuse").setType("folder");
@@ -177,5 +182,24 @@ class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
         BatchResponse result = fileOperationApiClient.saveShareFile(shareTokenResponse.getShareToken(), saveShareFileBody);
         assertNotNull(result);
     }
+
+    @Test
+    void checkFileExist() {
+        CreateWithFoldersResponse result =  fileOperationApiClient.checkFileExist(IS_BACKUP_DRIVER_MODEL, "root", UPLOAD_FILE_NAME, UPLOAD_FILE_PATH);
+        assertNotNull(result);
+    }
+
+    @Test
+    void fileTransferInSecond() {
+        CreateWithFoldersResponse result =  fileOperationApiClient.fileTransferInSecond(IS_BACKUP_DRIVER_MODEL, "root", UPLOAD_FILE_NAME, UPLOAD_FILE_PATH);
+        assertNotNull(result);
+    }
+
+    @Test
+    void uploadFile() {
+        CreateWithFoldersResponse result =  fileOperationApiClient.uploadFile(IS_BACKUP_DRIVER_MODEL, "root", UPLOAD_FILE_NAME, UPLOAD_FILE_PATH);
+        assertNotNull(result);
+    }
+
 
 }

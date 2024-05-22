@@ -22,9 +22,6 @@ public class UrlConstants {
 
     public static final String SIGNIN_ALIPAN_DOMAIN = "https://member.aliyundrive.com";
 
-    public static final String NAV_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0";
-    public static final String SEC_CH_UA = "\"Chromium\";v=\"122\", \"Not(A:Brand\";v=\"24\", \"Microsoft Edge\";v=\"122\"";
-
     public static final String HTML_INIT_LOGIN_MAIN_URL = PASSPORT_DOMAIN + "/mini_login.htm?lang=zh_cn&appName=aliyun_drive&appEntrance=web_default&styleType=auto&bizParams=&notLoadSsoView=false&notKeepLogin=false&isMobile=false&ad__pass__q__rememberLogin=true&ad__pass__q__rememberLoginDefaultValue=true&ad__pass__q__forgotPassword=true&ad__pass__q__licenseMargin=true&ad__pass__q__loginType=normal&hidePhoneCode=true&rnd=0.";
 
     public static final String HTML_INIT_AUTH_ALIPAN_URL = AUTH_ALIPAN_DOMAIN + "v2/oauth/authorize?client_id=25dzX3vbYqktVxyX&redirect_uri=https%3A%2F%2Fwww.alipan.com%2Fsign%2Fcallback&response_type=code&login_type=custom&state=%7B%22origin%22%3A%22https%3A%2F%2Fwww.alipan.com%22%7D";
@@ -141,4 +138,7 @@ public class UrlConstants {
 
     /* 保存分享文件 */
     public static final String RESOURCE_BATCH_SAVE_SHARE_FILE_URL = "/file/copy";
+
+    /* 文件上传预创建 */
+    public static final String POST_RESOURCE_CREATE_WITH_FOLDERS_URL = API_DOMAIN + "/adrive/v2/file/createWithFolders";
 }

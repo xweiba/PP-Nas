@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.net.client.AbstractApiHttpClient;
+import pp.weiba.framework.net.client.ClientConstants;
 import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.net.client.model.HttpResponse;
@@ -84,7 +85,7 @@ public class AuthenticationApiClient extends AbstractApiHttpClient {
         requestParams.put("ck", loginFormData.getHsiz());
         requestParams.put("umidTag", "SERVER");
         requestParams.put("navlanguage", "zh-CN");
-        requestParams.put("navUserAgent", UrlConstants.NAV_USER_AGENT);
+        requestParams.put("navUserAgent", ClientConstants.USER_AGENT);
         requestParams.put("navPlatform", "Win32");
         requestParams.put("isIframe", true);
         requestParams.put("documentReferer", UrlConstants.AUTH_ALIPAN_DOMAIN);

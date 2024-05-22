@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.client.netdisk.request;
+package pp.weiba.utils.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +16,12 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FileChunk {
+
+    public FileChunk(long start, long length, int partSeq) {
+        this.start = start;
+        this.length = length;
+        this.partSeq = partSeq;
+    }
 
     private long start;
 

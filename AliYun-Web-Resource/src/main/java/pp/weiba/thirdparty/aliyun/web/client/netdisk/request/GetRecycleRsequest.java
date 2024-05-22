@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 
 /*
 {"drive_id":"18654654","limit":20,"order_by":"name","order_direction":"DESC"}
@@ -28,7 +28,7 @@ public class GetRecycleRsequest {
      * driveId
      */
     @JSONField(name = "drive_id")
-    private String driveId = ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG;
+    private String driveId = AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG;
     /**
      * limit
      */

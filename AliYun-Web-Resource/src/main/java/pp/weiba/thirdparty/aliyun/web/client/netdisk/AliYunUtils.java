@@ -1,16 +1,34 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.HexUtil;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.bouncycastle.util.encoders.Hex;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Sign;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.CreateWithFoldersRequest;
+import pp.weiba.utils.FileUtils;
 
+import java.io.*;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.ArrayList;
+import java.util.List;
+
+import static cn.hutool.core.io.FileUtil.file;
+import static cn.hutool.core.io.FileUtil.getMimeType;
 
 /**
  * 阿里云工具类
@@ -18,6 +36,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
  * @author weiba
  * @date 2024/4/30 15:47
  */
+@Log4j2
 public class AliYunUtils {
 
     /* 阿里云盘 App Id*/
@@ -185,6 +204,59 @@ public class AliYunUtils {
                     + Character.digit(s.charAt(i+1), 16));
         }
         return data;
+    }
+
+    //默认大小
+    public static final Integer DEFAULT_SIZE = 10480000;
+
+
+    @SneakyThrows
+    public static final String preHash(String path) {
+        byte[] bytes = DigestUtil.sha1(FileUtils.getSliceFile(new File(path), 0, 1024));
+        return HexUtil.encodeHexStr(bytes);
+    }
+
+    private static String convertHashToString(byte[] hashBytes) {
+        StringBuilder returnVal = new StringBuilder();
+        for (byte hashByte : hashBytes) {
+            returnVal.append(Integer.toString((hashByte & 0xff) + 0x100, 16).substring(1));
+        }
+        return returnVal.toString().toUpperCase();
+    }
+
+
+    public static String proofCode(String path, String accessToken) {
+        File file = new File(path);
+        if (!file.isFile() || !file.exists()) {
+            throw new RuntimeException("path必须为文件且必须存在");
+        }
+        String n = accessToken;
+        BigInteger r = HexUtil.toBigInteger(SecureUtil.md5(n).substring(0, 16));
+        BigInteger i = BigInteger.valueOf(file.length());
+        BigInteger o = i.longValue() > 0 ? r.mod(i) : BigInteger.ZERO;
+        long start = o.longValue();
+        long end = NumberUtil.min(o.add(BigInteger.valueOf(8L)).longValue(), i.longValue());
+        int len = Convert.toInt(end - start);
+        byte[] b = FileUtils.getSliceFile(file, start, len);
+        return Base64.encode(b);
+    }
+
+    public static List<CreateWithFoldersRequest.PartInfoListResponse> getPartInfoList(long size) {
+        List<CreateWithFoldersRequest.PartInfoListResponse> partInfoList = null;
+        if (size > 0) {
+            // 单个文件分片最大限制5GB，最小限制 100KB
+            partInfoList = new ArrayList<>();
+
+            if (size < AliYunClientConstants.FILE_SPLIT_SIZE) {
+                partInfoList.add(new CreateWithFoldersRequest.PartInfoListResponse().setPartNumber(1));
+            } else {
+                double splitCount = Math.ceil(size / (AliYunClientConstants.FILE_SPLIT_SIZE * 1.0));
+                for (int j = 0; j < splitCount; j++) {
+                    partInfoList.add(new CreateWithFoldersRequest.PartInfoListResponse().setPartNumber(j + 1));
+                }
+            }
+        }
+        return partInfoList;
     }
 
 }

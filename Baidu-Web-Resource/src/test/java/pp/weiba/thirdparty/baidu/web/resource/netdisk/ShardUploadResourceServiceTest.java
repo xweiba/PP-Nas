@@ -9,7 +9,7 @@ import pp.weiba.framework.resource.IShardUploadResource;
 import pp.weiba.framework.resource.model.ShardResource;
 import pp.weiba.framework.resource.model.UploadResourceInfo;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.UploadFileApiClient;
-import pp.weiba.thirdparty.baidu.web.client.netdisk.request.FileChunk;
+import pp.weiba.utils.model.FileChunk;
 import pp.weiba.thirdparty.baidu.web.resource.security.authentication.WebNetDiskAuthenticationTest;
 
 import java.io.File;

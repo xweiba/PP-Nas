@@ -10,7 +10,7 @@ import pp.weiba.framework.net.client.AbstractApiHttpClient;
 import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.framework.net.client.model.*;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.request.CheckFileExistRequest;
-import pp.weiba.thirdparty.baidu.web.client.netdisk.request.FileChunk;
+import pp.weiba.utils.model.FileChunk;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.*;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.utils.BaiduNetDiskWebScript;
 import pp.weiba.utils.FileUtils;
@@ -18,7 +18,6 @@ import pp.weiba.utils.JSONUtils;
 import pp.weiba.utils.StringUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,7 @@ import java.util.List;
 public class UploadFileApiClient extends AbstractApiHttpClient {
 
     /* 4Mb */
-    public static final Integer UPLOAD_FILE_CHUNK_SIZE = 4194304;
+    public static final long UPLOAD_FILE_CHUNK_SIZE = 4194304;
 
     /* 256Kb */
     public static final Integer UPLOAD_FILE_RAPID_CHUNK_SIZE = 262144;
@@ -111,31 +110,6 @@ public class UploadFileApiClient extends AbstractApiHttpClient {
         });
     }
 
-
-    /**
-     * 将文件分片
-     *
-     * @param file 文件信息
-     * @return 文件分片信息，不需要分片的返回null
-     * @author weiba
-     * @date 2024/3/25 10:52
-     */
-    public List<FileChunk> buildFileChunks(File file) {
-        List<FileChunk> chunkList = null;
-        long fileLength = file.length();
-        if (fileLength > UPLOAD_FILE_CHUNK_SIZE) {
-            chunkList = new ArrayList<>();
-            long chunkCount = (fileLength + UPLOAD_FILE_CHUNK_SIZE - 1) / UPLOAD_FILE_CHUNK_SIZE;
-            for (long i = 0; i < chunkCount; i++) {
-                long start = i * UPLOAD_FILE_CHUNK_SIZE;
-                long length = Math.min(fileLength - start, UPLOAD_FILE_CHUNK_SIZE);
-                chunkList.add(new FileChunk(start, length, (int) i, null));
-            }
-        }
-
-        return chunkList;
-    }
-
     /**
      * 分片文件上传
      *
@@ -152,7 +126,7 @@ public class UploadFileApiClient extends AbstractApiHttpClient {
         int partseq = 0;
         if (chunk != null) {
             partseq = chunk.getPartSeq();
-            uploadFile.setChunk(new UploadFileChunk(chunk.getStart(), chunk.getLength(), partseq));
+            uploadFile.setChunk(new FileChunk(chunk.getStart(), chunk.getLength(), partseq, null));
         }
         HttpRequest httpRequest = HttpRequest.urlFormatBuilder(Method.POST, StrUtil.format(UrlConstants.POST_UPLOAD_FILE, getFastestUploadPCSServiceUrl(), dstDirPath, uploadid, partseq)).setUploadFile(uploadFile).addheader("Accept", "*");
         return execute(httpRequest, new TypeReference<UploadFileChunkResponse>() {

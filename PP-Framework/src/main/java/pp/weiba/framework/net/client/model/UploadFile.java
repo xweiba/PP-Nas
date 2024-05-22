@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import pp.weiba.utils.model.FileChunk;
 
 import java.io.File;
 
@@ -23,6 +24,9 @@ public class UploadFile {
     private File file;
 
     // 分块信息， 如有，则是取文件的指定内容上传
-    private UploadFileChunk chunk;
+    private FileChunk chunk;
+
+    // 上传方式
+    private UploadType uploadType = UploadType.FORM;
 
 }

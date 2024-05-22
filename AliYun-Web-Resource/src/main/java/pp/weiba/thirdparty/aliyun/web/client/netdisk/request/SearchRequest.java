@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.aliyun.web.client.ClientContants;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 import pp.weiba.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -102,8 +102,8 @@ public class SearchRequest {
      */
     @JSONField(name = "drive_id_list")
     private List<String> driveIdList = new ArrayList<String>(){{
-        add(ClientContants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG);
-        add(ClientContants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG);
+        add(AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG);
+        add(AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG);
     }};
 
     public String getQuery() {

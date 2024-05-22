@@ -220,4 +220,27 @@ public class StringUtils {
         return str.substring(0, endIndex).trim();
     }
 
+    public static String[] split(String str, String separator) {
+        int count = StrUtil.count(str, separator);
+        String[] result = null;
+        if (count == 0) {
+            result = new String[1];
+            result[0] = str;
+            return result;
+        } else {
+            result = new String[count + 1];
+            String tempStr = str;
+            for (int i = 0; i <= count; i++) {
+                int index = tempStr.indexOf(separator);
+                if (index == -1) {
+                    result[i] = tempStr;
+                    break;
+                }
+                result[i] = tempStr.substring(0, index);
+                tempStr = tempStr.substring(index + separator.length());
+            }
+        }
+
+        return result;
+    }
 }
