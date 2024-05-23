@@ -31,8 +31,10 @@ public class CreateSessionRequest {
 
     @JSONField(name = "deviceName")
     private String deviceName = UrlConstants.DEVICE_NAME;
+
     @JSONField(name = "modelName")
     private String modelName = "Windows网页版";
+
     @JSONField(name = "pubKey")
     private String pubKey;
 

@@ -26,7 +26,7 @@ import java.util.Map;
 public class NetDiskAuthentication {
 
     // OpenAPI 认证信息， XPAN 接口需要
-    public AccessToken accessToken;
+    public AccessToken openApiAccessToken;
     // 网盘公共信息
     public TemplateVariableResponse.Result templateVariable;
     // OAUTH 认证信息，通过此获取应用的 Cookies

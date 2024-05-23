@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.baidu.web.client.security.authentication.response;
+package pp.weiba.thirdparty.baidu.web.client.security.authentication;
 
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.net.url.UrlQuery;
@@ -15,6 +15,7 @@ import pp.weiba.thirdparty.baidu.web.client.netdisk.XpanUrlConstants;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.LoginStatusResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.TemplateVariableResponse;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.WebOAuthLoginAuthentication;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.AccessToken;
 
 import java.util.Date;
 import java.util.HashMap;

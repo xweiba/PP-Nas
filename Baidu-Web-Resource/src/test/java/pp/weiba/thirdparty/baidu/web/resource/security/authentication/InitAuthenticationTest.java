@@ -16,7 +16,7 @@ import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthe
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.WebHttpClientAuthentication;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.credentials.NetDiskJSONCredentials;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.credentials.OAuthJSONCredentials;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.AuthenticationApiClient;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.AuthenticationApiClient;
 import pp.weiba.utils.JSONUtils;
 
 import java.nio.charset.Charset;

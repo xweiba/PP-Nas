@@ -3,7 +3,6 @@ package pp.weiba.thirdparty.baidu.web.resource.security.authentication;
 import cn.hutool.core.collection.CollUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.net.client.model.HttpResponse;
-import pp.weiba.framework.security.authentication.AbstractAuthentication;
 import pp.weiba.framework.security.authentication.AbstractScheduledRefreshAuthentication;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.framework.security.authentication.credential.ICredential;
@@ -12,7 +11,7 @@ import pp.weiba.thirdparty.baidu.web.client.netdisk.response.TemplateVariableRes
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.WebOAuthLoginAuthentication;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.AccessToken;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.response.AuthenticationApiClient;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.AuthenticationApiClient;
 
 import java.net.HttpCookie;
 import java.util.HashMap;
@@ -63,7 +62,7 @@ public class BaiduNetDiskWebAuthentication extends AbstractScheduledRefreshAuthe
     @Override
     protected void appLogin() {
         // accessToken
-        if (authentication.getAccessToken() == null) {
+        if (authentication.getOpenApiAccessToken() == null) {
             openApiLogin(authentication);
         }
 
@@ -105,7 +104,7 @@ public class BaiduNetDiskWebAuthentication extends AbstractScheduledRefreshAuthe
             return;
         }
         // 存储到认证管理器， 补全的请求要使用
-        netDiskAuthentication.setAccessToken(accessToken);
+        netDiskAuthentication.setOpenApiAccessToken(accessToken);
     }
 
 }

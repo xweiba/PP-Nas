@@ -98,7 +98,7 @@ public class JSONUtils {
         if (isStrJSONValid(obj)) {
             return (String)obj;
         }
-        String result = JSON.toJSONString(obj);
+        String result = JSON.toJSONString(obj, SerializeConfig.global, SerializerFeature.WriteEnumUsingToString);
         printLog(result, msg);
         return result;
     }

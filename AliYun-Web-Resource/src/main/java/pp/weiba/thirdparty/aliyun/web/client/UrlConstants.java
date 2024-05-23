@@ -147,4 +147,14 @@ public class UrlConstants {
 
     /* 文件上传完成 */
     public static final String POST_RESOURCE_UPLOAD_COMPLETE_URL = API_DOMAIN + "/v2/file/complete";
+
+    /* OpenAPI Domain*/
+    public static final String OPEN_API_DOMAIN = "https://open.aliyundrive.com";
+
+    /* OpenAPI 获取授权code */
+    public static final String GET_POST_OPEN_OAUTH_AUTHORIZE_URL = OPEN_API_DOMAIN + "/oauth/users/authorize?client_id={clientId}&redirect_uri={redirectUri}&scope={scope}&code_challenge={codeChallenge}&code_challenge_method={codeChallengeMethod}";
+
+    /* OpenAPI 获取 AccessToken  */
+    public static final String POST_OPEN_GET_ACCESS_TOKEN_URL = OPEN_API_DOMAIN + "/oauth/access_token";
+
 }
