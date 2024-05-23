@@ -22,6 +22,9 @@ public class AliYunClientConstants {
     /* 预上传文件 hash */
     public static final String REQUEST_UPLOAD_FILE_PROOF_CODE_TAG = "{upload_proof_code}";
 
+    /* token 不添加 token type*/
+    public static final String NOT_ADD_TOKEN_TYPE = "{NotAddTokenType}";
+
     /* 文件分片大小 */
     public static final Long FILE_SPLIT_SIZE = 10485824L;
 }

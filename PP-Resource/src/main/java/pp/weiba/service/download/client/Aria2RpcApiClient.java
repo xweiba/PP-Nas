@@ -38,11 +38,7 @@ public class Aria2RpcApiClient extends AbstractApiHttpClient {
         });
     }
 
-    public Aria2JsonRpcResponse<String> add(String url, String path) {
-        return batchCreateByOption(Collections.singletonList(url), Aria2TaskOption.builder().dir(path).build());
-    }
-
-    public Aria2JsonRpcResponse<String> createByOption(String url, Aria2TaskOption aria2TaskOption) {
+    public Aria2JsonRpcResponse<String> add(String url, Aria2TaskOption aria2TaskOption) {
         return batchCreateByOption(Collections.singletonList(url), aria2TaskOption);
     }
 

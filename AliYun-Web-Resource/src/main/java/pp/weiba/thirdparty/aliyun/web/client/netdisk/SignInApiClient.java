@@ -1,9 +1,13 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.net.client.AbstractApiHttpClient;
 import pp.weiba.framework.net.client.IHttpClient;
+import pp.weiba.framework.net.client.model.HttpRequest;
+import pp.weiba.framework.net.client.model.Method;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SignInInfoListResponse;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SignInInfoResponse;
@@ -65,13 +69,14 @@ public class SignInApiClient extends AbstractApiHttpClient {
     }
 
     /**
-     * 领取奖励
+     * 领取奖励，签名更新，web接口废弃了，
      *
      * @param signInDay 连续签到天数
      * @return 领取奖励信息
      * @author weiba
      * @date 2024/5/8 16:47
      */
+    @Deprecated
     public SignInRewardResponse signInReward(Integer signInDay) {
         return postSrtExecute(UrlConstants.POST_SIGN_IN_REWARD_URL, new HashMap<String, Object>() {{
             put("signInDay", signInDay);

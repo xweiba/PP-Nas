@@ -101,7 +101,7 @@ public class SearchResponse {
          * size
          */
         @JSONField(name = "size")
-        private Integer size;
+        private Long size;
         /**
          * starred
          */

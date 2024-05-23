@@ -28,8 +28,7 @@ public class Aria2QueryStatusResponse {
     private String uploadSpeed;
 
     @NoArgsConstructor
-        @AllArgsConstructor
-        @Data
+    @Data
     public static class FilesResponse {
         private String completedLength;
         private String index;

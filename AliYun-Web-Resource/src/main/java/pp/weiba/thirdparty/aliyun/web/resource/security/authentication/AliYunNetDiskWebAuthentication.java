@@ -68,11 +68,12 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
         scheduledRefreshSignature();
 
         // 初始化签到
-        initSignIn();
+        // initSignIn();
 
         super.completeAuthenticationInformation();
     }
 
+    @Deprecated
     private void initSignIn() {
         try {
             // 每次登录执行一次领取所有签到奖励

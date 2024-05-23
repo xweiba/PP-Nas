@@ -6,6 +6,7 @@ import pp.weiba.framework.net.client.AbstractHttpClientAuthentication;
 import pp.weiba.framework.net.client.ClientConstants;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenResponse;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignatureInfo;
 
@@ -27,13 +28,26 @@ public class WebHttpClientAuthentication extends AbstractHttpClientAuthenticatio
     @Override
     public HttpRequest authentication(HttpRequest request) {
         Map<String, Object> params = request.getBuildParams();
-        if (params == null || params.get(ClientConstants.REQUEST_PARAM_NEW_SESSION_TAG) == null || !(Boolean)params.get(ClientConstants.REQUEST_PARAM_NEW_SESSION_TAG)) {
+
+        boolean isNewSession = false;
+        boolean isNotAddTokenType = false;
+        if (params != null) {
+            if (params.get(ClientConstants.REQUEST_PARAM_NEW_SESSION_TAG) != null) {
+                isNewSession = (Boolean) params.get(ClientConstants.REQUEST_PARAM_NEW_SESSION_TAG);
+            }
+            if (params.get(AliYunClientConstants.NOT_ADD_TOKEN_TYPE) != null) {
+                isNotAddTokenType = (Boolean) params.get(AliYunClientConstants.NOT_ADD_TOKEN_TYPE);
+            }
+
+        }
+        if (!isNewSession) {
             NetDiskAuthentication authorization = getAuthorization();
             if (authorization != null) {
                 TokenResponse tokenResponse = authorization.getToken();
                 SignatureInfo signatureInfo = authorization.getSignatureInfo();
                 if (tokenResponse != null) {
-                    request.addheader("Authorization", tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken());
+                    String authorizationStr = isNotAddTokenType ? tokenResponse.getAccessToken() : tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken();
+                    request.addheader("Authorization", authorizationStr);
                 }
                 if (signatureInfo != null) {
                     if (StrUtil.isNotBlank(signatureInfo.getXDeviceId())) {

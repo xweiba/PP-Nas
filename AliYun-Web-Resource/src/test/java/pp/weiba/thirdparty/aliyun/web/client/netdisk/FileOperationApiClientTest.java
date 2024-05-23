@@ -4,6 +4,14 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import pp.weiba.framework.download.adapters.IDownloadAdapter;
+import pp.weiba.framework.download.model.AddDownloadTaskInfo;
+import pp.weiba.framework.download.model.DownloadAuthInfo;
+import pp.weiba.framework.download.model.DownloadInfo;
+import pp.weiba.framework.download.model.DownloadTaskOptionInfo;
+import pp.weiba.framework.net.client.adapters.hutool.HutoolHttpClientAdapter;
+import pp.weiba.service.download.adapters.Aria2DownloadAdapter;
+import pp.weiba.service.download.client.Aria2RpcApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.*;
 import pp.weiba.thirdparty.aliyun.web.client.security.authentication.WebNetDiskAuthenticationTest;
@@ -13,6 +21,11 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
+
+    private final Aria2RpcApiClient aria2RpcApiClient = new Aria2RpcApiClient("https://aria2.com/aria2/jsonrpc", "xxxxxxxx", new HutoolHttpClientAdapter());
+
+
+    private final IDownloadAdapter adapter = new Aria2DownloadAdapter(aria2RpcApiClient);
 
     private final FileOperationApiClient fileOperationApiClient = new FileOperationApiClient(httpClient);
 
@@ -33,12 +46,28 @@ class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
         assertNotNull(dir);
     }
 
-
+    GetFileInfoResponse fileInfo = null;
     @Test
     void getFileInfo() {
-        GetFileInfoRequest getFileInfoRequest = new GetFileInfoRequest().setDriveId("18654654").setFileId("65f89804c8b9c616dc1544b99a66b8b86618f1fa").enablePreview();
-        GetFileInfoResponse fileInfo = fileOperationApiClient.getFileInfo(getFileInfoRequest);
+        GetFileInfoRequest getFileInfoRequest = new GetFileInfoRequest(true, "664d99e2c55d0f7366ca41c78786c8b670add6a5").enablePreview();
+        fileInfo = fileOperationApiClient.getFileInfo(getFileInfoRequest);
         assertNotNull(fileInfo);
+    }
+
+    @Test
+    void downloadFile() {
+        search();
+        DownloadAuthInfo authInfo = new DownloadAuthInfo();
+        authInfo.addheader("Referer", "https://www.aliyundrive.com/");
+        DownloadInfo downloadInfo = new DownloadInfo()
+                .setDownloadUrl(search.getItems().get(0).getUrl())
+                .setFileSize(search.getItems().get(0).getSize())
+                .setAuthInfo(authInfo);
+        DownloadTaskOptionInfo options = new DownloadTaskOptionInfo()
+                .setDownloadName(search.getItems().get(0).getName())
+                .setDstDirPath("/mnt/my_data/data/downloads")
+                ;
+        adapter.add(new AddDownloadTaskInfo(downloadInfo, options));
     }
 
     @Test
@@ -91,16 +120,17 @@ class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
         }
     }
 
+    SearchResponse search;
     @Test
     void search() {
-        SearchResponse search = fileOperationApiClient.search("1", null, null);
-        search = fileOperationApiClient.search("1", null, search.getNextMarker());
+        search = fileOperationApiClient.search("rom_2.zip", null, null);
+//        search = fileOperationApiClient.search("1", null, search.getNextMarker());
         assertNotNull(search);
     }
 
     @Test
     void copyToResource() {
-        CopyToResourceResponse result = fileOperationApiClient.copyToResource("root", true, "638829ed5df082af754043cba40637f674d213b7");
+        CopyToResourceResponse result = fileOperationApiClient.copyToResource("root", true, "664d99e2c55d0f7366ca41c78786c8b670add6a5");
         assertNotNull(result);
     }
 

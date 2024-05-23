@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 /**
  * @author xiaoweiba1028@gmail.com
  * @description 任务配置信息
@@ -103,7 +105,7 @@ public class Aria2TaskOption {
     private String ftptype;
     @JSONField(name = "hash-check-only")
     private String hashcheckonly;
-    private String header;
+    private List<String> header;
     @JSONField(name = "http-accept-gzip")
     private String httpacceptgzip;
     @JSONField(name = "http-auth-challenge")

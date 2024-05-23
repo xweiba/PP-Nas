@@ -27,7 +27,7 @@ public class Aria2JsonRpcRequest {
 
     /* 随机id */
     @Builder.Default
-    private String id = Base64Util.encode("Aria2JsonRpc_" + new Date().getTime());
+    private String id = String.valueOf(new Date().getTime());
 
     /* 业务参数 */
     @Builder.Default

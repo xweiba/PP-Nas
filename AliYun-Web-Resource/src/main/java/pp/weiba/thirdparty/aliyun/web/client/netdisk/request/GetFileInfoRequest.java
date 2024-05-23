@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 
 /**
  * 获取文件信息
@@ -17,6 +18,11 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Data
 public class GetFileInfoRequest {
+
+    public GetFileInfoRequest(boolean isBackupDrive, String fileId) {
+        this.driveId = isBackupDrive ? AliYunClientConstants.REQUEST_PARAM_BACKUP_DRIVE_ID_TAG : AliYunClientConstants.REQUEST_PARAM_RESOURCE_DRIVE_ID_TAG;
+        this.fileId = fileId;
+    }
 
     public GetFileInfoRequest(String driveId, String fileId) {
         this.driveId = driveId;

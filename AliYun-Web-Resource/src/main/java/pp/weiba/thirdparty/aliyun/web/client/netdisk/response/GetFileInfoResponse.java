@@ -860,7 +860,7 @@ public class GetFileInfoResponse {
     @JSONField(name = "hidden")
     private Boolean hidden;
     @JSONField(name = "size")
-    private Integer size;
+    private Long size;
     @JSONField(name = "starred")
     private Boolean starred;
     @JSONField(name = "status")

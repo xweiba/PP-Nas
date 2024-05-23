@@ -8,9 +8,11 @@ import pp.weiba.framework.download.model.*;
 import pp.weiba.framework.model.StatusResultInfo;
 import pp.weiba.service.download.client.Aria2RpcApiClient;
 import pp.weiba.service.download.client.model.Aria2QueryStatusResponse;
+import pp.weiba.service.download.client.model.Aria2TaskOption;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -114,7 +116,30 @@ public class Aria2DownloadAdapter implements IDownloadAdapter {
 
     @Override
     public DownloadTaskInfo add(AddDownloadTaskInfo addDownloadTaskInfo) {
+        aria2RpcApiClient.add(addDownloadTaskInfo.getDownloadInfo().getDownloadUrl(), tranToAria2TaskOption(addDownloadTaskInfo));
         return null;
+    }
+
+    private Aria2TaskOption tranToAria2TaskOption(AddDownloadTaskInfo addDownloadTaskInfo) {
+        DownloadTaskOptionInfo option = addDownloadTaskInfo.getOption();
+        DownloadInfo downloadInfo = addDownloadTaskInfo.getDownloadInfo();
+
+        List<String> headers = null;
+        if (downloadInfo.getAuthInfo() != null && CollUtil.isNotEmpty(downloadInfo.getAuthInfo().getHeaderMap())) {
+            headers = new ArrayList<>();
+            for (Map.Entry<String, String> item :downloadInfo.getAuthInfo().getHeaderMap().entrySet()){
+                headers.add(item.getKey() + ":" + item.getValue());
+            }
+
+        }
+
+
+        Aria2TaskOption aria2TaskOption = new Aria2TaskOption()
+                .setDir(option.getDstDirPath())
+                .setOut(option.getDownloadName())
+                .setHeader(headers)
+                ;
+        return aria2TaskOption;
     }
 
     @Override
@@ -131,4 +156,6 @@ public class Aria2DownloadAdapter implements IDownloadAdapter {
     public List<StatusResultInfo> changeStatus(List<ChangeDownloadTaskStatus> changeDownloadTaskStatuses) {
         return null;
     }
+
+
 }
