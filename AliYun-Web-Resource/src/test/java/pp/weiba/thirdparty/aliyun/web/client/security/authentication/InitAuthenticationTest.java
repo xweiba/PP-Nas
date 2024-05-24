@@ -12,6 +12,7 @@ import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.framework.test.DefaultTest;
 import pp.weiba.thirdparty.aliyun.web.client.WebAliYunNetDiskHttpClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.OpenApiAuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.WebHttpClientAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.credentials.JsonFileSetCredentials;
@@ -39,6 +40,9 @@ public class InitAuthenticationTest extends DefaultTest {
     protected static String businessId = "1";
     protected static String businessType = "user";
 
+    /* 阿里云盘官方id 55091393987b4cc090b090ee17e85e0a, 改成自己的，防止账号被封 */
+    public static final String OPEN_API_APP_ID = "55091393987b4cc090b090ee17e85e0a";
+
     public static final String TOKEN_SAVE_DIR_PATH = "/src/test/resources/authentication/";
 
     public static AliYunNetDiskWebAuthentication baiduWebAuthentication;
@@ -46,6 +50,8 @@ public class InitAuthenticationTest extends DefaultTest {
     public static IHttpClient httpClient;
 
     public static AuthenticationApiClient authenticationApiClient;
+
+    public static OpenApiAuthenticationApiClient openApiAuthenticationApiClient;
 
     public static SignInApiClient signInApiClient;
 
@@ -64,7 +70,7 @@ public class InitAuthenticationTest extends DefaultTest {
         buildAuthenticationApiClient();
         // 用户认证信息获取接口
         ICredential<NetDiskAuthentication> netDiskAuthenticationCredential = new JsonFileSetCredentials(authenticationApiClient, TOKEN_SAVE_DIR_PATH, tokenJsonFileName());
-        return new AliYunNetDiskWebAuthentication(businessId, businessType, authenticationApiClient, netDiskAuthenticationCredential, signInApiClient);
+        return new AliYunNetDiskWebAuthentication(businessId, businessType, authenticationApiClient, netDiskAuthenticationCredential, signInApiClient, openApiAuthenticationApiClient, OPEN_API_APP_ID);
     }
 
     protected static String getTokenJsonString() {
@@ -98,6 +104,7 @@ public class InitAuthenticationTest extends DefaultTest {
         initAuthentication();
         authenticationApiClient = new AuthenticationApiClient(httpClient);
         signInApiClient = new SignInApiClient(httpClient);
+        openApiAuthenticationApiClient = new OpenApiAuthenticationApiClient(httpClient);
     }
 
     protected static void initAuthentication() {

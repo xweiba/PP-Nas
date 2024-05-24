@@ -62,7 +62,7 @@ public class BaiduNetDiskWebAuthentication extends AbstractScheduledRefreshAuthe
     @Override
     protected void appLogin() {
         // accessToken
-        if (authentication.getAccessToken() == null) {
+        if (authentication.getOpenApiAccessToken() == null) {
             openApiLogin(authentication);
         }
 

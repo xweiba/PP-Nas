@@ -93,7 +93,7 @@ public class UrlParameterCompletionProcessor implements IProcessor<HttpRequest> 
 
     private String getAccessToken() {
         NetDiskAuthentication netDiskAuthentication = getNetDiskAuthentication();
-        AccessToken accessToken = netDiskAuthentication.getAccessToken();
+        AccessToken accessToken = netDiskAuthentication.getOpenApiAccessToken();
         if (accessToken == null || StrUtil.isBlank(accessToken.getAccessToken())) {
             throw new RuntimeException("认证失败，请先登录");
         }

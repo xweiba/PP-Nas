@@ -7,13 +7,20 @@ import pp.weiba.framework.security.authentication.AbstractScheduledRefreshAuthen
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.OpenApiAuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.model.OpenApiAuthenticationInfo;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.request.OpenAuthorizationPkceType;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.request.OpenAuthorizationRequest;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.response.OpenAccessTokenResponse;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.AliYunUtils;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignInApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignatureInfo;
 import pp.weiba.utils.ScheduledRunnable;
 import pp.weiba.utils.ScheduledUtils;
+import pp.weiba.utils.StringUtils;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,14 +35,22 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
 
     private final AuthenticationApiClient authenticationApiClient;
 
+    private final OpenApiAuthenticationApiClient openApiAuthenticationApiClient;
+
     public final SignInApiClient signInApiClient;
+
+    public String openApiClientId;
 
     private String scheduledRefreshSignatureId;
 
-    public AliYunNetDiskWebAuthentication(String authenticationId, String authenticationType, AuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential, SignInApiClient signInApiClient) {
+    private String scheduledRefreshOpenApiAccessTokenId;
+
+    public AliYunNetDiskWebAuthentication(String authenticationId, String authenticationType, AuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential, SignInApiClient signInApiClient, OpenApiAuthenticationApiClient openApiAuthenticationApiClient, String openApiClientId) {
         super(authenticationId, authenticationType, credential);
         this.authenticationApiClient = authenticationApiClient;
         this.signInApiClient = signInApiClient;
+        this.openApiAuthenticationApiClient = openApiAuthenticationApiClient;
+        this.openApiClientId = openApiClientId;
     }
 
     @Override
@@ -47,6 +62,50 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
             throw new RuntimeException("阿里云盘认证信息为空");
         }
     }
+
+    private void initOpenAuthentication() {
+        // openApi login
+        OpenApiAuthenticationInfo openApiAuthenticationInfo = authentication.getOpenApiAuthenticationInfo();
+
+        String newOpenApiClientIdTemp = (openApiAuthenticationInfo != null && StringUtils.isNotBlank(openApiAuthenticationInfo.getAppId()) && !openApiAuthenticationInfo.getAppId().equals(openApiClientId)) ? openApiAuthenticationInfo.getAppId() : null;
+
+        if (openApiAuthenticationInfo == null || StringUtils.isNotBlank(newOpenApiClientIdTemp)) {
+            if (StringUtils.isNotBlank(newOpenApiClientIdTemp)) {
+                // 使用配置文件中的id
+                openApiClientId = newOpenApiClientIdTemp;
+                openApiAuthenticationInfo.setAccessToken(null);
+            }
+            getOpenApiAccessToken();
+        }
+
+        // 添加定时任务
+        this.scheduleRefreshOpeonApiAccessToken();
+    }
+
+    private void getOpenApiAccessToken() {
+        OpenAccessTokenResponse openAccessToken = openApiAuthenticationApiClient.getOpenAccessToken(new OpenAuthorizationRequest(openApiClientId, OpenAuthorizationPkceType.PLAIN));
+        OpenApiAuthenticationInfo openApiAuthenticationInfo = new OpenApiAuthenticationInfo(openApiClientId, openAccessToken);
+        authentication.setOpenApiAuthenticationInfo(openApiAuthenticationInfo);
+
+        // 将数据写回配置文件
+        credential.refresh();
+    }
+
+    private void scheduleRefreshOpeonApiAccessToken() {
+        OpenAccessTokenResponse accessToken = authentication.getOpenApiAuthenticationInfo().getAccessToken();
+        Long expiresIn = accessToken.getExpiresIn();
+        Long createTime = accessToken.getCreateTime();
+        long initNextDelay = expiresIn - ((new Date().getTime() - createTime) / 1000);
+        ScheduledRunnable openApiAccessTokenScheduledRunnable = ScheduledRunnable.builder().command(() -> getOpenApiAccessToken())
+                .businessId(authenticationId)
+                .businessType("refresh_open_api_access_token_" + authenticationType)
+                .firstNotDelay(false)
+                .isRandom(false)
+                .initNextDelay(initNextDelay)
+                .delay(expiresIn).unit(TimeUnit.SECONDS).build();
+        scheduledRefreshOpenApiAccessTokenId = ScheduledUtils.schedule(openApiAccessTokenScheduledRunnable);
+    }
+
 
     @Override
     public void detectionAuthentication() {
@@ -69,6 +128,8 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
 
         // 初始化签到
         // initSignIn();
+
+        initOpenAuthentication();
 
         super.completeAuthenticationInformation();
     }
@@ -152,6 +213,7 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
     protected void doLogout() {
         authenticationApiClient.signOut(authenticationId);
         ScheduledUtils.cancel(scheduledRefreshSignatureId);
+        ScheduledUtils.cancel(scheduledRefreshOpenApiAccessTokenId);
         AuthenticationManager.removeAuthentication(authenticationId, authenticationType);
     }
 

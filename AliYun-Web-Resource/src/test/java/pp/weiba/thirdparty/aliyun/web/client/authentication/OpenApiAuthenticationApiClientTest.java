@@ -7,17 +7,11 @@ import pp.weiba.thirdparty.aliyun.web.client.authentication.request.OpenAuthoriz
 import pp.weiba.thirdparty.aliyun.web.client.authentication.request.OpenAuthorizationRequest;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.OpenAccessTokenResponse;
 import pp.weiba.thirdparty.aliyun.web.client.security.authentication.WebNetDiskAuthenticationTest;
-import pp.weiba.utils.JSONUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @Log4j2
 class OpenApiAuthenticationApiClientTest extends WebNetDiskAuthenticationTest {
-
-    /* 阿里云盘官方id 55091393987b4cc090b090ee17e85e0a  */
-    public static final String CLIENT_ID = "55091393987b4cc090b090ee17e85e0a";
-
-    private static final OpenApiAuthenticationApiClient openApiAuthenticationApiClient = new OpenApiAuthenticationApiClient(httpClient);
 
     OpenAuthorizationRequest openAuthorizationRequest;
 
@@ -25,7 +19,7 @@ class OpenApiAuthenticationApiClientTest extends WebNetDiskAuthenticationTest {
 
     @Test
     void getAuthorizationCode() {
-        openAuthorizationRequest = new OpenAuthorizationRequest(CLIENT_ID, OpenAuthorizationPkceType.PLAIN);
+        openAuthorizationRequest = new OpenAuthorizationRequest(OPEN_API_APP_ID, OpenAuthorizationPkceType.PLAIN);
         authorizationCode = openApiAuthenticationApiClient.getAuthorizationCode(openAuthorizationRequest);
     }
 

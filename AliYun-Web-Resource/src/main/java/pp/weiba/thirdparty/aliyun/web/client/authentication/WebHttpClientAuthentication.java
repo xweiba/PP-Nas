@@ -7,7 +7,10 @@ import pp.weiba.framework.net.client.ClientConstants;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
+import pp.weiba.thirdparty.aliyun.web.client.OpenApiUrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.model.OpenApiAuthenticationInfo;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.response.OpenAccessTokenResponse;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenResponse;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignatureInfo;
 
@@ -44,20 +47,31 @@ public class WebHttpClientAuthentication extends AbstractHttpClientAuthenticatio
         if (!isNewSession) {
             NetDiskAuthentication authorization = getAuthorization();
             if (authorization != null) {
-                TokenResponse tokenResponse = authorization.getToken();
-                SignatureInfo signatureInfo = authorization.getSignatureInfo();
-                if (tokenResponse != null) {
-                    String authorizationStr = isNotAddTokenType ? tokenResponse.getAccessToken() : tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken();
-                    request.addheader("Authorization", authorizationStr);
-                }
-                if (signatureInfo != null) {
-                    if (StrUtil.isNotBlank(signatureInfo.getXDeviceId())) {
-                        request.addheader("X-Device-Id", signatureInfo.getXDeviceId());
+                String url = request.getUrl();
+                OpenApiAuthenticationInfo openApiAuthenticationInfo = authorization.getOpenApiAuthenticationInfo();
+                if (url.startsWith(OpenApiUrlConstants.OPEN_API_DOMAIN) && !url.startsWith(OpenApiUrlConstants.GET_POST_OPEN_OAUTH_AUTHORIZE_BASE_URL) && openApiAuthenticationInfo != null) {
+                    OpenAccessTokenResponse accessToken = openApiAuthenticationInfo.getAccessToken();
+                    if (accessToken != null) {
+                        String authorizationStr = isNotAddTokenType ? accessToken.getAccessToken() : accessToken.getTokenType() + " " + accessToken.getAccessToken();
+                        request.addheader("Authorization", authorizationStr);
                     }
-                    if (StrUtil.isNotBlank(signatureInfo.getXSignature())) {
-                        request.addheader("X-Signature", signatureInfo.getXSignature());
+                } else {
+                    TokenResponse tokenResponse = authorization.getToken();
+                    SignatureInfo signatureInfo = authorization.getSignatureInfo();
+                    if (tokenResponse != null) {
+                        String authorizationStr = isNotAddTokenType ? tokenResponse.getAccessToken() : tokenResponse.getTokenType() + " " + tokenResponse.getAccessToken();
+                        request.addheader("Authorization", authorizationStr);
+                    }
+                    if (signatureInfo != null) {
+                        if (StrUtil.isNotBlank(signatureInfo.getXDeviceId())) {
+                            request.addheader("X-Device-Id", signatureInfo.getXDeviceId());
+                        }
+                        if (StrUtil.isNotBlank(signatureInfo.getXSignature())) {
+                            request.addheader("X-Signature", signatureInfo.getXSignature());
+                        }
                     }
                 }
+
 
             }
         }

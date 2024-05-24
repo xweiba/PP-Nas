@@ -4,28 +4,15 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import pp.weiba.framework.download.adapters.IDownloadAdapter;
-import pp.weiba.framework.download.model.AddDownloadTaskInfo;
-import pp.weiba.framework.download.model.DownloadAuthInfo;
-import pp.weiba.framework.download.model.DownloadInfo;
-import pp.weiba.framework.download.model.DownloadTaskOptionInfo;
-import pp.weiba.framework.net.client.adapters.hutool.HutoolHttpClientAdapter;
-import pp.weiba.service.download.adapters.Aria2DownloadAdapter;
-import pp.weiba.service.download.client.Aria2RpcApiClient;
+import pp.weiba.thirdparty.aliyun.web.client.download.Aria2RpcApiClientTest;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.*;
-import pp.weiba.thirdparty.aliyun.web.client.security.authentication.WebNetDiskAuthenticationTest;
 
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
-
-    private final Aria2RpcApiClient aria2RpcApiClient = new Aria2RpcApiClient("https://aria2.com/aria2/jsonrpc", "xxxxxxxx", new HutoolHttpClientAdapter());
-
-
-    private final IDownloadAdapter adapter = new Aria2DownloadAdapter(aria2RpcApiClient);
+class FileOperationApiClientTest extends Aria2RpcApiClientTest {
 
     private final FileOperationApiClient fileOperationApiClient = new FileOperationApiClient(httpClient);
 
@@ -57,17 +44,8 @@ class FileOperationApiClientTest extends WebNetDiskAuthenticationTest {
     @Test
     void downloadFile() {
         search();
-        DownloadAuthInfo authInfo = new DownloadAuthInfo();
-        authInfo.addheader("Referer", "https://www.aliyundrive.com/");
-        DownloadInfo downloadInfo = new DownloadInfo()
-                .setDownloadUrl(search.getItems().get(0).getUrl())
-                .setFileSize(search.getItems().get(0).getSize())
-                .setAuthInfo(authInfo);
-        DownloadTaskOptionInfo options = new DownloadTaskOptionInfo()
-                .setDownloadName(search.getItems().get(0).getName())
-                .setDstDirPath("/mnt/my_data/data/downloads")
-                ;
-        adapter.add(new AddDownloadTaskInfo(downloadInfo, options));
+        SearchResponse.ItemsResponse itemsResponse = search.getItems().get(0);
+        addDownloadTask(itemsResponse.getUrl(), "https://www.aliyundrive.com/", itemsResponse.getSize(), itemsResponse.getName());
     }
 
     @Test

@@ -32,8 +32,12 @@ public class ScheduledRunnable {
     @Builder.Default
     private boolean firstNotDelay = Boolean.TRUE;
 
+    // 延时执行时间
     @Builder.Default
     private long delay = 30l;
+
+    // 首次执行时的延时时间， 在服务重启后又不想立马执行时使用, 只使用一次
+    private Long initNextDelay;
 
     @Builder.Default
     private TimeUnit unit = TimeUnit.MINUTES;
@@ -49,7 +53,12 @@ public class ScheduledRunnable {
     private long minRandom = 0;
 
     public long getNextDelay() {
-        if (!this.isRandom) {
+        if (!this.isRandom || this.initNextDelay != null) {
+            if (initNextDelay != null) {
+                Long initNextDelayTemp = this.initNextDelay;
+                this.initNextDelay = null;
+                return initNextDelayTemp;
+            }
             return this.getDelay();
         }
         return this.getDelay() + RandomUtil.randomLong(this.getMinRandom(), this.getMaxRandom());

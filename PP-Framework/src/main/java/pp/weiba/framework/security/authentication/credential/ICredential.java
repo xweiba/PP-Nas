@@ -12,8 +12,10 @@ public interface ICredential<T> {
 
     }
 
-    T getCredential();
+    default T refresh() {
+        return null;
+    }
 
-    T refresh();
+    T getCredential();
 
 }
