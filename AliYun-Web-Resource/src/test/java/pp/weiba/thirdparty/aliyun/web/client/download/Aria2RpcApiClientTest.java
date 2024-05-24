@@ -23,16 +23,16 @@ public class Aria2RpcApiClientTest extends WebNetDiskAuthenticationTest {
 
     public final IDownloadAdapter adapter = new Aria2DownloadAdapter(aria2RpcApiClient);
 
-    public void addDownloadTask(String downloadUrl, String referer, long fileSize, String downloadName) {
+    public void addDownloadTask(String downloadUrl, String downloadName, long fileSize) {
         DownloadAuthInfo authInfo = new DownloadAuthInfo();
-        authInfo.addheader("Referer", referer);
+        authInfo.addheader("Referer", "https://www.aliyundrive.com/");
         DownloadInfo downloadInfo = new DownloadInfo()
                 .setDownloadUrl(downloadUrl)
                 .setFileSize(fileSize)
                 .setAuthInfo(authInfo);
         DownloadTaskOptionInfo options = new DownloadTaskOptionInfo()
                 .setDownloadName(downloadName)
-                .setDstDirPath("/mnt/my_data/data/downloads")
+                .setDstDirPath("/downloads")
                 ;
         adapter.add(new AddDownloadTaskInfo(downloadInfo, options));
     }

@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pp.weiba.thirdparty.aliyun.web.client.download.Aria2RpcApiClientTest;
+import pp.weiba.thirdparty.aliyun.web.client.netdisk.openapi.OpenFileOperationApiClientTest;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.*;
 
@@ -12,7 +13,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class FileOperationApiClientTest extends Aria2RpcApiClientTest {
+class FileOperationApiClientTest extends OpenFileOperationApiClientTest {
 
     private final FileOperationApiClient fileOperationApiClient = new FileOperationApiClient(httpClient);
 
@@ -36,16 +37,15 @@ class FileOperationApiClientTest extends Aria2RpcApiClientTest {
     GetFileInfoResponse fileInfo = null;
     @Test
     void getFileInfo() {
-        GetFileInfoRequest getFileInfoRequest = new GetFileInfoRequest(true, "664d99e2c55d0f7366ca41c78786c8b670add6a5").enablePreview();
+        GetFileInfoRequest getFileInfoRequest = new GetFileInfoRequest(IS_BACKUP_DRIVER_MODEL, "619404e699bbc0ca16d64e268e7808d303cac214").enablePreview();
         fileInfo = fileOperationApiClient.getFileInfo(getFileInfoRequest);
         assertNotNull(fileInfo);
     }
 
     @Test
     void downloadFile() {
-        search();
-        SearchResponse.ItemsResponse itemsResponse = search.getItems().get(0);
-        addDownloadTask(itemsResponse.getUrl(), "https://www.aliyundrive.com/", itemsResponse.getSize(), itemsResponse.getName());
+        getFileInfo();
+        addDownloadTask(IS_BACKUP_DRIVER_MODEL, fileInfo.getFileId(), fileInfo.getName(), fileInfo.getSize());
     }
 
     @Test
