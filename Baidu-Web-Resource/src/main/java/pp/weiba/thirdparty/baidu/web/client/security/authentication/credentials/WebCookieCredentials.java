@@ -83,4 +83,9 @@ public abstract class WebCookieCredentials implements ICredential<NetDiskAuthent
         this.ubi = getCookieValue(cookieMap, "UBI");
     }
 
+    @Override
+    public NetDiskAuthentication refresh() {
+        return null;
+    }
+
 }

@@ -12,7 +12,7 @@ import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.framework.test.DefaultTest;
 import pp.weiba.thirdparty.aliyun.web.client.WebAliYunNetDiskHttpClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.NetDiskAuthentication;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.WebHttpClientAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.credentials.JsonFileSetCredentials;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenResponse;
@@ -39,7 +39,7 @@ public class InitAuthenticationTest extends DefaultTest {
     protected static String businessId = "1";
     protected static String businessType = "user";
 
-    public static final String TOKEN_SAVE_DIR_PATH = "/src/test/resources/token/";
+    public static final String TOKEN_SAVE_DIR_PATH = "/src/test/resources/authentication/";
 
     public static AliYunNetDiskWebAuthentication baiduWebAuthentication;
 

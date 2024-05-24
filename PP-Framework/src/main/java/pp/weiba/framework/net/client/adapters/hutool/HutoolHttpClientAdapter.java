@@ -12,6 +12,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.*;
+import cn.hutool.http.body.MultipartBody;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.StrJsonTypeReferenceProcessor;
 import pp.weiba.framework.net.client.AbstractHttpClient;
@@ -164,7 +165,7 @@ public class HutoolHttpClientAdapter extends AbstractHttpClient<HttpRequest, Htt
                     httpRequest.form("file", inputStreamResource);
                 } else if (uploadFile.getUploadType() == UploadType.BYTE) {
                     httpRequest.body(inputStreamResource);
-                    // 不加这个会签名错误
+                    // 强制走MultiPart
                     ReflectUtil.setFieldValue(httpRequest, "isMultiPart", true);
                 }
             } catch (Exception e) {

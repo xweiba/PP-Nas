@@ -8,7 +8,7 @@ import pp.weiba.framework.net.client.IHttpClientAuthentication;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.NetDiskAuthentication;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.AliYunUtils;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.UserInfo;
 import pp.weiba.utils.StringUtils;

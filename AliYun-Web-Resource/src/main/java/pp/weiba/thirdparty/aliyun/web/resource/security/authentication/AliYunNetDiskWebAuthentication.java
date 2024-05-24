@@ -7,7 +7,7 @@ import pp.weiba.framework.security.authentication.AbstractScheduledRefreshAuthen
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.NetDiskAuthentication;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.AliYunUtils;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignInApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignatureInfo;

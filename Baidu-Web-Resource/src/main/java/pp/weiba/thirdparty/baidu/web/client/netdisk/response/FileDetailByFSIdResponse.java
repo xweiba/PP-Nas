@@ -26,14 +26,12 @@ public class FileDetailByFSIdResponse {
     private String requestId;
 
     @NoArgsConstructor
-        @AllArgsConstructor
-        @Data
     public static class NamesBO {
     }
 
     @NoArgsConstructor
-        @AllArgsConstructor
-        @Data
+    @AllArgsConstructor
+    @Data
     public static class ListBO {
         private Integer category;
         // dlink 大于20Mb的需要添加 User-Agent: pan.baidu.com 和 BDUSS Cookie 才能下载，没有ua会报：31326错误，没有BDUSS会报31045错误。

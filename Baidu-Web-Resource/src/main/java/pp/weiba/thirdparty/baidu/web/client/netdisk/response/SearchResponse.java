@@ -1,5 +1,6 @@
 package pp.weiba.thirdparty.baidu.web.client.netdisk.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

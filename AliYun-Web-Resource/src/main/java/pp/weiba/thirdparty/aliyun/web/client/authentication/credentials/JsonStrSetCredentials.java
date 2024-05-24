@@ -2,7 +2,7 @@ package pp.weiba.thirdparty.aliyun.web.client.authentication.credentials;
 
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenResponse;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.utils.JSONUtils;
 
 /**
@@ -24,8 +24,7 @@ public class JsonStrSetCredentials extends WebAuthCredentials {
         this.jsonStr = jsonStr;
     }
 
-    @Override
-    TokenResponse buildToken() {
-        return JSONUtils.toBean(jsonStr, TokenResponse.class);
+    public void buildCredential() {
+        this.credentialData = JSONUtils.toBean(jsonStr, NetDiskAuthentication.class);
     }
 }

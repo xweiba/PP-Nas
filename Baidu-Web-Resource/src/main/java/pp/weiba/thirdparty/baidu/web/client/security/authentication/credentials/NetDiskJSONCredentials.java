@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
  * @date 2024/3/6 14:59
  */
 @Log4j2
-public class NetDiskJSONCredentials extends WebCookieCredentials implements ICredential<NetDiskAuthentication> {
+public class NetDiskJSONCredentials extends WebCookieCredentials {
 
     private final String jsonFilePath;
 

@@ -3,6 +3,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
 * 开放平台返回的AccessToken
 *
@@ -29,6 +31,9 @@ public class OpenAccessTokenResponse {
 
     /* access_token的过期时间，单位秒。 PKCE模式30天有效期*/
     @JSONField(name = "expires_in")
-    private Integer expiresIn;
+    private Long expiresIn;
+
+    /* 创建时间 */
+    private Long createTime = new Date().getTime();
     
 }

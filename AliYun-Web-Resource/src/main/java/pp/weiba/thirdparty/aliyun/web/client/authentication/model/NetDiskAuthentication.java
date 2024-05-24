@@ -1,7 +1,8 @@
-package pp.weiba.thirdparty.aliyun.web.client.authentication;
+package pp.weiba.thirdparty.aliyun.web.client.authentication.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.response.OpenAccessTokenResponse;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenResponse;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.AliYunUtils;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.SignatureInfo;
@@ -28,4 +29,5 @@ public class NetDiskAuthentication {
 
     private TokenResponse token;
 
+    private OpenApiAuthenticationInfo openApiAuthenticationInfo;
 }
