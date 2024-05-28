@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.framework.net.client.IHttpClientAuthentication;
 import pp.weiba.framework.net.client.adapters.ahc.AsyncHttpClientAdapter;
@@ -31,8 +32,7 @@ public class InitAuthenticationTest extends DefaultTest {
     public static final String NET_DISK_AUTHENTICATION_JSON_FILE_PATH = "C:\\Users\\admin\\Documents\\code\\github\\PP-Nas\\Baidu-Web-Resource\\src\\test\\resources\\netDiskAuthentication.json";
 
     // 设置客户端认证信息
-    protected static String businessId = "1";
-    protected static String businessType = "user";
+    protected static KeyValue userInfo = new KeyValue("user", "1");
 
     public static BaiduNetDiskWebAuthentication baiduWebAuthentication;
 
@@ -52,7 +52,7 @@ public class InitAuthenticationTest extends DefaultTest {
     protected static @NotNull BaiduNetDiskWebAuthentication buildBaiduNetDiskWebAuthentication() {
         // 用户认证信息获取接口
         ICredential<NetDiskAuthentication> netDiskAuthenticationCredential = new NetDiskJSONCredentials(NET_DISK_AUTHENTICATION_JSON_FILE_PATH);
-        return new BaiduNetDiskWebAuthentication(businessId, businessType, buildAuthenticationApiClient(), netDiskAuthenticationCredential);
+        return new BaiduNetDiskWebAuthentication(buildAuthenticationApiClient(), netDiskAuthenticationCredential);
     }
 
     /**
@@ -68,7 +68,7 @@ public class InitAuthenticationTest extends DefaultTest {
         ICredential<NetDiskAuthentication> oauthCredentials = new OAuthJSONCredentials(OAUTH_AUTHENTICATION_JSON_FILE_PATH);
 
         // 使用oauthCredentials获取网盘认证信息
-        baiduWebAuthentication = new BaiduNetDiskWebAuthentication(businessId, businessType, buildAuthenticationApiClient(), oauthCredentials);
+        baiduWebAuthentication = new BaiduNetDiskWebAuthentication(buildAuthenticationApiClient(), oauthCredentials);
 
         NetDiskAuthentication netDiskAuthentication = baiduWebAuthentication.login();
 
@@ -78,7 +78,7 @@ public class InitAuthenticationTest extends DefaultTest {
 
     protected static IHttpClientAuthentication buildHttpClientAuthentication() {
         // 配置当前用户认证信息, 存储中间变量
-        return new WebHttpClientAuthentication(businessId, businessType);
+        return new WebHttpClientAuthentication();
     }
 
     public static IHttpClient buildHutoolHttpClient() {

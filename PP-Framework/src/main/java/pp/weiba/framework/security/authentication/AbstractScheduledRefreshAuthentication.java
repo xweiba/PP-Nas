@@ -1,6 +1,7 @@
 package pp.weiba.framework.security.authentication;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.credential.ICredential;
+import pp.weiba.framework.utils.UserInfoUtils;
 import pp.weiba.utils.IAbstractScheduled;
 
 /**
@@ -14,8 +15,8 @@ public abstract class AbstractScheduledRefreshAuthentication<T> extends Abstract
 
     private String scheduledId;
 
-    public AbstractScheduledRefreshAuthentication(String authenticationId, String authenticationType, ICredential<T> credential) {
-        super(authenticationId, authenticationType, credential);
+    public AbstractScheduledRefreshAuthentication(ICredential<T> credential) {
+        super(credential);
     }
 
     /**
@@ -56,11 +57,11 @@ public abstract class AbstractScheduledRefreshAuthentication<T> extends Abstract
 
     @Override
     public String scheduledBusinessType() {
-        return "refresh_authentication_" + authenticationType;
+        return "refresh_authentication_" + UserInfoUtils.getCurrentThreadUserType();
     }
 
     @Override
     public String scheduledBusinessId() {
-        return authenticationId;
+        return UserInfoUtils.getCurrentThreadUserId();
     }
 }

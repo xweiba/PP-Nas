@@ -25,8 +25,8 @@ import java.util.Map;
 @Log4j2
 public class WebHttpClientAuthentication extends AbstractHttpClientAuthentication {
 
-    public WebHttpClientAuthentication(String authenticationId, String authenticationType) {
-        super(authenticationId, authenticationType);
+    public WebHttpClientAuthentication() {
+        super();
     }
 
     @Override

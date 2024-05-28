@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.AbstractScheduledRefreshAuthentication;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.framework.security.authentication.credential.ICredential;
+import pp.weiba.framework.utils.UserInfoUtils;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.OpenApiAuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
@@ -45,8 +46,8 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
 
     private String scheduledRefreshOpenApiAccessTokenId;
 
-    public AliYunNetDiskWebAuthentication(String authenticationId, String authenticationType, AuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential, SignInApiClient signInApiClient, OpenApiAuthenticationApiClient openApiAuthenticationApiClient, String openApiClientId) {
-        super(authenticationId, authenticationType, credential);
+    public AliYunNetDiskWebAuthentication(AuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential, SignInApiClient signInApiClient, OpenApiAuthenticationApiClient openApiAuthenticationApiClient, String openApiClientId) {
+        super(credential);
         this.authenticationApiClient = authenticationApiClient;
         this.signInApiClient = signInApiClient;
         this.openApiAuthenticationApiClient = openApiAuthenticationApiClient;
@@ -97,8 +98,8 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
         Long createTime = accessToken.getCreateTime();
         long initNextDelay = expiresIn - ((new Date().getTime() - createTime) / 1000);
         ScheduledRunnable openApiAccessTokenScheduledRunnable = ScheduledRunnable.builder().command(() -> getOpenApiAccessToken())
-                .businessId(authenticationId)
-                .businessType("refresh_open_api_access_token_" + authenticationType)
+                .businessId(UserInfoUtils.getCurrentThreadUserId())
+                .businessType("refresh_open_api_access_token_" + UserInfoUtils.getCurrentThreadUserType())
                 .firstNotDelay(false)
                 .isRandom(false)
                 .initNextDelay(initNextDelay)
@@ -172,8 +173,8 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
         // 30 - 40 分钟刷新一次
         ScheduledRunnable signatureScheduledRunnable = ScheduledRunnable.builder().command(() -> createSession())
 //        ScheduledRunnable signatureScheduledRunnable = ScheduledRunnable.builder().command(() -> refreshSignature())
-                .businessId(authenticationId)
-                .businessType("refresh_signature_" + authenticationType)
+                .businessId(UserInfoUtils.getCurrentThreadUserId())
+                .businessType("refresh_signature_" + UserInfoUtils.getCurrentThreadUserType())
 //                .delay(3).build();
                 .delay(30).build();
         scheduledRefreshSignatureId = ScheduledUtils.schedule(signatureScheduledRunnable);
@@ -182,8 +183,8 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
     private void scheduledRefreshSignIn() {
         // 每24 - 34随机小时刷新一次
         ScheduledRunnable signatureScheduledRunnable = ScheduledRunnable.builder().command(() -> refreshSignatureRun())
-                .businessId(authenticationId)
-                .businessType("today_signin_and_reward" + authenticationType)
+                .businessId(UserInfoUtils.getCurrentThreadUserId())
+                .businessType("today_signin_and_reward" + UserInfoUtils.getCurrentThreadUserType())
                 .delay(24).unit(TimeUnit.HOURS).build();
         scheduledRefreshSignatureId = ScheduledUtils.schedule(signatureScheduledRunnable);
     }
@@ -211,10 +212,10 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
 
     @Override
     protected void doLogout() {
-        authenticationApiClient.signOut(authenticationId);
+        authenticationApiClient.signOut(UserInfoUtils.getCurrentThreadUserId());
         ScheduledUtils.cancel(scheduledRefreshSignatureId);
         ScheduledUtils.cancel(scheduledRefreshOpenApiAccessTokenId);
-        AuthenticationManager.removeAuthentication(authenticationId, authenticationType);
+        AuthenticationManager.removeAuthentication(UserInfoUtils.getCurrentThreadUserId(), UserInfoUtils.getCurrentThreadUserType());
     }
 
 }

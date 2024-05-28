@@ -1,6 +1,7 @@
 package pp.weiba.framework.net.client;
 
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.framework.utils.UserInfoUtils;
 
 /**
  * HttpClient 认证处理
@@ -11,25 +12,16 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public abstract class AbstractHttpClientAuthentication implements IHttpClientAuthentication {
 
-    protected String authenticationId;
-
-    protected String authenticationType;
-
     // authenticationId 和 authenticationType 可以使用ThreadLocal获取，实现鉴权信息动态获取，一个client实例，发起不同用户的请求。
     public AbstractHttpClientAuthentication() {
     }
 
-    public AbstractHttpClientAuthentication(String authenticationId, String authenticationType) {
-        this.authenticationId = authenticationId;
-        this.authenticationType = authenticationType;
-    }
-
     public String getAuthenticationId() {
-        return authenticationId;
+        return UserInfoUtils.getCurrentThreadUserId();
     }
 
     public String getAuthenticationType() {
-        return authenticationType;
+        return UserInfoUtils.getCurrentThreadUserType();
     }
 
 }

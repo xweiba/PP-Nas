@@ -6,6 +6,7 @@ import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.security.authentication.AbstractScheduledRefreshAuthentication;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.framework.security.authentication.credential.ICredential;
+import pp.weiba.framework.utils.UserInfoUtils;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.LoginStatusResponse;
 import pp.weiba.thirdparty.baidu.web.client.netdisk.response.TemplateVariableResponse;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
@@ -30,8 +31,8 @@ public class BaiduNetDiskWebAuthentication extends AbstractScheduledRefreshAuthe
 
     private final ICredential<NetDiskAuthentication> credential;
 
-    public BaiduNetDiskWebAuthentication(String authenticationId, String authenticationType, AuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential) {
-        super(authenticationId, authenticationType, credential);
+    public BaiduNetDiskWebAuthentication(AuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential) {
+        super(credential);
         this.authenticationApiClient = authenticationApiClient;
         this.credential = credential;
     }
@@ -94,8 +95,8 @@ public class BaiduNetDiskWebAuthentication extends AbstractScheduledRefreshAuthe
 
     @Override
     protected void doLogout() {
-        authenticationApiClient.signOut(authenticationId);
-        AuthenticationManager.removeAuthentication(authenticationId, authenticationType);
+        authenticationApiClient.signOut(UserInfoUtils.getCurrentThreadUserId());
+        AuthenticationManager.removeAuthentication(UserInfoUtils.getCurrentThreadUserId(), UserInfoUtils.getCurrentThreadUserType());
     }
 
     protected void openApiLogin(NetDiskAuthentication netDiskAuthentication) {

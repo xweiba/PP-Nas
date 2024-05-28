@@ -1,7 +1,9 @@
 package pp.weiba.framework.security.authentication;
 
 import lombok.extern.log4j.Log4j2;
+import pp.weiba.framework.KeyValue;
 import pp.weiba.framework.security.authentication.credential.ICredential;
+import pp.weiba.framework.utils.UserInfoUtils;
 
 /**
  * 认证信息抽象类
@@ -12,17 +14,11 @@ import pp.weiba.framework.security.authentication.credential.ICredential;
 @Log4j2
 public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
 
-    protected final String authenticationId;
-
-    protected final String authenticationType;
-
     protected final ICredential<T> credential;
 
     protected T authentication;
 
-    public AbstractAuthentication(String authenticationId, String authenticationType, ICredential<T> credential) {
-        this.authenticationId = authenticationId;
-        this.authenticationType = authenticationType;
+    public AbstractAuthentication(ICredential<T> credential) {
         this.credential = credential;
     }
 
@@ -75,7 +71,7 @@ public abstract class AbstractAuthentication<T> implements IAuthentication<T> {
     }
 
     protected void refreshAuthenticationToManager() {
-        AuthenticationManager.setAuthentication(authenticationId, authenticationType, authentication);
+        AuthenticationManager.setAuthentication(UserInfoUtils.getCurrentThreadUserId(), UserInfoUtils.getCurrentThreadUserType(), authentication);
     }
 
     @Override

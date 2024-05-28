@@ -4,6 +4,7 @@ import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Configuration;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
+import org.noear.solon.web.webdav.impl.LocalFileSystem;
 
 /**
 * 配置类

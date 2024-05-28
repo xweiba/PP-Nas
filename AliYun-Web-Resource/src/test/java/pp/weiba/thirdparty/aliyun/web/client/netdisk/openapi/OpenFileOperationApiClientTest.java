@@ -18,13 +18,12 @@ public class OpenFileOperationApiClientTest extends Aria2RpcApiClientTest {
     @Test
     @Disabled
     void getDownloadUrl() {
-        GetDownloadUrlResponse downloadUrl = fileOperationApiClient.getDownloadUrl(new GetDownloadUrlRequest(true, "664d99e2c55d0f7366ca41c78786c8b670add6a5"));
-        addDownloadTask(true, downloadUrl.getUrl(), "rom_2.zip", 364408302L);
+        addDownloadTask(true, "664d99e2c55d0f7366ca41c78786c8b670add6a5", "rom_2.zip", 364408302L);
     }
 
     public void addDownloadTask(boolean isBackupDrive, String fileId, String fileName, long fileSize) {
         GetDownloadUrlResponse downloadUrl = fileOperationApiClient.getDownloadUrl(new GetDownloadUrlRequest(isBackupDrive, fileId));
-        addDownloadTask(downloadUrl.getUrl(), fileName, fileSize);
+        addDownloadTask(downloadUrl.getUrl(), fileSize, fileName);
     }
 
 }

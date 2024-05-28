@@ -4,12 +4,16 @@ import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import pp.weiba.framework.KeyValue;
+import pp.weiba.framework.core.CoreConstants;
 import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.framework.net.client.IHttpClientAuthentication;
 import pp.weiba.framework.net.client.adapters.ahc.AsyncHttpClientAdapter;
 import pp.weiba.framework.net.client.adapters.hutool.HutoolHttpClientAdapter;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.framework.test.DefaultTest;
+import pp.weiba.framework.utils.ThreadLocalUtils;
+import pp.weiba.framework.utils.UserInfoUtils;
 import pp.weiba.thirdparty.aliyun.web.client.WebAliYunNetDiskHttpClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.OpenApiAuthenticationApiClient;
@@ -37,8 +41,7 @@ import java.util.regex.Pattern;
 public class InitAuthenticationTest extends DefaultTest {
 
     // 设置客户端认证信息
-    protected static String businessId = "1";
-    protected static String businessType = "user";
+    protected static KeyValue userInfo = new KeyValue("user", "1");
 
     /* 阿里云盘官方id 55091393987b4cc090b090ee17e85e0a, 改成自己的，防止账号被封 */
     public static final String OPEN_API_APP_ID = "55091393987b4cc090b090ee17e85e0a";
@@ -67,10 +70,15 @@ public class InitAuthenticationTest extends DefaultTest {
     }
 
     protected static @NotNull AliYunNetDiskWebAuthentication buildAliYunNetDiskWebAuthentication() {
+        buildUserInfo();
         buildAuthenticationApiClient();
         // 用户认证信息获取接口
         ICredential<NetDiskAuthentication> netDiskAuthenticationCredential = new JsonFileSetCredentials(authenticationApiClient, TOKEN_SAVE_DIR_PATH, tokenJsonFileName());
-        return new AliYunNetDiskWebAuthentication(businessId, businessType, authenticationApiClient, netDiskAuthenticationCredential, signInApiClient, openApiAuthenticationApiClient, OPEN_API_APP_ID);
+        return new AliYunNetDiskWebAuthentication(authenticationApiClient, netDiskAuthenticationCredential, signInApiClient, openApiAuthenticationApiClient, OPEN_API_APP_ID);
+    }
+
+    private static void buildUserInfo() {
+        UserInfoUtils.setCurrentThreadUserInfo(userInfo);
     }
 
     protected static String getTokenJsonString() {
@@ -82,13 +90,13 @@ public class InitAuthenticationTest extends DefaultTest {
     }
 
     protected static String tokenJsonFileName() {
-        return businessType + "_" + businessId;
+        return userInfo.getKey() + "_" + userInfo.getValue();
     }
 
 
     protected static IHttpClientAuthentication buildHttpClientAuthentication() {
         // 配置当前用户认证信息, 存储中间变量
-        return new WebHttpClientAuthentication(businessId, businessType);
+        return new WebHttpClientAuthentication();
     }
 
     public static IHttpClient buildHutoolHttpClient() {
