@@ -3,7 +3,7 @@ package pp.weiba.thirdparty.aliyun.web.client.authentication.credentials;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.security.authentication.credential.AbstractCredential;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.ALiYunAuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenResponse;
 
@@ -17,9 +17,9 @@ import pp.weiba.thirdparty.aliyun.web.client.authentication.response.TokenRespon
 @Accessors(chain = true)
 public abstract class WebAuthCredentials extends AbstractCredential<NetDiskAuthentication> {
 
-    protected final AuthenticationApiClient authenticationApiClient;
+    protected final ALiYunAuthenticationApiClient authenticationApiClient;
 
-    public WebAuthCredentials(AuthenticationApiClient authenticationApiClient) {
+    public WebAuthCredentials(ALiYunAuthenticationApiClient authenticationApiClient) {
         this.authenticationApiClient = authenticationApiClient;
     }
 

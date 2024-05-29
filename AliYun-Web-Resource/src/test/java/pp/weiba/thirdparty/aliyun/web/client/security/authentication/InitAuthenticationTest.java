@@ -13,7 +13,7 @@ import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.framework.test.DefaultTest;
 import pp.weiba.framework.utils.UserInfoUtils;
 import pp.weiba.thirdparty.aliyun.web.client.ALiYunWebNetDiskHttpClient;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.ALiYunAuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.OpenApiAuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.ALiYunWebHttpClientAuthentication;
@@ -50,7 +50,7 @@ public class InitAuthenticationTest extends DefaultTest {
 
     public static IHttpClient httpClient;
 
-    public static AuthenticationApiClient authenticationApiClient;
+    public static ALiYunAuthenticationApiClient authenticationApiClient;
 
     public static OpenApiAuthenticationApiClient openApiAuthenticationApiClient;
 
@@ -108,7 +108,7 @@ public class InitAuthenticationTest extends DefaultTest {
 
     protected static void buildAuthenticationApiClient() {
         initAuthentication();
-        authenticationApiClient = new AuthenticationApiClient(httpClient);
+        authenticationApiClient = new ALiYunAuthenticationApiClient(httpClient);
         signInApiClient = new SignInApiClient(httpClient);
         openApiAuthenticationApiClient = new OpenApiAuthenticationApiClient(httpClient);
     }

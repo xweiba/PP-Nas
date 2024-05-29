@@ -5,7 +5,7 @@ import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.security.authentication.qr.IScanQR;
 import pp.weiba.framework.security.authentication.qr.ScanQRStatusType;
 import pp.weiba.framework.security.authentication.qr.model.ScanQRStatus;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.ALiYunAuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.*;
 
@@ -24,11 +24,11 @@ public class AliYunScanQRImpl implements IScanQR<NetDiskAuthentication> {
 
     public static final String QR_LOGIN_AUTHENTICATION = "QR_LOGIN_BIZEXT";
 
-    private AuthenticationApiClient authenticationApiClient;
+    private ALiYunAuthenticationApiClient authenticationApiClient;
 
     private volatile Map<String, HttpRequest> getScanQrResultParams = new ConcurrentHashMap<>();
 
-    public AliYunScanQRImpl(AuthenticationApiClient authenticationApiClient) {
+    public AliYunScanQRImpl(ALiYunAuthenticationApiClient authenticationApiClient) {
         this.authenticationApiClient = authenticationApiClient;
     }
 

@@ -13,7 +13,6 @@ import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.net.client.model.Method;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.request.DeviceOfflineRequest;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.request.IVRequest;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.response.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.CreateSessionRequest;
@@ -35,9 +34,9 @@ import java.util.Map;
  * @date 2024/4/29 17:29
  */
 @Log4j2
-public class AuthenticationApiClient extends AbstractApiHttpClient {
+public class ALiYunAuthenticationApiClient extends AbstractApiHttpClient {
 
-    public AuthenticationApiClient(IHttpClient httpClient) {
+    public ALiYunAuthenticationApiClient(IHttpClient httpClient) {
         super(httpClient);
     }
 

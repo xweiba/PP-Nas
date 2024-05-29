@@ -113,7 +113,7 @@ public class ScheduleScanQR<T> implements IScanQR<T> {
     private ScheduleScanQRTaskData<T> getScheduleTaskData(String key) {
         ScheduleScanQRTaskData<T> tScheduleScanQRTaskData = scheduleScanQrTaskDataMap.get(key);
         if (tScheduleScanQRTaskData == null) {
-            throw new RuntimeException("扫描任务不存在，请重新生成扫码后获取");
+            throw new RuntimeException("扫码任务不存在，请重新生成扫码后获取");
         }
         return tScheduleScanQRTaskData;
     }

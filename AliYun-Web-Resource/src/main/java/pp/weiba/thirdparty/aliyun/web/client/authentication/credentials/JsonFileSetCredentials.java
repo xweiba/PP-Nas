@@ -1,7 +1,7 @@
 package pp.weiba.thirdparty.aliyun.web.client.authentication.credentials;
 
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.ALiYunAuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.utils.FileUtils;
 
@@ -17,7 +17,7 @@ public class JsonFileSetCredentials extends JsonStrSetCredentials {
     private final String relativeDirectory;
     private final String fileName;
 
-    public JsonFileSetCredentials(AuthenticationApiClient authenticationApiClient, String relativeDirectory, String fileName) {
+    public JsonFileSetCredentials(ALiYunAuthenticationApiClient authenticationApiClient, String relativeDirectory, String fileName) {
         super(authenticationApiClient, FileUtils.readJsonToWorkDir(relativeDirectory, fileName));
         this.relativeDirectory = relativeDirectory;
         this.fileName = fileName;

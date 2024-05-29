@@ -7,7 +7,7 @@ import pp.weiba.framework.security.authentication.AbstractScheduledRefreshAuthen
 import pp.weiba.framework.security.authentication.AuthenticationManager;
 import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.framework.utils.UserInfoUtils;
-import pp.weiba.thirdparty.aliyun.web.client.authentication.AuthenticationApiClient;
+import pp.weiba.thirdparty.aliyun.web.client.authentication.ALiYunAuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.OpenApiAuthenticationApiClient;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.OpenApiAuthenticationInfo;
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuthentication<NetDiskAuthentication> {
 
 
-    private final AuthenticationApiClient authenticationApiClient;
+    private final ALiYunAuthenticationApiClient authenticationApiClient;
 
     private final OpenApiAuthenticationApiClient openApiAuthenticationApiClient;
 
@@ -46,7 +46,7 @@ public class AliYunNetDiskWebAuthentication extends AbstractScheduledRefreshAuth
 
     private String scheduledRefreshOpenApiAccessTokenId;
 
-    public AliYunNetDiskWebAuthentication(AuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential, SignInApiClient signInApiClient, OpenApiAuthenticationApiClient openApiAuthenticationApiClient, String openApiClientId) {
+    public AliYunNetDiskWebAuthentication(ALiYunAuthenticationApiClient authenticationApiClient, ICredential<NetDiskAuthentication> credential, SignInApiClient signInApiClient, OpenApiAuthenticationApiClient openApiAuthenticationApiClient, String openApiClientId) {
         super(credential);
         this.authenticationApiClient = authenticationApiClient;
         this.signInApiClient = signInApiClient;
