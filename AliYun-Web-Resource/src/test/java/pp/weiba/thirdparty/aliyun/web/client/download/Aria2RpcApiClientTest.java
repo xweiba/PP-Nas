@@ -19,7 +19,7 @@ import pp.weiba.thirdparty.aliyun.web.client.security.authentication.WebNetDiskA
 @Log4j2
 public class Aria2RpcApiClientTest extends WebNetDiskAuthenticationTest {
 
-    public final Aria2RpcApiClient aria2RpcApiClient = new Aria2RpcApiClient("https://api.weiba.pp.ua:32880/aria2/jsonrpc", "656CjCKQ0iQUB78eXgd2VpYmExMDI4", new HutoolHttpClientAdapter());
+    public final Aria2RpcApiClient aria2RpcApiClient = new Aria2RpcApiClient("https://aria2.com/aria2/jsonrpc", "xxxxxxxx", new HutoolHttpClientAdapter());
 
     public final IDownloadAdapter adapter = new Aria2DownloadAdapter(aria2RpcApiClient);
 
