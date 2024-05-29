@@ -42,14 +42,16 @@ public class ScheduledUtils {
                     @Override
                     public void run() {
                         // 判断任务是否已经取消
-                        ScheduledFuture scheduledFuture = scheduledFutureMap.get(scheduledRandom.getScheduledId());
-                        if (scheduledFuture == null || scheduledFuture.isCancelled()) {
-                            log.info("{} 任务已取消！", scheduledRandom.getScheduledId());
-                            scheduledFutureMap.remove(scheduledRandom.getScheduledId());
-                            return;
-                        }
+                        if (isCancelled(scheduledRandom)) return;
+
                         scheduledRandom.getCommand().run();
-                        log.info("{} 任务已执行！", scheduledRandom.getScheduledId());
+                        log.info("{} 任务已执行 {} 次！", scheduledRandom.getScheduledId(), scheduledRandom.getExecuteCount());
+
+                        scheduledRandom.setExecuteCount(scheduledRandom.getExecuteCount() + 1);
+
+                        // 可能在执行逻辑中将自己取消了
+                        if (isCancelled(scheduledRandom)) return;
+
                         // 执行完毕重新加入到定时任务
                         scheduledFutureMap.put(scheduledRandom.getScheduledId(), scheduledExecutor.schedule(this, scheduledRandom.getNextDelay(), scheduledRandom.getUnit()));
                     }
@@ -57,6 +59,19 @@ public class ScheduledUtils {
         String scheduledId = scheduledRandom.getScheduledId();
         scheduledFutureMap.put(scheduledId, schedule);
         return scheduledId;
+    }
+
+    private static boolean isCancelled(ScheduledRunnable scheduledRandom) {
+        ScheduledFuture scheduledFuture = scheduledFutureMap.get(scheduledRandom.getScheduledId());
+        if (scheduledFuture == null || scheduledFuture.isCancelled()) {
+            log.info("{} 任务已取消！", scheduledRandom.getScheduledId());
+            scheduledFutureMap.remove(scheduledRandom.getScheduledId());
+            return true;
+        } else if (scheduledRandom.getMaxExecuteCount() != null && scheduledRandom.getExecuteCount() == scheduledRandom.getMaxExecuteCount()) {
+            log.info("{} 任务已到大最大执行次数！", scheduledRandom.getScheduledId());
+            return true;
+        }
+        return false;
     }
 
     public static String schedule(Runnable runnable, long delay, TimeUnit unit) {

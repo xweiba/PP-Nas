@@ -3,7 +3,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
+import pp.weiba.thirdparty.aliyun.web.client.core.AliYunClientConstants;
 
 /**
 * 

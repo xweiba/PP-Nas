@@ -1,4 +1,4 @@
-package pp.weiba.thirdparty.aliyun.web.client;
+package pp.weiba.thirdparty.aliyun.web.client.core;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -9,6 +9,8 @@ import lombok.extern.log4j.Log4j2;
 */
 @Log4j2
 public class AliYunClientConstants {
+
+    public static final String BUSINESS_TYPE = "aLiYunPan";
 
     /* 备份盘 id */
     public static final String REQUEST_PARAM_BACKUP_DRIVE_ID_TAG = "{backup_drive_id}";

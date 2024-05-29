@@ -18,4 +18,6 @@ public interface ICredential<T> {
 
     T getCredential();
 
+    void updateCredential(String key, T result);
+
 }

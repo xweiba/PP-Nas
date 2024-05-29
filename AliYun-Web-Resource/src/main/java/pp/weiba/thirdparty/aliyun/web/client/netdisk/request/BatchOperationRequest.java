@@ -1,7 +1,7 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk.request;
 import lombok.*;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
+import pp.weiba.thirdparty.aliyun.web.client.core.AliYunClientConstants;
 
 /**
 * 批处理请求业务参数

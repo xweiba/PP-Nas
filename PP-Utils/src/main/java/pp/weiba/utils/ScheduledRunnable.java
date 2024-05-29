@@ -39,6 +39,13 @@ public class ScheduledRunnable {
     // 首次执行时的延时时间， 在服务重启后又不想立马执行时使用, 只使用一次
     private Long initNextDelay;
 
+    // 已执行次数
+    @Builder.Default
+    private Integer executeCount = 0;
+
+    /* 最大执行次数 */
+    private Integer maxExecuteCount;
+
     @Builder.Default
     private TimeUnit unit = TimeUnit.MINUTES;
 

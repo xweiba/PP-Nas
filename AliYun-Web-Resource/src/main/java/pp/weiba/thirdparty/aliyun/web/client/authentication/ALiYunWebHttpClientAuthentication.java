@@ -6,7 +6,7 @@ import pp.weiba.framework.net.client.AbstractHttpClientAuthentication;
 import pp.weiba.framework.net.client.ClientConstants;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.security.authentication.AuthenticationManager;
-import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
+import pp.weiba.thirdparty.aliyun.web.client.core.AliYunClientConstants;
 import pp.weiba.thirdparty.aliyun.web.client.OpenApiUrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.NetDiskAuthentication;
 import pp.weiba.thirdparty.aliyun.web.client.authentication.model.OpenApiAuthenticationInfo;
@@ -23,9 +23,9 @@ import java.util.Map;
  * @date 2024/3/11 10:50
  */
 @Log4j2
-public class WebHttpClientAuthentication extends AbstractHttpClientAuthentication {
+public class ALiYunWebHttpClientAuthentication extends AbstractHttpClientAuthentication {
 
-    public WebHttpClientAuthentication() {
+    public ALiYunWebHttpClientAuthentication() {
         super();
     }
 

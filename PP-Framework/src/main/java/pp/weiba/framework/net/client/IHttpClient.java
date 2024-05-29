@@ -2,7 +2,7 @@ package pp.weiba.framework.net.client;
 
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.core.handler.ExecutorParams;
-import pp.weiba.framework.core.handler.IHandler;
+import pp.weiba.framework.core.handler.IHandlerChain;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.net.client.model.HttpResponse;
 
@@ -44,7 +44,7 @@ public interface IHttpClient {
      * @author weiba
      * @date 2024/3/6 17:07
      */
-    void addRequestHandler(IHandler<HttpRequest> requestHandler);
+    void addRequestHandler(IHandlerChain<HttpRequest> requestHandler);
 
     /**
      * 添加响应处理器，在响应后调用，默认实现同类型过滤器只会被添加一次, 按加入顺序执行
@@ -53,7 +53,7 @@ public interface IHttpClient {
      * @author weiba
      * @date 2024/3/6 17:07
      */
-    void addResponseHandler(IHandler<HttpResponse> responseHandler);
+    void addResponseHandler(IHandlerChain<HttpResponse> responseHandler);
 
     /**
      * 添加执行器处理器，可实现请求拦截，缓存，限流等处理，默认实现同类型过滤器只会被添加一次, 按加入顺序执行
@@ -62,6 +62,6 @@ public interface IHttpClient {
      * @author weiba
      * @date 2024/3/19 11:02
      */
-    void addExecuteHandler(IHandler<ExecutorParams<HttpRequest, HttpResponse>> executeHandler);
+    void addExecuteHandler(IHandlerChain<ExecutorParams<HttpRequest, HttpResponse>> executeHandler);
 
 }

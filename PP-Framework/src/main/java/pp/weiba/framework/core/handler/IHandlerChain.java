@@ -6,7 +6,7 @@ package pp.weiba.framework.core.handler;
  * @author weiba
  * @date 2024/3/18 15:16
  */
-public interface IHandler<T> {
+public interface IHandlerChain<T> {
 
     /**
      * 获取下一个处理器
@@ -14,7 +14,7 @@ public interface IHandler<T> {
      * @author weiba
      * @date 2024/3/18 15:17
      */
-    IHandler<T> getNext();
+    IHandlerChain<T> getNext();
 
     /**
      * 设置下一个处理器
@@ -23,7 +23,7 @@ public interface IHandler<T> {
      * @author weiba
      * @date 2024/3/18 15:17
      */
-    void setNext(IHandler<T> next);
+    void setNext(IHandlerChain<T> next);
 
     /**
      * 执行当前处理器
@@ -33,7 +33,7 @@ public interface IHandler<T> {
      * @author weiba
      * @date 2024/3/18 15:17
      */
-    T handle(T input);
+    T processHandle(T input);
 
     /**
      * 是否执行下一个处理器，用于缓存类的处理器，不往下执行了。

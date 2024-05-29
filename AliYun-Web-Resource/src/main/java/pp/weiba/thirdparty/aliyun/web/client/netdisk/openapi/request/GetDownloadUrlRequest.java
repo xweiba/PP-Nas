@@ -2,7 +2,7 @@ package pp.weiba.thirdparty.aliyun.web.client.netdisk.openapi.request;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.*;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
+import pp.weiba.thirdparty.aliyun.web.client.core.AliYunClientConstants;
 
 /**
 * 

@@ -30,6 +30,7 @@ public abstract class WebAuthCredentials extends AbstractCredential<NetDiskAuthe
     }
 
     public void refreshToken() {
+        if (credentialData.getToken() == null) return;
         TokenResponse tokenResponse = authenticationApiClient.refreshToken(credentialData.getToken().getRefreshToken());
         credentialData.setToken(tokenResponse);
     }

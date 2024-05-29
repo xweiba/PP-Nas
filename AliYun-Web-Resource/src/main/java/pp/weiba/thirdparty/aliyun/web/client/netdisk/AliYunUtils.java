@@ -12,7 +12,7 @@ import org.bouncycastle.util.encoders.Hex;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Sign;
-import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
+import pp.weiba.thirdparty.aliyun.web.client.core.AliYunClientConstants;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.CreateWithFoldersRequest;
 import pp.weiba.utils.FileUtils;
 

@@ -1,13 +1,9 @@
 package pp.weiba.thirdparty.aliyun.web.client.netdisk;
 
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.net.client.AbstractApiHttpClient;
 import pp.weiba.framework.net.client.IHttpClient;
-import pp.weiba.framework.net.client.model.HttpRequest;
-import pp.weiba.framework.net.client.model.Method;
-import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SignInInfoListResponse;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.SignInInfoResponse;

@@ -1,6 +1,6 @@
 package pp.weiba.framework.utils;
 
-import pp.weiba.framework.core.handler.IHandler;
+import pp.weiba.framework.core.handler.IHandlerChain;
 
 /**
  * 处理器工具类
@@ -17,7 +17,7 @@ public class HandlerUtils {
      * @author weiba
      * @date 2024/3/18 16:33
      */
-    public static <T> void addHandlerToEnd(IHandler<T> current, IHandler<T> newHandler, boolean isFilterDuplicates) {
+    public static <T> void addHandlerToEnd(IHandlerChain<T> current, IHandlerChain<T> newHandler, boolean isFilterDuplicates) {
         if (current == null || newHandler == null) return;
         while (true) {
             if (isFilterDuplicates && (current == newHandler)) {
@@ -32,7 +32,7 @@ public class HandlerUtils {
         }
     }
 
-    public static <T> boolean handlerContains(IHandler<T> current, IHandler<T> newHandler) {
+    public static <T> boolean handlerContains(IHandlerChain<T> current, IHandlerChain<T> newHandler) {
         boolean handlerContains = false;
         if (current == null || newHandler == null) return handlerContains;
         while (true) {

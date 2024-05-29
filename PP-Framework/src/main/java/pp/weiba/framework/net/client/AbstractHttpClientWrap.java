@@ -3,7 +3,7 @@ package pp.weiba.framework.net.client;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.TypeReference;
 import pp.weiba.framework.core.handler.ExecutorParams;
-import pp.weiba.framework.core.handler.IHandler;
+import pp.weiba.framework.core.handler.IHandlerChain;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.net.client.model.HttpResponse;
 
@@ -59,17 +59,17 @@ public abstract class AbstractHttpClientWrap implements IHttpClient {
     }
 
     @Override
-    public void addRequestHandler(IHandler<HttpRequest> requestHandler) {
+    public void addRequestHandler(IHandlerChain<HttpRequest> requestHandler) {
         httpClient.addRequestHandler(requestHandler);
     }
 
     @Override
-    public void addResponseHandler(IHandler<HttpResponse> responseHandler) {
+    public void addResponseHandler(IHandlerChain<HttpResponse> responseHandler) {
         httpClient.addResponseHandler(responseHandler);
     }
 
     @Override
-    public void addExecuteHandler(IHandler<ExecutorParams<HttpRequest, HttpResponse>> executeHandler) {
+    public void addExecuteHandler(IHandlerChain<ExecutorParams<HttpRequest, HttpResponse>> executeHandler) {
         httpClient.addExecuteHandler(executeHandler);
     }
 

@@ -88,4 +88,8 @@ public abstract class WebCookieCredentials implements ICredential<NetDiskAuthent
         return null;
     }
 
+    @Override
+    public void updateCredential(String key, NetDiskAuthentication result) {
+
+    }
 }

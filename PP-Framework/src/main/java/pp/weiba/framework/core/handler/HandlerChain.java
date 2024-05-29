@@ -9,25 +9,25 @@ import lombok.extern.log4j.Log4j2;
  * @date 2024/3/18 15:17
  */
 @Log4j2
-public abstract class AbstractHandler<T> implements IHandler<T> {
+public abstract class HandlerChain<T> implements IHandlerChain<T> {
 
-    private IHandler<T> next;
+    private IHandlerChain<T> next;
 
     @Override
-    public IHandler<T> getNext() {
+    public IHandlerChain<T> getNext() {
         return this.next;
     }
 
     @Override
-    public void setNext(IHandler<T> next) {
+    public void setNext(IHandlerChain<T> next) {
         this.next = next;
     }
 
     @Override
-    public T handle(T input) {
+    public T processHandle(T input) {
         T result = process(input);
-        if (this.canHandle(result) && next != null) {
-            return next.handle(result);
+        if (this.canHandle(result) && getNext() != null) {
+            return getNext().processHandle(result);
         }
         return result;
     }

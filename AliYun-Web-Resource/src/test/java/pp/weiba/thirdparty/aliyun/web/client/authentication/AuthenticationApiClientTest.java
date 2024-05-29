@@ -18,10 +18,11 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Log4j2
-class AuthenticationApiClientTest extends WebNetDiskAuthenticationTest {
+class AuthenticationApiClientTest extends InitAuthenticationTest {
 
     static {
         isHutoolHttpClient = true;
+        InitAuthenticationTest.initAhcClientBaiduWebAuthentication();
     }
 
     private static LoginMainResponse loginMainViewData;

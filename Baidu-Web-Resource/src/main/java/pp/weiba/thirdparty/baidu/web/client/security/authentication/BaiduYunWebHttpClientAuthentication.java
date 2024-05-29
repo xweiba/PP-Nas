@@ -16,9 +16,9 @@ import java.util.Map;
  * @date 2024/3/11 10:50
  */
 @Log4j2
-public class WebHttpClientAuthentication extends AbstractHttpClientAuthentication {
+public class BaiduYunWebHttpClientAuthentication extends AbstractHttpClientAuthentication {
 
-    public WebHttpClientAuthentication() {
+    public BaiduYunWebHttpClientAuthentication() {
     }
 
     @Override

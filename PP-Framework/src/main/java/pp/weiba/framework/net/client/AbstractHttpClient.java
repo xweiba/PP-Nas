@@ -3,9 +3,9 @@ package pp.weiba.framework.net.client;
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.ITypeReferenceProcessor;
 import pp.weiba.framework.core.convert.TypeReference;
-import pp.weiba.framework.core.handler.AbstractHandler;
+import pp.weiba.framework.core.handler.HandlerChain;
 import pp.weiba.framework.core.handler.ExecutorParams;
-import pp.weiba.framework.core.handler.IHandler;
+import pp.weiba.framework.core.handler.IHandlerChain;
 import pp.weiba.framework.net.client.model.HttpRequest;
 import pp.weiba.framework.net.client.model.HttpResponse;
 import pp.weiba.framework.utils.HandlerUtils;
@@ -20,7 +20,7 @@ import java.util.Map;
  * @date 2024/3/7 10:29
  */
 @Log4j2
-public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorParams<HttpRequest, HttpResponse>> implements IHttpClient {
+public abstract class AbstractHttpClient<T, F> extends HandlerChain<ExecutorParams<HttpRequest, HttpResponse>> implements IHttpClient {
 
     // Http 请求与响应信息转换器
     private final IHttpTypeAdapter<T, F> httpTypeAdapter;
@@ -29,13 +29,13 @@ public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorP
     private final ITypeReferenceProcessor<String> typeReferenceProcessor;
 
     // Http 请求参数处理链
-    private IHandler<HttpRequest> requestChain;
+    private IHandlerChain<HttpRequest> requestChain;
 
     // Http 响应处理链
-    private IHandler<HttpResponse> responseChain;
+    private IHandlerChain<HttpResponse> responseChain;
 
     // Http 响应处理链
-    private IHandler<ExecutorParams<HttpRequest, HttpResponse>> executorChain;
+    private IHandlerChain<ExecutorParams<HttpRequest, HttpResponse>> executorChain;
 
     public AbstractHttpClient(IHttpTypeAdapter<T, F> httpTypeAdapter, ITypeReferenceProcessor<String> typeReferenceProcessor) {
         this.httpTypeAdapter = httpTypeAdapter;
@@ -55,7 +55,7 @@ public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorP
 
         // 请求参数处理器
         if (requestChain != null && (params == null || params.get(ClientConstants.REQUEST_PARAM_NEW_SESSION_TAG) == null || !(Boolean)params.get(ClientConstants.REQUEST_PARAM_NEW_SESSION_TAG))) {
-            request = requestChain.handle(request);
+            request = requestChain.processHandle(request);
         }
 
         // 执行请求
@@ -63,13 +63,13 @@ public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorP
 
         // 响应信息过滤
         if (responseChain != null) {
-            adapterResponse = responseChain.handle(adapterResponse);
+            adapterResponse = responseChain.processHandle(adapterResponse);
         }
         return adapterResponse;
     }
 
     private HttpResponse httpExecute(HttpRequest request) {
-        return this.handle(new ExecutorParams<HttpRequest, HttpResponse>().setInput(request)).getOutput();
+        return this.processHandle(new ExecutorParams<HttpRequest, HttpResponse>().setInput(request)).getOutput();
     }
 
     @Override
@@ -80,7 +80,7 @@ public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorP
 
     protected abstract F doExecute(T request);
 
-    public void addRequestHandler(IHandler<HttpRequest> requestHandler) {
+    public void addRequestHandler(IHandlerChain<HttpRequest> requestHandler) {
         if (requestChain == null) {
             requestChain = requestHandler;
         } else {
@@ -88,7 +88,7 @@ public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorP
         }
     }
 
-    public void addResponseHandler(IHandler<HttpResponse> responseHandler) {
+    public void addResponseHandler(IHandlerChain<HttpResponse> responseHandler) {
         if (responseChain == null) {
             responseChain = responseHandler;
         } else {
@@ -97,7 +97,7 @@ public abstract class AbstractHttpClient<T, F> extends AbstractHandler<ExecutorP
     }
 
     @Override
-    public void addExecuteHandler(IHandler<ExecutorParams<HttpRequest, HttpResponse>> executeHandler) {
+    public void addExecuteHandler(IHandlerChain<ExecutorParams<HttpRequest, HttpResponse>> executeHandler) {
 
         if (!HandlerUtils.handlerContains(this.executorChain, executeHandler)) {
             // 先加入 先执行

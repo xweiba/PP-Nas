@@ -2,7 +2,7 @@ package pp.weiba.framework.net.client.model;
 
 import lombok.extern.log4j.Log4j2;
 import pp.weiba.framework.core.convert.IProcessor;
-import pp.weiba.framework.net.client.AbstractClientHandler;
+import pp.weiba.framework.net.client.AbstractClientHandlerChain;
 
 /**
  * 请求处理器
@@ -11,9 +11,9 @@ import pp.weiba.framework.net.client.AbstractClientHandler;
  * @date 2024/3/18 16:04
  */
 @Log4j2
-public class RequestHandler extends AbstractClientHandler<HttpRequest> {
+public class RequestHandlerChain extends AbstractClientHandlerChain<HttpRequest> {
 
-    public RequestHandler(IProcessor<HttpRequest> dataProcessor) {
+    public RequestHandlerChain(IProcessor<HttpRequest> dataProcessor) {
         super(dataProcessor);
     }
 

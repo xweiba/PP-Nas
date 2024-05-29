@@ -14,7 +14,7 @@ import pp.weiba.framework.net.client.AbstractApiHttpClient;
 import pp.weiba.framework.net.client.ClientConstants;
 import pp.weiba.framework.net.client.IHttpClient;
 import pp.weiba.framework.net.client.model.*;
-import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
+import pp.weiba.thirdparty.aliyun.web.client.core.AliYunClientConstants;
 import pp.weiba.thirdparty.aliyun.web.client.UrlConstants;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.request.*;
 import pp.weiba.thirdparty.aliyun.web.client.netdisk.response.*;

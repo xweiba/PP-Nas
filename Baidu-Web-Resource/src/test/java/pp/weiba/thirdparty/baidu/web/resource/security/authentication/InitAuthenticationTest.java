@@ -14,7 +14,7 @@ import pp.weiba.framework.security.authentication.credential.ICredential;
 import pp.weiba.framework.test.DefaultTest;
 import pp.weiba.thirdparty.baidu.web.client.WebBaiduNetDiskHttpClient;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.NetDiskAuthentication;
-import pp.weiba.thirdparty.baidu.web.client.security.authentication.WebHttpClientAuthentication;
+import pp.weiba.thirdparty.baidu.web.client.security.authentication.BaiduYunWebHttpClientAuthentication;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.credentials.NetDiskJSONCredentials;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.credentials.OAuthJSONCredentials;
 import pp.weiba.thirdparty.baidu.web.client.security.authentication.AuthenticationApiClient;
@@ -78,7 +78,7 @@ public class InitAuthenticationTest extends DefaultTest {
 
     protected static IHttpClientAuthentication buildHttpClientAuthentication() {
         // 配置当前用户认证信息, 存储中间变量
-        return new WebHttpClientAuthentication();
+        return new BaiduYunWebHttpClientAuthentication();
     }
 
     public static IHttpClient buildHutoolHttpClient() {

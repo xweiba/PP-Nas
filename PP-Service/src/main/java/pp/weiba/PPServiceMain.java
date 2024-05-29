@@ -1,5 +1,7 @@
 package pp.weiba;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.noear.solon.Solon;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Handler;
@@ -17,7 +19,7 @@ import org.noear.solon.web.webdav.impl.LocalFileSystem;
 public class PPServiceMain {
 
     public static void main(String[] args) {
-
+        Configurator.setAllLevels("", Level.DEBUG);
 
         FileSystem fileSystem = new LocalFileSystem("C:\\Users\\admin\\Documents\\Tools");
 

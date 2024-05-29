@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import pp.weiba.thirdparty.aliyun.web.client.AliYunClientConstants;
+import pp.weiba.thirdparty.aliyun.web.client.core.AliYunClientConstants;
 /*
 {"drive_id":"18654654","file_id":"638829ed5df082af754043cba40637f674d213b7","name":"Test1111","check_name_mode":"refuse"}
 * */

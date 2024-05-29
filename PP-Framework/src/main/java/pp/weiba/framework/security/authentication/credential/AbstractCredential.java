@@ -18,4 +18,9 @@ public abstract class AbstractCredential<T> implements ICredential<T> {
         buildCredential();
         return credentialData;
     }
+
+    @Override
+    public void updateCredential(String key, T result) {
+        credentialData = result;
+    }
 }
