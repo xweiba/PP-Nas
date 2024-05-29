@@ -35,7 +35,7 @@ public class ConfigContorller {
         ctx.contentType("text/html;charset=UTF-8");
         QrConfig qrConfig = (new QrConfig(500, 500)).setMargin(5);
         String s = QrCodeUtil.generateAsBase64(scanQrUrl, qrConfig, "svg");
-        return "<img src='" + s + "'>";
+        return "<div style='display: flex; justify-content: center; align-items: center; height: 95vh;'><img style='max-width: 100%;' src='" + s + "'></div>";
     }
 
     @Mapping("/login/qr/status")
